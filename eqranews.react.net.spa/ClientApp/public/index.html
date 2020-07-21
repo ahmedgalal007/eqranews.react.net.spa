@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html class="loading" lang="en" data-textdirection="rtl">
+	<!-- BEGIN: Head-->
+
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<base href="%PUBLIC_URL%/" />
+		<!--<base href="http://localhost:3000/" />-->
+		<!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+		<link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico" />
+
+		<meta
+			name="viewport"
+			content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui"
+		/>
+		<meta
+			name="description"
+			content="Materialize is a Material Design Admin Template,It's modern, responsive and based on Material Design by Google."
+		/>
+		<meta
+			name="keywords"
+			content="materialize, admin template, dashboard template, flat admin template, responsive admin template, eCommerce dashboard, analytic dashboard"
+		/>
+		<meta name="author" content="ThemeSelect" />
+		<title>
+			EqraNews Admin Page | Materialize - Material Design Admin Template
+		</title>
+		<link
+			rel="apple-touch-icon"
+			href="app-assets/images/favicon/apple-touch-icon-152x152.png"
+		/>
+		<link
+			rel="shortcut icon"
+			type="image/x-icon"
+			href="app-assets/images/favicon/favicon-32x32.png"
+		/>
+		<link
+			href="https://fonts.googleapis.com/icon?family=Material+Icons"
+			rel="stylesheet"
+		/>
+		<!-- BEGIN: VENDOR CSS-->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="app-assets/vendors/vendors-rtl.min.css"
+		/>
+		<!-- END: VENDOR CSS-->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="app-assets/css-rtl/style-rtl.css"
+		/>
+		<!-- BEGIN: Page Level CSS-->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="app-assets/css-rtl/themes/eqra-news-vertical-menu-nav-dark-template/materialize.css"
+		/>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="app-assets/css-rtl/themes/eqra-news-vertical-menu-nav-dark-template/style.css"
+		/>
+		<!-- END: Page Level CSS-->
+		<!-- BEGIN: Custom CSS-->
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="app-assets/css-rtl/custom/custom.css"
+		/>
+		<!-- END: Custom CSS-->
+	</head>
+	<!-- END: Head-->
+	<body>
+		<div id="root"></div>
+		<div id="reactloader">
+			<style type="text/css">
+				#reactloader {
+					left: 0;
+					top: 0;
+					position: absolute;
+					background: #111;
+					height: 100%;
+					width: 100%;
+					display: table-cell;
+					vertical-align: middle;
+					z-index: 10000;
+				}
+
+				#reactloader > .loader {
+					display: inline-block;
+					vertical-align: middle;
+					line-height: normal;
+					width: 100%;
+				}
+
+				.loader {
+					border: 3px solid #d6336c;
+					width: 200px;
+					height: 200px;
+					border-radius: 50%;
+					border-left-color: transparent;
+					border-right-color: transparent;
+					animation: rotate 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+				}
+
+				#loader2 {
+					border: 3px solid #3bc9db;
+					width: 220px;
+					height: 220px;
+					position: relative;
+					top: -216px;
+					border-left-color: transparent;
+					border-right-color: transparent;
+					animation: rotate2 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+				}
+
+				#loader3 {
+					border: 3px solid #d6336c;
+					width: 240px;
+					height: 240px;
+					position: relative;
+					top: -452px;
+					border-left-color: transparent;
+					border-right-color: transparent;
+					animation: rotate 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+				}
+
+				#loader4 {
+					border: 3px solid #3bc9db;
+					width: 260px;
+					height: 260px;
+					position: relative;
+					top: -708px;
+					border-left-color: transparent;
+					border-right-color: transparent;
+					animation: rotate2 2s cubic-bezier(0.26, 1.36, 0.74, -0.29) infinite;
+				}
+
+				@keyframes rotate {
+					0% {
+						transform: rotateZ(-360deg);
+					}
+
+					100% {
+						transform: rotateZ(0deg);
+					}
+				}
+
+				@keyframes rotate2 {
+					0% {
+						transform: rotateZ(360deg);
+					}
+
+					100% {
+						transform: rotateZ(0deg);
+					}
+				}
+
+				#text {
+					color: white;
+					font-family: Arial;
+					font-size: 20px;
+					position: relative;
+					top: -857px;
+				}
+			</style>
+			<div id="center">
+				<center>
+					<br /><br /><br />
+					<div class="loader" id="loader"></div>
+					<div class="loader" id="loader2"></div>
+					<div class="loader" id="loader3"></div>
+					<div class="loader" id="loader4"></div>
+					<!--Delete the "loader3" and "loader4" divs for a 2-layer loader-->
+					<!--You can also change the animation durations or delays, that looks also pretty cool -->
+					<span id="text">LOADING...</span><br />
+				</center>
+			</div>
+		</div>
+	</body>
+</html>

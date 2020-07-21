@@ -1,0 +1,53 @@
+[
+	{
+		"Domain": "https://www.almasryalyoum.com/",
+		"Name": "El Masry El Yom",
+		"Stepper": [
+			{
+				"Type": "CrawlStepGetRssLinks",
+				"URL": "https://www.almasryalyoum.com/rss/rssfeeds",
+				"Selector": "//rss/channel/item/link/text()",
+				"CrawlItems": [{ "Name": "", "Selector": "", "Attr": "", "Value": "" }]
+			},
+			{
+				"Type": "CrawlStepParseLinkList",
+				"Selector": "//rss/channel/item/link/text()",
+				"CrawlItems": [
+					{ "Name": "Title", "Selector": "Title", "Attr": "", "Value": "" },
+					{
+						"Name": "Image",
+						"Selector": ".article .articleimg > img",
+						"Attr": "src",
+						"Value": ""
+					}
+				]
+			}
+		]
+	},
+	{
+		"Domain": "http://gate.ahram.org.eg/",
+		"Name": "Ahram",
+		"Stepper": [
+			{
+				"Type": "CrawlStepGetLinkList",
+				"URL": "http://gate.ahram.org.eg/index.aspx",
+				"Selector": "#ContentPlaceHolder1_divUrgent .blok_file > a",
+				"CrawlItems": []
+			},
+			{
+				"Type": "CrawlStepParseLinkList",
+				"URL": "http://gate.ahram.org.eg/index.aspx",
+				"Selector": "#ContentPlaceHolder1_divUrgent .blok_file > a",
+				"CrawlItems": [
+					{ "Name": "Title", "Selector": "Title", "Attr": "", "Value": "" },
+					{
+						"Name": "Image",
+						"Selector": "#ContentPlaceHolder1_divMainImage > img",
+						"Attr": "src",
+						"Value": ""
+					}
+				]
+			}
+		]
+	}
+]
