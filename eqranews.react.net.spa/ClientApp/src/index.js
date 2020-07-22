@@ -44,16 +44,16 @@ ReactDOM.render(
 	() => {
 		// document.body.innerHTML = document.querySelector('#root').innerHTML;
 		document.querySelector('#root').style.height = '100%';
-		const appendScript = script => {
+		const appendScript = (script, selector = 'body') => {
 			const elem = document.createElement('script');
 			elem.setAttribute('src', script);
-			document.body.append(elem);
+			document.querySelector(selector).after(elem);
 			return elem;
 		};
-		appendScript('app-assets/js/vendors.min.js').onload = () => {
-			appendScript('app-assets/js/plugins.js').onload = () => {
-				appendScript('app-assets/js/search.js');
-				appendScript('app-assets/js/custom/custom-script.js');
+		appendScript('app-assets/js/vendors.min.js', '#VENDOR_JS').onload = () => {
+			appendScript('app-assets/js/plugins.js', '#THEME_JS').onload = () => {
+				appendScript('app-assets/js/search.js', '#THEME_JS');
+				appendScript('app-assets/js/custom/custom-script.js', '#THEME_JS');
 				document.querySelector('#reactloader').remove();
 			};
 		};

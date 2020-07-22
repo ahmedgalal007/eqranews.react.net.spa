@@ -36,5 +36,7 @@ RUN dotnet publish "eqranews.react.net.spa.csproj" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
+RUN sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /etc/ssl/openssl.cnf
+RUN sed -i 's/DEFAULT@SECLEVEL=2/DEFAULT@SECLEVEL=1/g' /usr/lib/ssl/openssl.cnf
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "eqranews.react.net.spa.dll"]

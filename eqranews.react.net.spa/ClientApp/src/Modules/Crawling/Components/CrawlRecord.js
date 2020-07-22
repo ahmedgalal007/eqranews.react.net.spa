@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 export default function CrawlRecord(props) {
 	const { Id, Name, Domain, CountryId } = { ...props.record };
 	return (
-		<tr>
+		<Fragment>
 			<td></td>
 			<td>{Id}</td>
 			<td>
@@ -23,6 +23,6 @@ export default function CrawlRecord(props) {
 					<i class="material-icons">remove_red_eye</i>
 				</a>
 			</td>
-		</tr>
+		</Fragment>
 	);
 }
