@@ -14,7 +14,7 @@ namespace eqranews.react.net.spa.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DAL.Crawling.CrawlItem", b =>
@@ -68,7 +68,10 @@ namespace eqranews.react.net.spa.Migrations
                     b.Property<int>("CountryId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Domain")
+                    b.Property<string>("DomainURL")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Logo")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Name")
@@ -117,6 +120,29 @@ namespace eqranews.react.net.spa.Migrations
                     b.ToTable("CrawlSteps");
                 });
 
+            modelBuilder.Entity("DAL.Crawling.CrawlStepTypeRequiredAttribute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("DefaultValue")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<bool>("Required")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<string>("TypeName")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CrawlStepTypeRequiredAttribute");
+                });
+
             modelBuilder.Entity("DAL.Crawling.CrawlStepper", b =>
                 {
                     b.Property<int>("Id")
@@ -154,6 +180,28 @@ namespace eqranews.react.net.spa.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Countries");
+                });
+
+            modelBuilder.Entity("DAL.Store.Category", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.DeviceFlowCodes", b =>
@@ -477,6 +525,13 @@ namespace eqranews.react.net.spa.Migrations
                     b.HasOne("DAL.Crawling.CrawlSource", "CrawlSource")
                         .WithMany("CrawlStepper")
                         .HasForeignKey("CrawlSourceId");
+                });
+
+            modelBuilder.Entity("DAL.Store.Category", b =>
+                {
+                    b.HasOne("DAL.Store.Category", "Parent")
+                        .WithMany()
+                        .HasForeignKey("ParentId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

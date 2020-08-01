@@ -1,5 +1,6 @@
 ﻿using DAL.Crawling;
 using DAL.Geo;
+using DAL.Store;
 using eqranews.react.net.spa.Models;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
@@ -14,6 +15,7 @@ namespace eqranews.react.net.spa.Data
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
+
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
@@ -26,6 +28,7 @@ namespace eqranews.react.net.spa.Data
         public DbSet<CrawlStep> CrawlSteps { get; set; }
         public DbSet<CrawlStepper> CrawlSteppers { get; set; }
         public DbSet<Country> Countries { get; set; }
-        public DbSet<DAL.Crawling.CrawlStepTypeRequiredAttribute> CrawlStepTypeRequiredAttribute { get; set; }
+        public DbSet<CrawlStepTypeRequiredAttribute> CrawlStepTypeRequiredAttribute { get; set; }
+        public DbSet<Category> Categories { get; set; }
     }
 }

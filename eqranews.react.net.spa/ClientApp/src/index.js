@@ -7,10 +7,13 @@ import { createStore, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
 
 import createSagaMiddleware, { delay } from 'redux-saga';
+import 'regenerator-runtime/runtime';
 
 import App from './App';
+import * as AppUtilities from './Modules/_shared/lib/AppUtilities';
 import reducers from './Reducers';
 import rootSaga from './sagas';
+//import CrawlSourceSagas from './Modules/Crawling/sagas/CrawlSource';
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
 // mount it on the Store
@@ -24,10 +27,11 @@ const store = createStore(
 
 // then run the saga
 sagaMiddleware.run(rootSaga);
+// sagaMiddleware.run(CrawlSourceSagas);
 
 //import registerServiceWorker from './registerServiceWorker';
 
-const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
+// const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
 //%PUBLIC_URL%
 ReactDOM.render(
@@ -37,26 +41,47 @@ ReactDOM.render(
 				//<Route path="/" render={props => <App />} />
 				// <App />
 			}
-			<Route path="/" component={withRouter(App)} />
+			<Route path="/" component={App} />
 		</BrowserRouter>
 	</Provider>,
 	rootElement,
 	() => {
-		// document.body.innerHTML = document.querySelector('#root').innerHTML;
+		// 	// document.body.innerHTML = document.querySelector('#root').innerHTML;
 		document.querySelector('#root').style.height = '100%';
-		const appendScript = (script, selector = 'body') => {
-			const elem = document.createElement('script');
-			elem.setAttribute('src', script);
-			document.querySelector(selector).after(elem);
-			return elem;
-		};
-		appendScript('app-assets/js/vendors.min.js', '#VENDOR_JS').onload = () => {
-			appendScript('app-assets/js/plugins.js', '#THEME_JS').onload = () => {
-				appendScript('app-assets/js/search.js', '#THEME_JS');
-				appendScript('app-assets/js/custom/custom-script.js', '#THEME_JS');
-				document.querySelector('#reactloader').remove();
-			};
-		};
+		// 	const scripts = AppUtilities.populateAllSctions();
+		// 	AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+		// 		document.querySelector('#reactloader').remove();
+		// 	});
+		// 	// 	const elem1 = (AppUtilities.appendScript(
+		// 	// 		'app-assets/js/vendors.min.js',
+		// 	// 		'#VENDOR_JS',
+		// 	// 		'VENDORJS'
+		// 	// 	).onload = () => {
+		// 	// 		AppUtilities.appendScript(
+		// 	// 			'/app-assets/vendors/jquery-validation/jquery.validate.min.js',
+		// 	// 			AppUtilities.SCRIPT_SECTIONS.VENDOR_JS.id,
+		// 	// 			'VALIDATIONJS'
+		// 	// 		).onload = () => {
+		// 	// 			AppUtilities.appendScript(
+		// 	// 				'app-assets/js/plugins.js',
+		// 	// 				AppUtilities.SCRIPT_SECTIONS.THEME_JS.id,
+		// 	// 				'PLUGINSJS'
+		// 	// 			).onload = () => {
+		// 	// 				AppUtilities.appendScript(
+		// 	// 					'app-assets/js/search.js',
+		// 	// 					'#PLUGINSJS',
+		// 	// 					'SEARCHJS'
+		// 	// 				).onload = () => {
+		// 	// 					AppUtilities.appendScript(
+		// 	// 						'app-assets/js/custom/custom-script.js',
+		// 	// 						'#SEARCHJS',
+		// 	// 						'CUSTOMJS'
+		// 	// 					);
+		// 	// 					// document.querySelector('#reactloader').remove();
+		// 	// 				};
+		// 	// 			};
+		// 	// 		};
+		// 	// 	});
 	}
 );
 

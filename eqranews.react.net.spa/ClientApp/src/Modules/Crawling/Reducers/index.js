@@ -15,5 +15,5 @@
 // 	SelectedItem: SelectedItemReducer,
 // };
 
-import * as CrawlSourceReducers from './CrawlSource';
-export default { ...CrawlSourceReducers };
+import * as CrawlSourcesReducers from './CrawlSource';
+export default { ...CrawlSourcesReducers };

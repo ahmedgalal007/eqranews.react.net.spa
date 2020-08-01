@@ -13,18 +13,19 @@ import ApiAuthorizationRoutes from './components/api-authorization/ApiAuthorizat
 import { ApplicationPaths } from './components/api-authorization/ApiAuthorizationConstants';
 
 import './custom.css';
+import CrawlRoutes, { CrawlPrefix } from './Modules/Crawling/routes';
+import { CountryRoutes, CountryPrefix } from './Modules/Settings/routes';
 
 export class App extends Component {
 	static displayName = App.name;
 
 	render() {
-		console.log('App Props:', this.props);
+		// console.log('App Props:', this.props);
 		return (
 			<Layout>
 				<Route exact path="/" component={Home} />
-				<Route exact path="/crawlsources" component={withRouter(CrawlSource)} />
-				<Route exact path="/crawl" component={withRouter(Crawl)} />
-				<Route exact path="/crawling" component={withRouter(Crawl)} />
+				<Route path={CrawlPrefix} component={CrawlRoutes} />
+				<Route path={CountryPrefix} component={CountryRoutes} />
 				<AuthorizeRoute path="/about" component={About} />
 				{
 					//<AuthorizeRoute path='/fetch-data' component={FetchData} />
@@ -38,9 +39,9 @@ export class App extends Component {
 	}
 }
 
-const mapStateToProps = (state, ownProps) => {
-	console.log('qwnProps', ownProps);
-	return { ...state, ...ownProps };
+const mapStateToProps = state => {
+	//console.log('qwnProps', ownProps);
+	return state;
 };
 
 export default connect(mapStateToProps)(App);

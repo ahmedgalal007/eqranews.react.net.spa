@@ -1,11 +1,35 @@
-import api from '../api/CrawlSource';
+import api from '../Api/CrawlSource';
 
 export const ACTION_TYPES = {
-	CREATE: 'CREATE',
-	UPDATE: 'UPDATE',
-	DELETE: 'DELETE',
-	FETCH_ALL: 'FETCH_ALL',
+	CRAWL_SOURCE_LOADING: 'CRAWL_SOURCE_LOADING',
+	REQUEST_CRAWL_SOURCE_CREATE: 'REQUEST_CRAWL_SOURCE_CREATE',
+	REQUEST_CRAWL_SOURCE_UPDATE: 'REQUEST_CRAWL_SOURCE_UPDATE',
+	REQUEST_CRAWL_SOURCE_DELETE: 'REQUEST_CRAWL_SOURCE_DELETE',
+	REQUEST_CRAWL_SOURCE_FETCH_ALL: 'REQUEST_CRAWL_SOURCE_FETCH_ALL',
+	RECEIVE_CRAWL_SOURCE_CREATE: 'RECEIVE_CRAWL_SOURCE_CREATE',
+	RECEIVE_CRAWL_SOURCE_UPDATE: 'RECEIVE_CRAWL_SOURCE_UPDATE',
+	RECEIVE_CRAWL_SOURCE_DELETE: 'RECEIVE_CRAWL_SOURCE_DELETE',
+	RECEIVE_CRAWL_SOURCE_FETCH_ALL: 'RECEIVE_CRAWL_SOURCE_FETCH_ALL',
 };
+
+export const requestCrawlSourceFetchAll = () => ({
+	type: ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL,
+});
+
+export const receiveCrawlSourceFetchAll = /*async*/ data => /*await*/ ({
+	type: ACTION_TYPES.RECEIVE_CRAWL_SOURCE_FETCH_ALL,
+	data,
+});
+
+export const crawlSourceLoadStart = () => ({
+	type: ACTION_TYPES.CRAWL_SOURCE_LOADING,
+	data: true,
+});
+export const crawlSourceLoadEnd = () => ({
+	type: ACTION_TYPES.CRAWL_SOURCE_LOADING,
+	data: false,
+});
+
 const formateData = data => ({
 	...data,
 	//age: parseInt(data.age ? data.age : 0),
@@ -74,9 +98,9 @@ export const Delete = (id, onSuccess) => dispatch => {
 		);
 };
 
-export default {
-	CREATE: create,
-	UPDATE: update,
-	Delete: Delete,
-	FETCH_ALL: fetchAll,
-};
+// export default {
+// 	CREATE: create,
+// 	UPDATE: update,
+// 	DELETE: Delete,
+// 	FETCH_ALL: fetchAll,
+// };

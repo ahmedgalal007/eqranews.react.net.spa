@@ -1,31 +1,30 @@
-import ACTION_TYPES from '../Actions/CrawlSource';
+import { ACTION_TYPES } from '../Actions/CrawlSource';
 
-const intialState = { list: [] };
+export const CrawlSources = (state = [], { type, data }) => {
+	switch (type) {
+		case ACTION_TYPES.RECEIVE_CRAWL_SOURCE_FETCH_ALL:
+			console.log('Saga sent the request to reducer!');
+			console.log('RECEIVE_CRAWL_SOURCE_FETCH_ALL', data);
+			return [...state, ...data];
 
-export const CrawlSource = (state = intialState, action) => {
-	switch (action.type) {
-		case ACTION_TYPES.FETCH_ALL:
-			return {
-				...state,
-				list: action.payload,
-			};
+		case ACTION_TYPES.RECEIVE_CRAWL_SOURCE_CREATE:
+			return [...state, data];
 
-		case ACTION_TYPES.CREATE:
-			return { ...state, list: [...state.list, action.payload] };
+		case ACTION_TYPES.RECEIVE_CRAWL_SOURCE_UPDATE:
+			return state.map(x => (x.id == data.id ? data : x));
 
-		case ACTION_TYPES.UPDATE:
-			return {
-				...state,
-				list: state.list.map(x =>
-					x.id == action.payload.id ? action.payload : x
-				),
-			};
+		case ACTION_TYPES.RECEIVE_CRAWL_SOURCE_DELETE:
+			return [...state.filter(x => x.id != data)];
+		default:
+			return state;
+	}
+};
 
-		case ACTION_TYPES.DELETE:
-			return {
-				...state,
-				list: state.list.filter(x => x.id != action.payload),
-			};
+export const Loading = (state = false, { type, data }) => {
+	switch (type) {
+		case ACTION_TYPES.CRAWL_SOURCE_LOADING:
+			return data;
+
 		default:
 			return state;
 	}

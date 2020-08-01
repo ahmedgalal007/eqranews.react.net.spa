@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.Crawling;
 using eqranews.react.net.spa.Data;
+using System.Net.Mime;
+using System.IO;
 
 namespace eqranews.react.net.spa.Controllers
 {
@@ -80,6 +82,22 @@ namespace eqranews.react.net.spa.Controllers
         [HttpPost]
         public async Task<ActionResult<CrawlSource>> PostCrawlSource(CrawlSource crawlSource)
         {
+            var fileBytes = new List<byte[]>();
+            var files = HttpContext.Request.Form.Files;
+            foreach (var file in files)
+            {
+                if (file.Length > 0)
+                {
+                    using (var memoryStream = new MemoryStream())
+                    {
+                        await file.CopyToAsync(memoryStream);
+                        fileBytes.Add(memoryStream.ToArray());
+                    }
+                }
+            }
+            // TODO: Write Code For Save Or Send Result To Another Services For Save
+        
+
             _context.CrawlSources.Add(crawlSource);
             await _context.SaveChangesAsync();
 

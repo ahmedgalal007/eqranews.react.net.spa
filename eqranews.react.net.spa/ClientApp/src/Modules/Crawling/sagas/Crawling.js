@@ -21,4 +21,4 @@ function* fetchResourcesSaga() {
 	yield takeLatest('CRAWLING_SOURCES_API_REQUEST', fetchResources);
 }
 export { fetchResourcesSaga };
-export default [fetchResourcesSaga()];
+export default [fetchResourcesSaga];
