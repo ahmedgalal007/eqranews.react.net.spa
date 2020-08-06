@@ -13,21 +13,31 @@ import App from './App';
 import * as AppUtilities from './Modules/_shared/lib/AppUtilities';
 import reducers from './Reducers';
 import rootSaga from './sagas';
-//import CrawlSourceSagas from './Modules/Crawling/sagas/CrawlSource';
+import { loadState, saveState } from './localStorage';
+import { throttle } from 'redux-saga/effects';
 // create the saga middleware
 const sagaMiddleware = createSagaMiddleware();
+
+const persistedState = loadState();
+
 // mount it on the Store
 const store = createStore(
 	reducers,
+	persistedState,
 	compose(
 		applyMiddleware(sagaMiddleware),
 		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 	)
 );
 
+store.subscribe(() => {
+	//throttle(() => {
+	saveState({ Countries: store.getState().Countries });
+	//}, 1000);
+});
+
 // then run the saga
 sagaMiddleware.run(rootSaga);
-// sagaMiddleware.run(CrawlSourceSagas);
 
 //import registerServiceWorker from './registerServiceWorker';
 
@@ -47,11 +57,18 @@ ReactDOM.render(
 	rootElement,
 	() => {
 		// 	// document.body.innerHTML = document.querySelector('#root').innerHTML;
-		document.querySelector('#root').style.height = '100%';
-		// 	const scripts = AppUtilities.populateAllSctions();
-		// 	AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-		// 		document.querySelector('#reactloader').remove();
-		// 	});
+		//  document.querySelector('#root').style.height = '100%';
+		const scripts = AppUtilities.populateAllSctions();
+		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+			// document.querySelector('#reactloader').remove();
+			const loader = document.querySelector('#reactloader');
+			if (loader) {
+				loader.classList.add('animated', 'fadeOut');
+				setTimeout(() => {
+					loader.style.display = 'none';
+				}, 4000);
+			}
+		});
 		// 	// 	const elem1 = (AppUtilities.appendScript(
 		// 	// 		'app-assets/js/vendors.min.js',
 		// 	// 		'#VENDOR_JS',

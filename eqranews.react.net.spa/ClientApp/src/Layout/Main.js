@@ -2,10 +2,19 @@ import React, { Component } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import RightSidebarNav from './RightSidebarNav';
 import Breadcrumb from './Breadcrumb';
+import { connect } from 'react-redux';
+import Loader from '../Modules/_shared/components/Loader';
 // import Home from '../Modules/Home';
-export default class Main extends Component {
+class Main extends Component {
 	showBreadcrumb = () => {
 		return <Breadcrumb />;
+	};
+	renderContent = () => {
+		if (this.props.IsPageLoading) {
+			return <Loader />;
+		} else {
+			return this.props.children;
+		}
 	};
 	render() {
 		const baseUrl = document
@@ -16,13 +25,15 @@ export default class Main extends Component {
 				id="main"
 				// style={!this.props.ShowBreadcrumb ? { paddingRight: '0' } : {}}
 			>
-				<div className="row">
-					{console.log('BreadCrumb', this.props)}
+				<div className="row main-height">
+					{
+						//console.log('BreadCrumb', this.props)
+					}
 					{this.showBreadcrumb()}
-					<div className="col s12">
-						<div className="container">
-							{console.log('Route Component:', this.props.children)}
-							{this.props.children}
+					<div className="col s12 main-height">
+						<div className="container main-height">
+							{console.log('Main Component props:', this.props)}
+							{this.renderContent()}
 							{
 								//<!-- START RIGHT SIDEBAR NAV -->
 							}
@@ -71,3 +82,11 @@ export default class Main extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return {
+		IsPageLoading: state.IsPageLoading,
+	};
+};
+
+export default connect(mapStateToProps)(Main);

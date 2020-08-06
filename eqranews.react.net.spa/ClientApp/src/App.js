@@ -14,7 +14,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 
 import './custom.css';
 import CrawlRoutes, { CrawlPrefix } from './Modules/Crawling/routes';
-import { CountryRoutes, CountryPrefix } from './Modules/Settings/routes';
+import { SettingsRoutes, SettingsPrefix } from './Modules/Settings/routes';
 
 export class App extends Component {
 	static displayName = App.name;
@@ -25,7 +25,7 @@ export class App extends Component {
 			<Layout>
 				<Route exact path="/" component={Home} />
 				<Route path={CrawlPrefix} component={CrawlRoutes} />
-				<Route path={CountryPrefix} component={CountryRoutes} />
+				<Route path={SettingsPrefix} component={SettingsRoutes} />
 				<AuthorizeRoute path="/about" component={About} />
 				{
 					//<AuthorizeRoute path='/fetch-data' component={FetchData} />

@@ -9,46 +9,50 @@ import { connect } from 'react-redux';
 
 import { DTable } from '../../_shared/components/DTable';
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
-// import * as Actions from '../Actions/Country';
+import {
+	requestFetchAllCountries,
+	requestDeleteCountry,
+} from '../Actions/Country';
+import { Link } from 'react-router-dom';
+import { CountryForm } from './CountryForm';
 // var $ = require('jquery');
-export class Crawl extends Component {
+export class Country extends Component {
 	componentWillMount = () => {
 		//this.state = { loaded: false };
 		this.columns = [
-			{ title: 'Id' },
-			{ title: 'Name' },
-			{ title: 'IsoCode' },
+			{ title: 'Id', name: 'id', width: '10%' },
+			{ title: 'Name', name: 'name' },
+			{ title: 'Code', name: 'isoCode' },
 			{
+				width: '10%',
+				title: 'Edit',
 				class: '',
 				orderable: false,
 				data: null,
 				defaultContent: '',
 			},
 			{
+				width: '10%',
+				title: 'Delete',
 				class: '',
 				orderable: false,
 				data: null,
-				defaultContent:
-					'<a class="danger" href="/crawl/source/"><i class="material-icons">delete</i></a>',
+				defaultContent: '',
 			},
 		];
 
-		this.data = [
-			{ Id: 1, Name: 'Egypt', IsoCode: 'EG' },
-			{ Id: 2, Name: 'Saudi Erabia', IsoCode: 'SA' },
-			{ Id: 3, Name: 'Kuwait', IsoCode: 'KW' },
-		];
-
 		this.columnDefs = [
+			{ responsivePriority: 1, targets: [3, 4] },
 			{
 				//render: EditButton,
 				// createdCell: EditButton,
 				targets: 3,
+				// createdCell: this.createEditButton,
 				createdCell: (td, cellData, rowData, row, col) => {
-					const linkStr = '/crawl/sources/' + rowData[1];
+					const linkStr = '/settings/country/' + rowData[0];
 					return ReactDOM.render(
 						<a
-							style={{ cursor: 'pointer' }}
+							style={{ cursor: 'pointer', color: 'green' }}
 							onClick={() => {
 								//console.log(props.history);
 								this.props.history.push(linkStr);
@@ -60,30 +64,37 @@ export class Crawl extends Component {
 					);
 				},
 			},
-			{ visible: true, targets: [4] },
+			{
+				targets: 4,
+				createdCell: (td, cellData, rowData, row, col) => {
+					return ReactDOM.render(
+						<a
+							style={{ cursor: 'pointer', color: 'red' }}
+							onClick={() => {
+								this.props.DeleteCountry(rowData[0]);
+							}}
+						>
+							<i className="material-icons">delete</i>
+						</a>,
+						td
+					);
+				},
+			},
 		];
-		const scripts = AppUtilities.populateAllSctions();
 
-		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			//this.setState({ loaded: true });
+		//if (this.props.data.length == 0)
+		this.props.FetchAllCountries();
+	};
 
-			if (!this.props.Loading) {
-				if (document.querySelector('#reactloader')) {
-					document.querySelector('#reactloader').remove();
-				}
-				//this.props.crawlSourceLoadStart();
-
-				//this.props.requestCrawlSourceFetchAll();
-				this.forceUpdate();
-			}
-		});
+	componentDidMount = () => {
+		this.forceUpdate();
 	};
 
 	tableData = dataArray => {
 		return dataArray.map((x, i) => {
 			const res = [];
 			this.columns.map((n, l) => {
-				res.push(n.title ? x[n.title] : '');
+				res.push(n.name ? x[n.name] : '');
 			});
 			return res;
 		});
@@ -110,13 +121,21 @@ export class Crawl extends Component {
 	render() {
 		//console.log('Crawl M', window.M);
 		//console.log('Crawl props', this.props);
+		console.log('Countries Props', this.props);
 		return (
 			<section className="users-list-wrapper section">
 				<div className="users-list-table">
+					<Link
+						to="/settings/country/0"
+						component={CountryForm}
+						className="btn-floating btn-large waves-effect waves-light red"
+					>
+						<i class="material-icons">add</i>
+					</Link>
 					<div className="card">
 						<div className="card-content">
 							<DTable
-								data={this.tableData(this.data)}
+								data={this.tableData(this.props.data)}
 								columns={this.columns}
 								formate={this.formate}
 								columnDefs={this.columnDefs}
@@ -127,20 +146,29 @@ export class Crawl extends Component {
 			</section>
 		);
 	}
+
+	createEditButton = (td, cellData, rowData, row, col) => {
+		const linkStr = '/settings/country/' + rowData[0];
+		td.innerHTML = `
+			<a
+				style="cursor: pointer; color: green"
+				onclick="${"() => {this.props.history.push('" + linkStr + "');}"}"
+			>
+				<i class="material-icons">edit</i>
+			</a>`;
+	};
 }
 
 const mapStateToProps = state => {
-	//console.log('Crawl', state);
+	console.log('Countries', state);
 	return {
-		//data: state.CrawlSources.list,
-		//Loading: state.Loading,
+		data: state.Countries,
 	};
 };
 
 const mapActionToProps = {
-	//requestCrawlSourceFetchAll: requestCrawlSourceFetchAll,
-	//crawlSourceLoadStart: crawlSourceLoadStart,
-	//requestCrawlSourceDelete: requestCrawlSourceDelete,
+	FetchAllCountries: requestFetchAllCountries,
+	DeleteCountry: requestDeleteCountry,
 };
 
-export default connect(mapStateToProps, mapActionToProps)(Crawl);
+export default connect(mapStateToProps, mapActionToProps)(Country);

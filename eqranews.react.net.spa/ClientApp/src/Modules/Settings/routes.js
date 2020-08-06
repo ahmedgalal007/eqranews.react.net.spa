@@ -1,16 +1,15 @@
 import React, { Fragment } from 'react';
 import { Route } from 'react-router-dom';
 import Country from './Components/Country';
-export const CountryPrefix = '/country';
-export const CountryRoutes = props => {
+import CountryForm from './Components/CountryForm';
+export const SettingsPrefix = '/settings/country';
+export const SettingsRoutes = props => {
 	return (
 		<Fragment>
-			<Route exact path={`${CountryPrefix}`} component={Country} />
-			{
-				//<Route path={`${CrawlPrefix}/sources/:id`} component={CrawlSource} />
-			}
+			<Route exact path={`${SettingsPrefix}`} component={Country} />
+			{<Route path={`${SettingsPrefix}/:id`} component={CountryForm} />}
 		</Fragment>
 	);
 };
 
-export default CountryRoutes;
+export default SettingsRoutes;

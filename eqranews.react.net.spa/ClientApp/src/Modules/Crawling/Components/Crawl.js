@@ -16,13 +16,7 @@ export class Crawl extends Component {
 	componentWillMount = () => {
 		//this.state = { loaded: false };
 		this.columns = [
-			{
-				class: 'details-control',
-				orderable: false,
-				data: null,
-				defaultContent: '',
-			},
-			{ title: 'Id' },
+			{ title: 'Id', style: { width: '50px' } },
 			{ title: 'Name' },
 			{ title: 'DomainUrl' },
 			{ title: 'CountryId' },
@@ -45,12 +39,13 @@ export class Crawl extends Component {
 			{
 				//render: EditButton,
 				// createdCell: EditButton,
-				targets: 5,
+				targets: 4,
 				createdCell: (td, cellData, rowData, row, col) => {
-					const linkStr = '/crawl/sources/' + rowData[1];
+					const linkStr = '/crawl/sources/' + rowData[0];
 					return ReactDOM.render(
 						<a
 							style={{ cursor: 'pointer' }}
+							class="danger"
 							onClick={() => {
 								//console.log(props.history);
 								this.props.history.push(linkStr);
@@ -62,7 +57,8 @@ export class Crawl extends Component {
 					);
 				},
 			},
-			{ visible: true, targets: [6] },
+			{ orderable: false, targets: [0, 4, 5] },
+			// { visible: true, targets: [6] },
 		];
 		//const scripts = AppUtilities.populateAllSctions();
 
@@ -73,8 +69,10 @@ export class Crawl extends Component {
 		if (document.querySelector('#reactloader')) {
 			document.querySelector('#reactloader').remove();
 		}
-		// this.props.crawlSourceLoadStart();
+		//this.props.crawlSourceLoadStart();
+		// if (!this.props.IsPageLoading) {
 		this.props.requestCrawlSourceFetchAll();
+		// }
 		//}
 		//});
 	};
@@ -134,7 +132,8 @@ const mapStateToProps = state => {
 	//console.log('Crawl', state);
 	return {
 		data: state.CrawlSources,
-		Loading: state.Loading,
+		//Loading: state.Loading,
+		//Loading: state.IsPageLoading,
 	};
 };
 

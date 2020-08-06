@@ -21,30 +21,45 @@ function* crawlSourceFetchAll(action) {
 	console.log('Responding to the Saga!!!');
 	try {
 		//const data = yield call(api.fetchAll);
-		const data = yield call(() => [
-			{
-				Id: 5,
-				DomainUrl: 'http://Akhbar.com',
-				Name: 'AKHBAR',
-				CountryId: 1,
-			},
-		]);
-		yield put(crawlSourceLoadStart());
+		const data = yield call(() => {
+			const res = [];
+			for (let i = 0; i < 87; i++) {
+				res.push({
+					Id: i + 1,
+					DomainUrl: 'http://Akhbar.com',
+					Name: 'AKHBAR',
+					CountryId: 1,
+				});
+			}
+			return res;
+		});
+		yield put({
+			type: 'PAGE_LOADING',
+			data: true,
+		});
+		yield delay(4000);
+
+		//yield put(crawlSourceLoadStart());
 		yield put(receiveCrawlSourceFetchAll(data));
-		yield put(crawlSourceLoadEnd());
+		//yield put(crawlSourceLoadEnd());
+
+		yield put({
+			type: 'PAGE_LOADING',
+			data: false,
+		});
 	} catch (err) {
 		//console.log(err);
 	}
 }
 
-export function* crawlSourceFetchAllSaga() {
+function* crawlSourceFetchAllSaga() {
 	console.log('Received the Saga Request!!!!!');
-	// yield take(ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL);
-	// yield call(crawlSourceFetchAll);
-	yield takeEvery(
-		ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL,
-		crawlSourceFetchAll
-	);
+	yield take(ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL);
+	yield call(crawlSourceFetchAll);
+	// yield takeEvery(
+	// 	ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL,
+	// 	crawlSourceFetchAll
+	// );
 }
 
-// export default { crawlSourceFetchAllSaga };
+export default [crawlSourceFetchAllSaga()];

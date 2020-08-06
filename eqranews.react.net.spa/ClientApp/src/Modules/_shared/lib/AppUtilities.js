@@ -87,7 +87,10 @@ export const loadScriptsAsync = section => {
 };
 
 export const populateAllSctions = () => {
-	SCRIPT_SECTIONS.VENDOR_JS.scripts = ['app-assets/js/vendors.min.js'];
+	SCRIPT_SECTIONS.VENDOR_JS.scripts = [
+		'app-assets/js/vendors.min.js',
+		//'app-assets/vendors/waves/waves.min.js',
+	];
 	SCRIPT_SECTIONS.THEME_JS.scripts = [
 		//'/app-assets/vendors/jquery-validation/jquery.validate.min.js',
 		'app-assets/js/plugins.js',

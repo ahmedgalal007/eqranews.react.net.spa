@@ -1,5 +1,5 @@
-import { crawlSourceFetchAllSaga } from './CrawlSource';
+import crawlSourceSagas from './CrawlSource';
 
 // export { crawlSourceSagas };
 
-export default [crawlSourceFetchAllSaga];
+export default [...crawlSourceSagas];

@@ -46,7 +46,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCountry(int id, Country country)
+        public async Task<IActionResult> PutCountry([FromForm] int id,[FromForm] Country country)
         {
             if (id != country.Id)
             {
@@ -78,7 +78,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Country>> PostCountry(Country country)
+        public async Task<ActionResult<Country>> PostCountry([FromForm]Country country)
         {
             _context.Countries.Add(country);
             await _context.SaveChangesAsync();

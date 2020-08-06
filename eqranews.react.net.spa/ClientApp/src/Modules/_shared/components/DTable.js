@@ -10,7 +10,6 @@ import * as AppUtilities from '../lib/AppUtilities';
 import { bindActionCreators } from 'redux';
 // const $ = require('jquery');
 //$.DataTable = require('datatables.net');
-require('datatables.net-select');
 
 // require('datatables.net-buttons-dt');
 // const jzip = require('jzip');
@@ -54,8 +53,9 @@ export class DTable extends Component {
 		//console.log(this.el);
 		const options = {
 			responsive: true,
-			data: data,
+			autoWidth: false,
 			columns: columns,
+			data: data,
 			//select: true,
 			//processing: true,
 			// "serverSide": true,
