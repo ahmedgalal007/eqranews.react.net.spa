@@ -25,14 +25,16 @@ const store = createStore(
 	reducers,
 	persistedState,
 	compose(
-		applyMiddleware(sagaMiddleware),
-		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+		applyMiddleware(sagaMiddleware)
+		//window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 	)
 );
 
 store.subscribe(() => {
 	//throttle(() => {
 	saveState({ Countries: store.getState().Countries });
+	saveState({ Categories: store.getState().Categories });
+
 	//}, 1000);
 });
 
@@ -60,7 +62,13 @@ ReactDOM.render(
 		//  document.querySelector('#root').style.height = '100%';
 		const scripts = AppUtilities.populateAllSctions();
 		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			// document.querySelector('#reactloader').remove();
+			if (window.jQuery && window.Waves) {
+				const $ = window.jQuery,
+					Waves = window.Waves;
+				$(document).ready(function () {
+					Waves.init(); //Preloading script
+				});
+			}
 			const loader = document.querySelector('#reactloader');
 			if (loader) {
 				loader.classList.add('animated', 'fadeOut');

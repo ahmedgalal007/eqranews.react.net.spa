@@ -1,28 +1,22 @@
-import '../../../vendors/data-tables/css/jquery.dataTables.css';
-import '../../../vendors/data-tables/extensions/responsive/css/responsive.dataTables.css';
-// import '../CSS/page-users.css';
-
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
 import { connect } from 'react-redux';
 
 import { DTable } from '../../_shared/components/DTable';
-import * as AppUtilities from '../../_shared/lib/AppUtilities';
 import {
-	requestFetchAllCountries,
-	requestDeleteCountry,
-} from '../Actions/Country';
+	requestFetchAllCategories,
+	requestDeleteCategory,
+} from '../Actions/Category';
 import { Link } from 'react-router-dom';
-import { CountryForm } from './CountryForm';
-// var $ = require('jquery');
-export class Country extends Component {
+import { CategoryForm } from './CategoryForm';
+export class Category extends Component {
 	componentWillMount = () => {
 		//this.state = { loaded: false };
 		this.columns = [
 			{ title: 'Id', name: 'id', width: '10%' },
 			{ title: 'Name', name: 'name' },
-			{ title: 'Code', name: 'isoCode' },
+			{ title: 'Color', name: 'color' },
+			{ title: 'Parent', name: 'parentId' },
 			{
 				width: '10%',
 				title: 'Edit',
@@ -42,19 +36,44 @@ export class Country extends Component {
 		];
 
 		this.columnDefs = [
-			{ responsivePriority: 1, targets: [3, 4] },
+			{ responsivePriority: 1, targets: [4, 5] },
 			{
-				//render: EditButton,
-				// createdCell: EditButton,
-				targets: 3,
-				// createdCell: this.createEditButton,
+				targets: 2,
 				createdCell: (td, cellData, rowData, row, col) => {
-					const linkStr = '/settings/country/' + rowData[0];
+					return ReactDOM.render(
+						<div class="col s6 m3 l2">
+							<a
+								class="btn z-depth-2"
+								style={{ background: rowData[2], cursor: 'default' }}
+							>
+								{rowData[2]}
+							</a>
+						</div>,
+						td
+					);
+				},
+			},
+			{
+				targets: 3,
+				createdCell: (td, cellData, rowData, row, col) => {
+					return ReactDOM.render(
+						<div class="col s6 m3 l2">
+							{rowData[3]
+								? this.props.data.filter(x => x.id == rowData[3])[0].name
+								: ''}
+						</div>,
+						td
+					);
+				},
+			},
+			{
+				targets: 4,
+				createdCell: (td, cellData, rowData, row, col) => {
+					const linkStr = '/settings/category/' + rowData[0];
 					return ReactDOM.render(
 						<a
 							style={{ cursor: 'pointer', color: 'green' }}
 							onClick={() => {
-								//console.log(props.history);
 								this.props.history.push(linkStr);
 							}}
 						>
@@ -65,13 +84,13 @@ export class Country extends Component {
 				},
 			},
 			{
-				targets: 4,
+				targets: 5,
 				createdCell: (td, cellData, rowData, row, col) => {
 					return ReactDOM.render(
 						<a
 							style={{ cursor: 'pointer', color: 'red' }}
 							onClick={() => {
-								this.props.DeleteCountry(rowData[0]);
+								this.props.DeleteCategory(rowData[0]);
 							}}
 						>
 							<i className="material-icons">delete</i>
@@ -83,7 +102,7 @@ export class Country extends Component {
 		];
 
 		//if (this.props.data.length == 0)
-		this.props.FetchAllCountries();
+		this.props.FetchAllCategories();
 	};
 
 	componentDidMount = () => {
@@ -126,8 +145,8 @@ export class Country extends Component {
 			<section className="users-list-wrapper section">
 				<div className="users-list-table">
 					<Link
-						to="/settings/country/0"
-						component={CountryForm}
+						to="/settings/category"
+						component={CategoryForm}
 						className="btn-floating btn-large waves-effect waves-light red"
 					>
 						<i class="material-icons">add</i>
@@ -153,29 +172,18 @@ export class Country extends Component {
 			</section>
 		);
 	}
-
-	createEditButton = (td, cellData, rowData, row, col) => {
-		const linkStr = '/settings/country/' + rowData[0];
-		td.innerHTML = `
-			<a
-				style="cursor: pointer; color: green"
-				onclick="${"() => {this.props.history.push('" + linkStr + "');}"}"
-			>
-				<i class="material-icons">edit</i>
-			</a>`;
-	};
 }
 
 const mapStateToProps = state => {
-	console.log('Countries', state);
+	console.log('Categories', state);
 	return {
-		data: state.Countries,
+		data: state.Categories,
 	};
 };
 
 const mapActionToProps = {
-	FetchAllCountries: requestFetchAllCountries,
-	DeleteCountry: requestDeleteCountry,
+	FetchAllCategories: requestFetchAllCategories,
+	DeleteCategory: requestDeleteCategory,
 };
 
-export default connect(mapStateToProps, mapActionToProps)(Country);
+export default connect(mapStateToProps, mapActionToProps)(Category);

@@ -48,7 +48,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCrawlSource(int id, CrawlSource crawlSource)
+        public async Task<IActionResult> PutCrawlSource([FromForm]int id, [FromForm]CrawlSource crawlSource)
         {
             if (id != crawlSource.Id)
             {
@@ -80,7 +80,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<CrawlSource>> PostCrawlSource(CrawlSource crawlSource)
+        public async Task<ActionResult<CrawlSource>> PostCrawlSource([FromForm]CrawlSource crawlSource)
         {
             var fileBytes = new List<byte[]>();
             var files = HttpContext.Request.Form.Files;

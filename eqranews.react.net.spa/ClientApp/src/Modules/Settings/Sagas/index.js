@@ -1,3 +1,4 @@
-import CountrySaga from './Country';
+import CountrySagas from './Country';
+import CategorySagas from './Category';
 
-export default [...CountrySaga];
+export default [...CountrySagas, ...CategorySagas];

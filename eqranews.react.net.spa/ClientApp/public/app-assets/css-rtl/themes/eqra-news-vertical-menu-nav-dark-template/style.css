@@ -11721,9 +11721,7 @@ tr.group:hover
     height: 10px;
     margin-left: 1px;
 
-    -webkit-border-radius: 50%;
-       -moz-border-radius: 50%;
-            border-radius: 50%;
+    border-radius: 50%;
 }
 
 .browser-window .circles

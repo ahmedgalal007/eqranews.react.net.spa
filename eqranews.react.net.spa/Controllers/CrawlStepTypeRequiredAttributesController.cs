@@ -46,7 +46,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCrawlStepTypeRequiredAttribute(int id, CrawlStepTypeRequiredAttribute crawlStepTypeRequiredAttribute)
+        public async Task<IActionResult> PutCrawlStepTypeRequiredAttribute([FromForm] int id, [FromForm] CrawlStepTypeRequiredAttribute crawlStepTypeRequiredAttribute)
         {
             if (id != crawlStepTypeRequiredAttribute.Id)
             {
@@ -78,7 +78,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<CrawlStepTypeRequiredAttribute>> PostCrawlStepTypeRequiredAttribute(CrawlStepTypeRequiredAttribute crawlStepTypeRequiredAttribute)
+        public async Task<ActionResult<CrawlStepTypeRequiredAttribute>> PostCrawlStepTypeRequiredAttribute([FromForm] CrawlStepTypeRequiredAttribute crawlStepTypeRequiredAttribute)
         {
             _context.CrawlStepTypeRequiredAttribute.Add(crawlStepTypeRequiredAttribute);
             await _context.SaveChangesAsync();

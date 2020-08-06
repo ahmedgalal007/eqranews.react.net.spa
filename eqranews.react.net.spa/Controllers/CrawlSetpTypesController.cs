@@ -46,7 +46,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCrawlSetpType(int id, CrawlSetpType crawlSetpType)
+        public async Task<IActionResult> PutCrawlSetpType([FromForm] int id, [FromForm] CrawlSetpType crawlSetpType)
         {
             if (id != crawlSetpType.Id)
             {
@@ -78,7 +78,7 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<CrawlSetpType>> PostCrawlSetpType(CrawlSetpType crawlSetpType)
+        public async Task<ActionResult<CrawlSetpType>> PostCrawlSetpType([FromForm] CrawlSetpType crawlSetpType)
         {
             _context.CrawlSetpTypes.Add(crawlSetpType);
             await _context.SaveChangesAsync();

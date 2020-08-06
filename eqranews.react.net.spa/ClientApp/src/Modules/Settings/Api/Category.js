@@ -1,16 +1,11 @@
 import axios from 'axios';
-import { CountryForm } from '../Components/CountryForm';
 
 const Countries = () => {
 	const baseUrl = '/api/';
-	const url = baseUrl + 'Countries/';
+	const url = baseUrl + 'Categories/';
 	return {
 		fetchAll: async () => {
 			const res = await axios.get(url);
-			//console.log('Axios GET:', res);
-			//const data = await res.json();
-			console.log('Axios Data:', res.data);
-
 			return res.data;
 		},
 		fetchById: async id => await axios.get(url + id),
