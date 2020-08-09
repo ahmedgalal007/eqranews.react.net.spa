@@ -31,10 +31,13 @@ const store = createStore(
 );
 
 store.subscribe(() => {
-	//throttle(() => {
-	saveState({ Countries: store.getState().Countries });
-	saveState({ Categories: store.getState().Categories });
-
+	//throttle(function () { // Create throttle lodash
+	saveState({
+		Countries: store.getState().Countries,
+		Categories: store.getState().Categories,
+		CrawlStepTypes: store.getState().CrawlStepTypes,
+		RouterCurrentPage: store.getState().RouterCurrentPage,
+	});
 	//}, 1000);
 });
 

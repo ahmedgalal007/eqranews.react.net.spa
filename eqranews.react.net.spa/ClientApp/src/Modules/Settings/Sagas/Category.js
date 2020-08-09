@@ -7,7 +7,9 @@ import {
 	receiveDeleteCategory,
 } from '../Actions/Category';
 import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
-import Api from '../Api/Category';
+//import Api from '../Api/Category';
+import ApiProxy from '../../_shared/api/ApiProxy';
+const Api = ApiProxy('categories');
 
 function* fetchAllCategories() {
 	yield put({
@@ -16,6 +18,7 @@ function* fetchAllCategories() {
 	});
 	const data = yield call(Api.fetchAll);
 	yield delay(2000);
+	console.log('Categories Data From Saga', data);
 	yield put(receiveFetchAllCategories(data));
 	yield put({
 		type: 'PAGE_LOADING',
@@ -69,7 +72,9 @@ function* deleteCategory(action) {
 		type: 'PAGE_LOADING',
 		data: true,
 	});
+	console.log('DeleteCategory Saga Action', action);
 	const data = yield call(Api.delete, action.data); //data = id
+	console.log('DeleteCategory Saga data', data);
 	yield put(receiveDeleteCategory(data.data));
 	yield put({
 		type: 'PAGE_LOADING',

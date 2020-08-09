@@ -1,6 +1,7 @@
-import '../css/dataTables/jquery.dataTables.min.css';
+// import '../css/dataTables/jquery.dataTables.min.css';
 import '../css/dataTables/responsive.dataTables.min.css';
 import '../css/dataTables/page-users.css';
+import '../css/dataTables/fixedColumns.dataTables.min.css';
 // import 'datatables.net-buttons-dt/css/buttons.dataTables.css';
 
 import React, { Component } from 'react';
@@ -52,9 +53,10 @@ export class DTable extends Component {
 		const { columns, data, formate, columnDefs } = { ...this.props };
 		//console.log(this.el);
 		const options = {
-			responsive: true,
+			responsive: false,
 			autoWidth: false,
 			columns: columns,
+			fixedColumns: true,
 			data: data,
 			//select: true,
 			//processing: true,
@@ -71,16 +73,17 @@ export class DTable extends Component {
 			//const detailRows = [];
 			//const dt = this.$el.DataTable(this.options);
 
-			if (!$.fn.dataTable.isDataTable(this.$el)) {
-				$(document).ready(
-					function () {
+			$(document).ready(
+				function () {
+					if ($.fn.dataTable && !$.fn.dataTable.isDataTable(this.$el)) {
 						// variable declaration
 						var usersTable;
 						var usersDataArray = [];
-						this.dt = this.$el.DataTable(options);
-					}.bind(this)
-				);
-			}
+						this.dt = this.$el.removeAttr('width').DataTable(options);
+					}
+				}.bind(this)
+			);
+
 			//this.forceUpdate();
 
 			// $('.display > tbody').on('click', 'tr td.details-control', function () {
@@ -116,7 +119,8 @@ export class DTable extends Component {
 			<div className="responsive-table">
 				<table
 					id="users-list-datatable"
-					className="table"
+					className="table mdl-data-table"
+					style={{ 'min-height': '100px' }}
 					ref={el => (this.el = el)}
 				></table>
 			</div>

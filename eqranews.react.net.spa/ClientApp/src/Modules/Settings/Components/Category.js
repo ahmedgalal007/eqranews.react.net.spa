@@ -16,7 +16,7 @@ export class Category extends Component {
 			{ title: 'Id', name: 'id', width: '10%' },
 			{ title: 'Name', name: 'name' },
 			{ title: 'Color', name: 'color' },
-			{ title: 'Parent', name: 'parentId' },
+			{ title: 'Parent', name: 'parentId', searchable: true },
 			{
 				width: '10%',
 				title: 'Edit',
@@ -55,6 +55,7 @@ export class Category extends Component {
 			},
 			{
 				targets: 3,
+				searchable: true,
 				createdCell: (td, cellData, rowData, row, col) => {
 					return ReactDOM.render(
 						<div class="col s6 m3 l2">
@@ -109,6 +110,11 @@ export class Category extends Component {
 		this.forceUpdate();
 	};
 
+	componentWillUnmount = () => {
+		delete this.columnDefs;
+		delete this.columns;
+	};
+
 	tableData = dataArray => {
 		return dataArray.map((x, i) => {
 			const res = [];
@@ -139,8 +145,7 @@ export class Category extends Component {
 
 	render() {
 		//console.log('Crawl M', window.M);
-		//console.log('Crawl props', this.props);
-		console.log('Countries Props', this.props);
+		console.log('Categories Data', this.props.data);
 		return (
 			<section className="users-list-wrapper section">
 				<div className="users-list-table">
@@ -149,13 +154,11 @@ export class Category extends Component {
 						component={CategoryForm}
 						className="btn-floating btn-large waves-effect waves-light red"
 					>
-						<i class="material-icons">add</i>
+						<i className="material-icons">add</i>
 					</Link>
-					<a
-						class="waves-effect waves-red btn white black-text primary-content"
-						href="javascript:{void(0)}"
-					>
-						Wave
+
+					<a className="waves-effect waves-red btn white red-text primary-content">
+						<i class="material-icons left">add_to_photos</i> جديد
 					</a>
 
 					<div className="card">

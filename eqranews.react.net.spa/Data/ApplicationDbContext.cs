@@ -1,4 +1,5 @@
-﻿using DAL.Crawling;
+﻿using AngleSharp;
+using DAL.Crawling;
 using DAL.Geo;
 using DAL.Store;
 using eqranews.react.net.spa.Models;
@@ -30,5 +31,16 @@ namespace eqranews.react.net.spa.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<CrawlStepTypeRequiredAttribute> CrawlStepTypeRequiredAttribute { get; set; }
         public DbSet<Category> Categories { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.Entity<Category>()
+                .HasMany(p => p.Childrens)
+                .WithOne(p => p.Parent)
+                .HasForeignKey(p => p.ParentId)
+                .OnDelete(DeleteBehavior.SetNull);
+        }
     }
 }

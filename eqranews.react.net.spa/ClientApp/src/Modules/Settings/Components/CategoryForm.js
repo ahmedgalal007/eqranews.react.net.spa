@@ -1,4 +1,3 @@
-// http://wittsparks.com/materialize-colorpicker/#examples
 import '../../../vendors/materialize-colorpicker/css/materialize-colorpicker.min.css';
 import '../../../vendors/select2/select2.min.css';
 import '../../../vendors/select2/select2-materialize.css';
@@ -37,40 +36,56 @@ export class CategoryForm extends Component {
 
 		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
 			//this.forceUpdate();
+
 			if (window.jQuery) {
 				const $ = window.jQuery;
 				$(document).ready(() => {
-					// if ($().colorpicker) {
-					// Load the colorPicker
-					const color = this.state.color ? this.state.color : '#ffffff';
-					const colorPicker = $('#color-component').colorpicker({
-						component: '.btn',
-						format: 'hex',
-						color: color,
-					});
-					colorPicker.colorpicker('setValue', color);
-					// }
-
-					// Load Select2 for parent
-					if ($().select2) {
-						$('#parentId').select2({
-							dropdownAutoWidth: true,
-							placeholder: 'Select an option',
-							width: '100%',
-							data: [
-								{ id: '', text: 'Select Parent Category' },
-								...$.map(this.props.data, obj => {
-									obj.id = obj.id || obj.pk; // replace pk with your identifier
-									obj.text = obj.text || obj.name;
-									obj.selected = obj.id == this.state.parentId;
-									return obj.id !== this.state.id &&
-										obj.parentId !== this.state.id
-										? obj
-										: null;
-								}),
-							],
-						});
+					for (let i = 0; i < 3; i++) {
+						if ($.fn.colorpicker) {
+							// Load the colorPicker
+							const color = this.state.color ? this.state.color : '#ffffff';
+							const colorPicker = $('#color-component').colorpicker({
+								component: '.btn',
+								format: 'hex',
+								color: color,
+							});
+							colorPicker.colorpicker('setValue', color);
+							break;
+						} else {
+							this.forceUpdate();
+						}
 					}
+
+					for (let i = 0; i < 3; i++) {
+						if ($().select2) {
+							$('#parentId').select2({
+								dropdownAutoWidth: true,
+								placeholder: 'Select an option',
+								allowClear: true,
+								width: '100%',
+								data: [
+									{
+										id: '',
+										text: 'Select Parent Category',
+										selected: this.state.parentId > 0 ? false : true,
+									},
+									...$.map(this.props.data, obj => {
+										obj.id = obj.id || obj.pk; // replace pk with your identifier
+										obj.text = obj.text || obj.name;
+										obj.selected = obj.id == this.state.parentId;
+										return obj.id !== this.state.id &&
+											obj.parentId !== this.state.id
+											? obj
+											: null;
+									}),
+								],
+							});
+							break;
+						} else {
+							this.forceUpdate();
+						}
+					}
+					// Load Select2 for parent
 				});
 			}
 		});

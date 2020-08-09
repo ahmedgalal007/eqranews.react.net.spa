@@ -1,9 +1,32 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+import AsideNav from './AsideNav';
+import AppRoutes from '../routes';
 
-export default class Aside extends Component {
+export class Aside extends Component {
+	componentDidUpdate = () => {
+		this.el
+			.querySelectorAll('a, li')
+			.forEach(a => a.classList.remove('active'));
+		const selected = this.el.querySelector(
+			`a[href="${this.props.history.location.pathname}"]`
+		);
+		if (selected) {
+			selected.classList.add('active');
+			let parent = selected;
+			while (parent && parent != this.el) {
+				parent = parent.parentNode;
+				if (parent.tagName == 'LI') parent.classList.add('active');
+			}
+		}
+	};
 	render() {
 		return (
-			<aside className="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-light navbar-full sidenav-active-rounded">
+			<aside
+				ref={el => (this.el = el)}
+				className="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-light navbar-full sidenav-active-rounded"
+			>
 				<div className="brand-sidebar">
 					<h1 className="logo-wrapper">
 						<a className="brand-logo darken-1" href="index.html">
@@ -24,6 +47,9 @@ export default class Aside extends Component {
 					data-menu="menu-navigation"
 					data-collapsible="menu-accordion"
 				>
+					{AppRoutes.map((x, i) => {
+						return <AsideNav key={i} routes={x} />;
+					})}
 					<li className="active bold">
 						<a className="collapsible-header waves-effect waves-cyan" href="#">
 							<i className="material-icons">pages</i>
@@ -134,3 +160,13 @@ export default class Aside extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	console.log('ASIDE:', state);
+	return {
+		CurrentPage: state.RouterCurrentPage,
+		history: state.history,
+	};
+};
+
+export default connect(mapStateToProps)(withRouter(Aside));

@@ -25,7 +25,8 @@ namespace eqranews.react.net.spa.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            var categories = await _context.Categories.ToListAsync();
+            return categories;
         }
 
         // GET: api/Categories/5
@@ -90,14 +91,27 @@ namespace eqranews.react.net.spa.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Category>> DeleteCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories.Include(c => c.Childrens).SingleAsync(c => c.Id == id);
+            
             if (category == null)
             {
                 return NotFound();
             }
 
+            //if (category.Childrens.Any())
+            //{
+            //    // _logger.LogError($"Cannot delete owner with id: {id}. It has related accounts. Delete those accounts first");
+            //    return BadRequest("Cannot delete Category. It has child categories. Unlink or Delete those childrens first");
+            //}
+
             _context.Categories.Remove(category);
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception e) {
+                return  BadRequest(e); 
+            }
 
             return category;
         }

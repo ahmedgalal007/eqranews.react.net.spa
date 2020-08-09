@@ -11,5 +11,6 @@ namespace DAL.Crawling
         public string TypeName { get; set; }
         public string DefaultValue { get; set; }
         public bool Required { get; set; }
+
     }
 }

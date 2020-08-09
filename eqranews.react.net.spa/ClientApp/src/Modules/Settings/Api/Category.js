@@ -6,6 +6,7 @@ const Countries = () => {
 	return {
 		fetchAll: async () => {
 			const res = await axios.get(url);
+			console.log('Api Response', res);
 			return res.data;
 		},
 		fetchById: async id => await axios.get(url + id),

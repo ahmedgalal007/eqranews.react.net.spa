@@ -57,7 +57,7 @@ export const removeScript = scriptToremove => {
 export const appendToSection = (src, section, id = null, after = false) => {
 	return new Promise((resolve, reject) => {
 		try {
-			console.log(`Script '${src}' Loaded successfuly`);
+			// console.log(`Script '${src}' Loaded successfuly`);
 			const elem = appendScript(src, section, id, after);
 			elem.onload = () => {
 				resolve(elem);

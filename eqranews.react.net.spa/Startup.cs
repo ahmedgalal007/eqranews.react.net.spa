@@ -36,8 +36,12 @@ namespace eqranews.react.net.spa
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     // Configuration.GetConnectionString("DevConnectionMySQL")
-                    conn
-                )
+                    conn, mySqlOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                    }
+                ).UseLazyLoadingProxies(false)
+
             );
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
@@ -53,7 +57,11 @@ namespace eqranews.react.net.spa
             services.AddAuthentication()
                 .AddIdentityServerJwt();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+            );
+
             services.AddRazorPages();
 
             // In production, the React files will be served from this directory

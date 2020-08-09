@@ -530,7 +530,7 @@ namespace eqranews.react.net.spa.Migrations
             modelBuilder.Entity("DAL.Store.Category", b =>
                 {
                     b.HasOne("DAL.Store.Category", "Parent")
-                        .WithMany()
+                        .WithMany("Childrens")
                         .HasForeignKey("ParentId");
                 });
 

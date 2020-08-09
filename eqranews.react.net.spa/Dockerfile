@@ -6,8 +6,11 @@ EXPOSE 80
 EXPOSE 443
 
 #Ahmed Galal -Install nodejs
-RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+#RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
+RUN npm install -g gulp-cli
+
 
 #ENV MYSQL_VERSION=8.0
 #RUN apt-get update && apt-get install -y apt-transport-https 
@@ -29,6 +32,7 @@ COPY ["eqranews.crawling/eqranews.crawling.csproj", "eqranews.crawling/"]
 RUN dotnet restore "eqranews.react.net.spa/eqranews.react.net.spa.csproj"
 COPY . .
 WORKDIR "/src/eqranews.react.net.spa"
+RUN npm install -g gulp-cli
 RUN dotnet build "eqranews.react.net.spa.csproj" -c Release -o /app/build
 
 FROM build AS publish

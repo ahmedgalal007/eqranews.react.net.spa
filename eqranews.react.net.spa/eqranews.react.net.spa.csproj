@@ -23,12 +23,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
@@ -53,11 +56,35 @@
     <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
   </ItemGroup>
   <ItemGroup>
+    <Content Remove="wwwroot\css\animate.css" />
+    <Content Remove="wwwroot\css\custom.css" />
+    <Content Remove="wwwroot\css\loading-bar.css" />
+    <Content Remove="wwwroot\css\materialize.css" />
+    <Content Remove="wwwroot\css\style-rtl.css" />
+    <Content Remove="wwwroot\css\style.css" />
+    <Content Remove="wwwroot\css\vendors-rtl.min.css" />
+    <Content Remove="wwwroot\css\vendors.min.css" />
+    <Content Remove="wwwroot\css\waves.css" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="_MySQL_Init_Script\MySQL.sh" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ClientApp\public\css\" />
+    <Folder Include="ClientApp\public\js\" />
     <Folder Include="ClientApp\src\Models\Utilities\" />
     <Folder Include="ClientApp\src\Modules\Crawling\CSS\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\css\animate.css" />
+    <None Include="wwwroot\css\custom.css" />
+    <None Include="wwwroot\css\loading-bar.css" />
+    <None Include="wwwroot\css\materialize.css" />
+    <None Include="wwwroot\css\style-rtl.css" />
+    <None Include="wwwroot\css\style.css" />
+    <None Include="wwwroot\css\vendors-rtl.min.css" />
+    <None Include="wwwroot\css\vendors.min.css" />
+    <None Include="wwwroot\css\waves.css" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
@@ -73,6 +100,10 @@
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
     <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
     <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+  </Target>
+  
+  <Target Name="MyPreCompileTarget" BeforeTargets="Build">
+    <Exec WorkingDirectory="$(SpaRoot)" Command="gulp min:css" />
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
