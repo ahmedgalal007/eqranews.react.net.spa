@@ -221,7 +221,7 @@ export default class RightSidebarNav extends Component {
 							<div className="input-field">
 								<input id="icon_prefix" type="text" className="search" />
 								<label htmlFor="icon_prefix">Type here..</label>
-								<a onclick="slideOutChat()">
+								<a onClick="slideOutChat()">
 									<i className="material-icons prefix">send</i>
 								</a>
 							</div>

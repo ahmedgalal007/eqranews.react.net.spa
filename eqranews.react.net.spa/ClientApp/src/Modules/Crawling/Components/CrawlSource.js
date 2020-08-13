@@ -1,13 +1,28 @@
+import '../../../vendors/select2/select2.min.css';
+import '../../../vendors/select2/select2-materialize.css';
+// import '../../../app-assets/js/scripts/form-validation.js';
+import '../../../vendors/dropify/css/dropify.min.css';
 import React from 'react';
-import * as actions from '../Actions/CrawlSource';
+import ReactDOM from 'react-dom';
+import {
+	requestCreateCrawlSource,
+	requestUpdateCrawlSource,
+} from '../Actions/CrawlSource';
+import { requestFetchCrawlStepperBySource } from '../Actions/CrawlStepper';
 // import useForm from '../../_shared/components/useForm';
 // import $ from 'jquery';
 //import M from 'materialize-css';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-// import '../../../app-assets/js/scripts/form-validation.js';
-import '../../../vendors/dropify/css/dropify.min.css';
-import * as AppUtilities from '../../../Modules/_shared/lib/AppUtilities';
+
+import * as AppUtilities from '../../_shared/lib/AppUtilities';
+
+import { Link } from 'react-router-dom';
+
+import { DTable } from '../../_shared/components/DTable';
+
+import FormUtils from '../../_shared/lib/FormUtils';
+import { CrawlStepper } from './CrawlStepper';
 
 // var $ = require('jquery');
 
@@ -19,21 +34,68 @@ class CrawlSource extends React.Component {
 			match: { params },
 		} = this.props;
 
-		// if (params.id) initialFieldValues.id = params.id;
 		const initialFieldValues = this.initialFieldValues(params.id);
 		this.state = { ...initialFieldValues, Errors: {} };
+		this.columns = [
+			{ title: 'ID', name: 'id' },
+			{ title: 'NAME', name: 'name' },
+			{ title: 'EDIT', defaultContent: '' },
+			{ title: 'DELETE', defaultContent: '' },
+		];
+		this.columnDefs = [
+			{ targets: [2, 3], orderable: false },
+			{
+				targets: 2,
+				// createdCell: FormUtils.createEditButton(
+				// 	'/crawl/stepper/' + this.state.id + '/',
+				// 	this.props.history
+				// ),
+				// createdCell: FormUtils.createEditLink('/crawl/stepper/', {
+				// 	source: this.state.id,
+				// }),
+				createdCell: (td, cellData, rowData, row, col) => {
+					const lnkSTr = '/crawl/stepper/' + rowData[0];
+					return ReactDOM.render(
+						<a
+							style={{ cursor: 'pointer', color: 'green' }}
+							onClick={() => {
+								this.props.history.push(lnkSTr);
+							}}
+						>
+							<i className="material-icons">edit</i>
+						</a>,
+						td
+					);
+				},
+			},
+			{
+				targets: 3,
+				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+			},
+		];
 		console.log('Values: ', this.state);
 	}
 
 	//validate({fullname: 'jenny'})
-	initialFieldValues = (Id = 0) => {
-		return {
-			Id: Id,
-			Name: '',
-			DomainURL: '',
-			CountryId: '',
-			Logo: '',
+	initialFieldValues = (id = 0) => {
+		let result = {
+			id: id,
+			name: '',
+			domainURL: '',
+			countryId: '',
+			logo: '',
+			crawlStepper: [],
 		};
+
+		if (id > 0) {
+			console.log('Initialized Data:', this.props.data);
+			const record = this.props.data.filter(x => x.id == id)[0];
+			if (record) {
+				console.log('Initialized Record:', record);
+				result = record;
+			}
+		}
+		return result;
 	};
 
 	handelInputChange = e => {
@@ -48,12 +110,12 @@ class CrawlSource extends React.Component {
 	validate = (fieldValues = this.state) => {
 		console.log('fieldValues:', fieldValues);
 		let temp = {};
-		if ('Name' in fieldValues)
-			temp.Name = fieldValues.Name ? '' : 'This field is required.';
-		if ('Domain' in fieldValues)
-			temp.Domain = fieldValues.Domain ? '' : 'This field is required.';
-		if ('CountryId' in fieldValues)
-			temp.CountryId = fieldValues.CountryId
+		if ('name' in fieldValues)
+			temp.name = fieldValues.name ? '' : 'This field is required.';
+		if ('domainURL' in fieldValues)
+			temp.domainURL = fieldValues.domainURL ? '' : 'This field is required.';
+		if ('countryId' in fieldValues)
+			temp.countryId = fieldValues.countryId
 				? ''
 				: 'You must select a country.';
 		//temp.Email = (/^$|.+@.+..+/).test(fieldValues.Email)? "" : "Email is not valid"
@@ -66,23 +128,16 @@ class CrawlSource extends React.Component {
 		e.preventDefault();
 
 		console.log('Post-Data');
-		if (this.validate()) {
-			// window.alert('Validation succeeded.');
-			window.alert('inserted.');
+		// if (this.validate()) {
+		const formData = new FormData(e.target);
 
-			const formData = new FormData();
-			//console.log('Form-State', this.state);
-			Object.keys(this.state).forEach(key => {
-				if (key != 'Errors') formData.append(key, this.state[key]);
-			});
-
-			console.log('Form-Data', formData);
-			if (formData.id == 0) {
-				// this.props.createCrawlSources(formData);
-			} else {
-				// this.props.updateCrawlSources(formData);
-			}
+		console.log('Form-Data', formData);
+		if (formData.get('id') == 0) {
+			this.props.createCrawlSources(formData);
+		} else {
+			this.props.updateCrawlSources(formData.get('id'), formData);
 		}
+		// }
 	};
 
 	setFile = e => {
@@ -92,14 +147,53 @@ class CrawlSource extends React.Component {
 	componentWillMount = () => {
 		const scripts = AppUtilities.populateAllSctions();
 		scripts.PAGE_VENDOR_JS.scripts.push(
+			'app-assets/vendors/select2/select2.full.min.js'
+		);
+		scripts.PAGE_VENDOR_JS.scripts.push(
 			'/app-assets/vendors/dropify/js/dropify.js'
 		);
 		scripts.PAGE_LEVEL_JS.scripts.push(
 			'/app-assets/js/scripts/form-file-uploads.js'
 		);
 		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			this.forceUpdate();
-			// this.loadPageScripts();
+			// if (this.state.id && !this.state.IsChildrenLoaded) {
+			this.props.FetchCrawlStepperBySource(this.state.id);
+			// 	this.setState({ IsChildrenLoaded: true });
+			// }
+
+			if (window.jQuery) {
+				const $ = window.jQuery;
+				console.log('SELECT COUNTRIES', this.props.countries);
+				$(document).ready(() => {
+					for (let i = 0; i < 3; i++) {
+						if ($().select2) {
+							$('#countryId').select2({
+								dropdownAutoWidth: true,
+								placeholder: 'Select Country',
+								allowClear: true,
+								width: '100%',
+								data: [
+									{
+										id: '',
+										text: 'Select a Country',
+										selected: this.state.countryId > 0 ? false : true,
+									},
+									...$.map(this.props.countries, obj => {
+										obj.id = obj.id || obj.pk; // replace pk with your identifier
+										obj.text = obj.text || obj.name;
+										obj.selected = obj.id == this.state.countryId;
+										return obj;
+									}),
+								],
+							});
+							break;
+						} else {
+							this.forceUpdate();
+						}
+					}
+					// Load Select2 for parent
+				});
+			}
 		});
 	};
 
@@ -126,9 +220,10 @@ class CrawlSource extends React.Component {
 	};
 
 	render() {
-		const { Id, Name, DomainURL, CountryId, Logo } = this.state;
+		const { id, name, domainURL, countryId, logo, crawlStepper } = this.state;
+
 		const errors = this.state.Errors;
-		console.log('Props', this.state);
+		console.log('Steppers', this.props.crawlSteppers);
 		return (
 			<div className="row">
 				{console.log(this.props)}
@@ -139,20 +234,6 @@ class CrawlSource extends React.Component {
 								<div className="row">
 									<div className="col s12 m6 l10">
 										<h4 className="card-title">Crawl Source</h4>
-									</div>
-									<div className="col s12 m6 l2">
-										<ul className="tabs">
-											<li className="tab col s6 p-0">
-												<a className="active p-0" href="#view-validations">
-													View
-												</a>
-											</li>
-											<li className="tab col s6 p-0">
-												<a className="p-0" href="#js-validations">
-													Tab 2
-												</a>
-											</li>
-										</ul>
 									</div>
 								</div>
 							</div>
@@ -166,66 +247,67 @@ class CrawlSource extends React.Component {
 								>
 									<div className="row">
 										<div className="input-field col s12">
-											{console.log(this.props)}
-											<label htmlFor="id">id:{Id} </label>
-										</div>
-										<div className="input-field col s12">
-											<label htmlFor="Name">Name*</label>
 											<input
 												className="validate"
-												id="Name"
-												name="Name"
+												id="id"
+												name="id"
+												type="hidden"
+												value={id}
+											/>
+										</div>
+										<div className="input-field col s12">
+											<label htmlFor="name">Name*</label>
+											<input
+												className="validate"
+												id="name"
+												name="name"
 												type="text"
 												data-error=".errorTxt1"
 												onChange={this.handelInputChange}
-												value={Name}
+												value={name}
 												required
-												{...(errors.Name && {
+												{...(errors.name && {
 													error: 'true',
-													'data-pattern-error': errors.Name,
+													'data-pattern-error': errors.name,
 												})}
 											/>
 											<small className="errorTxt1"></small>
 										</div>
 										<div className="input-field col s12">
-											<label htmlFor="Domain">Domain URL *</label>
+											<label htmlFor="domainURL">Domain URL *</label>
 											<input
 												className="validate"
-												id="DomainURL"
+												id="domainURL"
 												type="url"
-												name="DomainURL"
+												name="domainURL"
 												data-error=".errorTxt5"
 												onChange={this.handelInputChange}
-												value={DomainURL}
+												value={domainURL}
 												required
 											/>
 											<small className="errorTxt5"></small>
 										</div>
-										<div className="col s12">
-											<label htmlFor="CountryId">Country *</label>
-											<div
-												className="input-field "
-												{...(errors.CountryId && { error: 'true' })}
+										<div className="input-field col s12">
+											<label
+												htmlFor="countryId"
+												style={{
+													position: 'absolute',
+													top: '-14px',
+													fontSize: '0.8rem',
+												}}
 											>
-												<select
-													className="error validate"
-													id="CountryId"
-													name="CountryId"
-													data-error=".errorTxt6"
-													onChange={this.handelInputChange}
-													value={CountryId}
-												>
-													<option value="" disabled>
-														Choose Country
-													</option>
-													<option value="1">Egypt</option>
-													<option value="2">Saudi Erabia</option>
-													<option value="3">Kuwait</option>
-												</select>
-												<small className="errorTxt6">
-													{errors.CountryId && errors.CountryId}
-												</small>
-											</div>
+												COUNTRY *
+											</label>
+											<select
+												className="validate select2-data-array browser-default"
+												id="countryId"
+												type="text"
+												name="countryId"
+												data-error=".errorTxt5"
+												onChange={this.handelInputChange}
+												value={countryId}
+											></select>
+											<small className="errorTxt5"></small>
 										</div>
 										<div className="input-field col s12">
 											<div className=" section">
@@ -234,12 +316,11 @@ class CrawlSource extends React.Component {
 												</label>
 											</div>
 											<input
-												name="Logo"
+												name="logo"
 												type="file"
 												id="input-file-max-fs"
 												className="dropify-event"
 												data-max-file-size="512K"
-												onChange={this.setFile}
 											/>
 										</div>
 										<div className="input-field col s12">
@@ -258,6 +339,57 @@ class CrawlSource extends React.Component {
 						</div>
 					</div>
 				</div>
+
+				<div className="col s12">
+					<div id="validations" className="card card-tabs">
+						<div className="card-content">
+							<div className="card-title">
+								<div className="row">
+									<div className="col s12 m6 l10">
+										<h4 className="card-title">Crawl Steppers</h4>
+									</div>
+								</div>
+							</div>
+							<div id="Crawl-Steppers">
+								<section className="users-list-wrapper section">
+									<div className="users-list-table">
+										<Link
+											to={{
+												pathname: '/crawl/stepper/',
+												state: { id: 0, crawlSourceId: id },
+											}}
+											component={CrawlStepper}
+											params={{ source: id }}
+											className="btn-floating btn-large waves-effect waves-light red"
+										>
+											<i className="material-icons">add</i>
+										</Link>
+
+										<a className="waves-effect waves-red btn white red-text primary-content">
+											<i class="material-icons left">add_to_photos</i> جديد
+										</a>
+										<div className="card">
+											<div className="card-content">
+												<DTable
+													data={FormUtils.tableData(
+														this.columns,
+														this.props.crawlSteppers.filter(
+															x => x.crawlSourceId == id
+														)
+													)}
+													columns={this.columns}
+													formate={this.formate}
+													columnDefs={this.columnDefs}
+												></DTable>
+											</div>
+										</div>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
+
 				<script src="../../../app-assets/js/scripts/form-file-uploads.js"></script>
 			</div>
 		);
@@ -267,32 +399,32 @@ class CrawlSource extends React.Component {
 		if (window.jQuery) {
 			const $ = window.jQuery;
 			$(document).ready(() => {
-				console.log('$', $);
-
 				// Basic
 				$('.dropify').dropify();
-				console.log($('.dropify').dropify());
+				// console.log($('.dropify').dropify());
 				// Translated
-				$('.dropify-fr').dropify({
-					messages: {
-						default: 'Glissez-déposez un fichier ici ou cliquez',
-						replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
-						remove: 'Supprimer',
-						error: 'Désolé, le fichier trop volumineux',
-					},
-				});
+				// $('.dropify-fr').dropify({
+				// 	messages: {
+				// 		default: 'Glissez-déposez un fichier ici ou cliquez',
+				// 		replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
+				// 		remove: 'Supprimer',
+				// 		error: 'Désolé, le fichier trop volumineux',
+				// 	},
+				// });
 
 				// Used events
 				var drEvent = $('.dropify-event').dropify();
 
 				drEvent.on('dropify.beforeClear', function (event, element) {
-					// return confirm(
-					// 	'Do you really want to delete "' + element.filename + '" ?'
-					// );
+					console.log('File Element:', element);
+					return window.confirm(
+						'Do you really want to delete "' + element.filename + '" ?'
+					);
 				});
 
 				drEvent.on('dropify.afterClear', function (event, element) {
-					alert('File deleted');
+					console.log('File Element:', element);
+					alert(element);
 				});
 			});
 		}
@@ -301,78 +433,19 @@ class CrawlSource extends React.Component {
 
 const mapStateToProps = state => {
 	return {
-		crawlSourceList: state.CrawlSources.list,
-		// ...oldState,
+		data: state.CrawlSources,
+		crawlSteppers: state.CrawlSteppers,
+		countries: state.Countries,
 	};
 };
 
 const mapActionToProps = {
-	// createCrawlSources: actions.req,
-	// updateCrawlSources: actions.UPDATE,
+	createCrawlSources: requestCreateCrawlSource,
+	updateCrawlSources: requestUpdateCrawlSource,
+	FetchCrawlStepperBySource: requestFetchCrawlStepperBySource,
 };
 
 export default connect(
 	mapStateToProps,
 	mapActionToProps
 )(withRouter(CrawlSource));
-
-// $('select[required]').css({
-// 	position: 'absolute',
-// 	display: 'inline',
-// 	height: 0,
-// 	padding: 0,
-// 	border: '1px solid rgba(255,255,255,0)',
-// 	width: 0
-// });
-
-// $("#formValidate").validate({
-// 	rules: {
-// 		uname: {
-// 			required: true,
-// 			minlength: 5
-// 		},
-// 		cemail: {
-// 			required: true,
-// 			email:true
-// 		},
-// 		password: {
-// 			required: true,
-// 			minlength: 5
-// 		},
-// 		cpassword: {
-// 			required: true,
-// 			minlength: 5,
-// 			equalTo: "#password"
-// 		},
-// 		curl: {
-// 			required: true,
-// 			url:true
-// 		},
-// 		crole:{
-// 			required: true,
-// 		},
-// 		ccomment: {
-// 			required: true,
-// 			minlength: 15
-// 		},
-// 		cgender:"required",
-// 		cagree:"required",
-// 		},
-// 		//For custom messages
-// 		messages: {
-// 		uname:{
-// 			required: "Enter a username",
-// 			minlength: "Enter at least 5 characters"
-// 		},
-// 		curl: "Enter your website",
-// 		},
-// 		errorElement : 'div',
-// 		errorPlacement: function(error, element) {
-// 			var placement = $(element).data('error');
-// 			if (placement) {
-// 				$(placement).append(error)
-// 			} else {
-// 		error.insertAfter(element);
-// 		}
-// 	}
-// });

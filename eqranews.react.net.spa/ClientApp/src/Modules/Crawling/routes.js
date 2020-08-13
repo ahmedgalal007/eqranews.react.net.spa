@@ -4,7 +4,9 @@ import React, { Fragment } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import Crawl from './Components/Crawl';
 import CrawlSource from './Components/CrawlSource';
-import CrawlingStep from './Components/CrawlingStep';
+import CrawlStep from './Components/CrawlStep';
+import CrawlStepper from './Components/CrawlStepper';
+
 export const CrawlPrefix = '/crawl';
 
 export const routes = {
@@ -19,16 +21,22 @@ export const routes = {
 			component: Crawl,
 		},
 		{
-			path: `${CrawlPrefix}/sources`,
+			path: `${CrawlPrefix}/source`,
 			exact: true,
 			title: 'CRAWL SOURCE',
 			component: CrawlSource,
 		},
 		{
+			path: `${CrawlPrefix}/stepper`,
+			exact: true,
+			title: 'CRAWL STEPPER ',
+			component: CrawlStepper,
+		},
+		{
 			path: `${CrawlPrefix}/steps`,
 			exact: true,
 			title: 'CRAWL STEP ',
-			component: CrawlingStep,
+			component: CrawlStep,
 		},
 	],
 };
@@ -37,8 +45,9 @@ const CrawlRoutes = props => {
 	return (
 		<Fragment>
 			<Route exact path={`${CrawlPrefix}`} component={Crawl} />
-			<Route path={`${CrawlPrefix}/sources/:id`} component={CrawlSource} />
-			<Route exact path={`${CrawlPrefix}/steps`} component={CrawlingStep} />
+			<Route path={`${CrawlPrefix}/source/:id?`} component={CrawlSource} />
+			<Route path={`${CrawlPrefix}/stepper/:id?`} component={CrawlStepper} />
+			<Route exact path={`${CrawlPrefix}/steps`} component={CrawlStep} />
 			{
 				// <Route path={`${prefix}/sources/edit/?id`} component={CrawlSourceEdit} />
 			}

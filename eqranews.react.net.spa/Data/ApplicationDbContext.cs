@@ -31,7 +31,7 @@ namespace eqranews.react.net.spa.Data
         public DbSet<Country> Countries { get; set; }
         public DbSet<CrawlStepTypeRequiredAttribute> CrawlStepTypeRequiredAttribute { get; set; }
         public DbSet<Category> Categories { get; set; }
-
+        public DbSet<Media> Medias { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Route, withRouter } from 'react-router-dom';
 import Layout from './Layout';
 import Home from './Modules/Home';
-import Crawling from './Modules/Crawling/Components/Crawling';
 import About from './Modules/About';
 import { FetchData } from './components/FetchData';
 import CrawlSource from './Modules/Crawling/Components/CrawlSource';

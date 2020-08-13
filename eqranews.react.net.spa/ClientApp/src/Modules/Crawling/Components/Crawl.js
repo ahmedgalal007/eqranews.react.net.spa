@@ -1,47 +1,49 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import CrawlRecord from './CrawlRecord';
 import CrawlSource from './CrawlSource';
 import { withRouter } from 'react-router-dom';
 import { DTable } from '../../_shared/components/DTable';
+
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
+import FormUtils from '../../_shared/lib/FormUtils';
 import {
-	requestCrawlSourceFetchAll,
-	crawlSourceLoadStart,
+	requestFetchAllCrawlSources,
+	requestDeleteCrawlSource,
 } from '../Actions/CrawlSource';
-// var $ = require('jquery');
+import { requestFetchAllCountries } from '../../Settings/Actions/Country';
+
 export class Crawl extends Component {
 	componentWillMount = () => {
-		//this.state = { loaded: false };
 		this.columns = [
-			{ title: 'Id', style: { width: '50px' } },
-			{ title: 'Name' },
-			{ title: 'DomainUrl' },
-			{ title: 'CountryId' },
+			{ title: 'ID', name: 'id', style: { width: '50px' } },
+			{ title: 'NAME', name: 'name' },
+			{ title: 'DOMIAN', name: 'domainURL' },
+			{ title: 'COUNTRY', name: 'countryId' },
 			{
+				title: 'Edit',
+				width: 120,
 				class: '',
 				orderable: false,
 				data: null,
 				defaultContent: '',
 			},
 			{
+				Title: 'Delete',
+				width: 120,
 				class: '',
 				orderable: false,
 				data: null,
-				defaultContent:
-					'<a class="danger" href="/crawl/source/"><i class="material-icons">delete</i></a>',
+				defaultContent: '',
 			},
 		];
 
 		this.columnDefs = [
 			{
-				//render: EditButton,
-				// createdCell: EditButton,
-				targets: 4,
+				targets: 3,
 				createdCell: (td, cellData, rowData, row, col) => {
-					const linkStr = '/crawl/sources/' + rowData[0];
+					const linkStr = '/settings/country/' + rowData[3];
 					return ReactDOM.render(
 						<a
 							style={{ cursor: 'pointer' }}
@@ -51,43 +53,33 @@ export class Crawl extends Component {
 								this.props.history.push(linkStr);
 							}}
 						>
-							<i className="material-icons">edit</i>
+							{this.props.countries.filter(x => x.id == rowData[3])[0].name}
 						</a>,
 						td
 					);
 				},
 			},
+			{
+				targets: 4,
+				createdCell: FormUtils.createEditButton(
+					'/crawl/source/',
+					this.props.history
+				),
+			},
+			{
+				targets: 5,
+				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+			},
 			{ orderable: false, targets: [0, 4, 5] },
 			// { visible: true, targets: [6] },
 		];
-		//const scripts = AppUtilities.populateAllSctions();
 
-		//AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-		//this.setState({ loaded: true });
-
-		//if (!this.props.Loading) {
-		if (document.querySelector('#reactloader')) {
-			document.querySelector('#reactloader').remove();
-		}
-		//this.props.crawlSourceLoadStart();
-		// if (!this.props.IsPageLoading) {
-		this.props.requestCrawlSourceFetchAll();
-		// }
-		//}
-		//});
+		if (!(this.props.countries && this.props.countries.length > 0))
+			this.props.FetchAllCountries();
+		this.props.FetchAllCrawlSources();
 	};
 	componentDidMount = () => {
 		this.forceUpdate();
-	};
-
-	tableData = dataArray => {
-		return dataArray.map((x, i) => {
-			const res = [];
-			this.columns.map((n, l) => {
-				res.push(n.title ? x[n.title] : '');
-			});
-			return res;
-		});
 	};
 
 	formate = (d, cols = []) => {
@@ -100,7 +92,9 @@ export class Crawl extends Component {
 		return (
 			<tr>
 				<td colSpan={this.columns.length}>
-					<CrawlRecord record={res} />
+					{
+						//<CrawlRecord record={res} />
+					}
 				</td>
 			</tr>
 		);
@@ -112,10 +106,21 @@ export class Crawl extends Component {
 		return (
 			<section className="users-list-wrapper section">
 				<div className="users-list-table">
+					<Link
+						to="/crawl/source"
+						component={CrawlSource}
+						className="btn-floating btn-large waves-effect waves-light red"
+					>
+						<i className="material-icons">add</i>
+					</Link>
+
+					<a className="waves-effect waves-red btn white red-text primary-content">
+						<i class="material-icons left">add_to_photos</i> جديد
+					</a>
 					<div className="card">
 						<div className="card-content">
 							<DTable
-								data={this.tableData(this.props.data)}
+								data={FormUtils.tableData(this.columns, this.props.data)}
 								columns={this.columns}
 								formate={this.formate}
 								columnDefs={this.columnDefs}
@@ -129,156 +134,16 @@ export class Crawl extends Component {
 }
 
 const mapStateToProps = state => {
-	//console.log('Crawl', state);
 	return {
 		data: state.CrawlSources,
-		//Loading: state.Loading,
-		//Loading: state.IsPageLoading,
+		countries: state.Countries,
 	};
 };
 
 const mapActionToProps = {
-	requestCrawlSourceFetchAll: requestCrawlSourceFetchAll,
-	crawlSourceLoadStart: crawlSourceLoadStart,
-	//requestCrawlSourceDelete: requestCrawlSourceDelete,
+	FetchAllCountries: requestFetchAllCountries,
+	FetchAllCrawlSources: requestFetchAllCrawlSources,
+	DeleteCrawlSource: requestDeleteCrawlSource,
 };
 
-export default connect(mapStateToProps, mapActionToProps)(Crawl);
-
-// const tmprender = sources => {
-// 	return (
-// 		<div class="col s12">
-// 			<div class="container">
-// 				<section class="users-list-wrapper section">
-// 					<div class="users-list-filter">
-// 						<div class="card-panel">
-// 							<div class="row">
-// 								<form>
-// 									<div class="col s12 m6 l3">
-// 										<label for="users-list-verified">الدولة</label>
-// 										<div class="input-field">
-// 											<select class="form-control" id="Country-list">
-// 												<option value="">Any</option>
-// 												<option value="Yes">Egypt</option>
-// 												<option value="No">Saudi Arabia</option>
-// 												<option value="No">Kuwait</option>
-// 												<option value="No">الإمارات العربية المتحدة</option>
-// 											</select>
-// 										</div>
-// 									</div>
-// 									<div class="col s12 m6 l3"></div>
-// 									<div class="col s12 m6 l3"></div>
-// 									<div class="col s12 m6 l3 display-flex align-items-center show-btn">
-// 										<button
-// 											type="submit"
-// 											class="btn btn-block indigo waves-effect waves-light"
-// 										>
-// 											Show
-// 										</button>
-// 									</div>
-// 								</form>
-// 							</div>
-// 						</div>
-// 					</div>
-// 					<div class="users-list-table">
-// 						<div class="card">
-// 							<div class="card-content">
-// 								{
-// 									//<!-- datatable start -->
-// 								}
-// 								<div class="responsive-table">
-// 									<table id="users-list-datatable" class="table">
-// 										<thead>
-// 											<tr>
-// 												<th></th>
-// 												<th>id</th>
-// 												<th>Name</th>
-// 												<th>Domain</th>
-// 												<th>Country</th>
-// 												<th>edit</th>
-// 												<th>view</th>
-// 											</tr>
-// 										</thead>
-// 										<tbody>
-// 											{sources.map((x, i) => {
-// 												return <CrawlRecord key={i} record={x} />;
-// 											})}
-// 										</tbody>
-// 									</table>
-// 								</div>
-// 							</div>
-// 						</div>
-// 					</div>
-// 				</section>
-// 			</div>
-// 		</div>
-// 	);
-// };
-
-// this.data = [
-// 	{
-// 		Id: 1,
-// 		Name: 'Akhbar',
-// 		Domain: 'http://www.akhbarelyom.com',
-// 		CountryId: 1,
-// 	},
-// 	{ Id: 2, Name: 'Ahram', Domain: 'http://alahram.org.eg', CountryId: 1 },
-// 	{
-// 		Id: 3,
-// 		Name: 'El Masry El Yom',
-// 		Domain: 'http://www.elmasry.com',
-// 		CountryId: 1,
-// 	},
-// 	{
-// 		Id: 4,
-// 		Name: 'Akhbar',
-// 		Domain: 'http://www.akhbarelyom.com',
-// 		CountryId: 1,
-// 	},
-// 	{ Id: 5, Name: 'Ahram', Domain: 'http://alahram.org.eg', CountryId: 1 },
-// 	{
-// 		Id: 6,
-// 		Name: 'El Masry El Yom',
-// 		Domain: 'http://www.elmasry.com',
-// 		CountryId: 1,
-// 	},
-// 	{
-// 		Id: 7,
-// 		Name: 'Akhbar',
-// 		Domain: 'http://www.akhbarelyom.com',
-// 		CountryId: 1,
-// 	},
-// 	{ Id: 8, Name: 'Ahram', Domain: 'http://alahram.org.eg', CountryId: 1 },
-// 	{
-// 		Id: 9,
-// 		Name: 'El Masry El Yom',
-// 		Domain: 'http://www.elmasry.com',
-// 		CountryId: 1,
-// 	},
-// 	{
-// 		Id: 10,
-// 		Name: 'Akhbar',
-// 		Domain: 'http://www.akhbarelyom.com',
-// 		CountryId: 1,
-// 	},
-// 	{ Id: 11, Name: 'Ahram', Domain: 'http://alahram.org.eg', CountryId: 1 },
-// 	{
-// 		Id: 12,
-// 		Name: 'El Masry El Yom',
-// 		Domain: 'http://www.elmasry.com',
-// 		CountryId: 1,
-// 	},
-// 	{
-// 		Id: 13,
-// 		Name: 'Akhbar',
-// 		Domain: 'http://www.akhbarelyom.com',
-// 		CountryId: 1,
-// 	},
-// 	{ Id: 14, Name: 'Ahram', Domain: 'http://alahram.org.eg', CountryId: 1 },
-// 	{
-// 		Id: 15,
-// 		Name: 'El Masry El Yom',
-// 		Domain: 'http://www.elmasry.com',
-// 		CountryId: 1,
-// 	},
-// ];
+export default connect(mapStateToProps, mapActionToProps)(withRouter(Crawl));

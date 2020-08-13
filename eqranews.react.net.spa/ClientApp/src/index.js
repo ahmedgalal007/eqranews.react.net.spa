@@ -25,8 +25,8 @@ const store = createStore(
 	reducers,
 	persistedState,
 	compose(
-		applyMiddleware(sagaMiddleware)
-		//window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+		applyMiddleware(sagaMiddleware),
+		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 	)
 );
 
@@ -37,6 +37,8 @@ store.subscribe(() => {
 		Categories: store.getState().Categories,
 		CrawlStepTypes: store.getState().CrawlStepTypes,
 		RouterCurrentPage: store.getState().RouterCurrentPage,
+		CrawlSources: store.getState().CrawlSources,
+		CrawlSteppers: store.getState().CrawlSteppers,
 	});
 	//}, 1000);
 });

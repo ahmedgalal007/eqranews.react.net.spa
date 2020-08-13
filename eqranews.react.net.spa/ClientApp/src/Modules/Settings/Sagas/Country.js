@@ -7,7 +7,9 @@ import {
 	receiveDeleteCountry,
 } from '../Actions/Country';
 import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
-import Api from '../Api/Country';
+// import Api from '../Api/Country';
+import ApiProxy from '../../_shared/api/ApiProxy';
+const Api = ApiProxy('countries');
 
 function* fetchAllCountries() {
 	yield put({

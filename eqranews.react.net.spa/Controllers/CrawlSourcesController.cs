@@ -27,20 +27,19 @@ namespace eqranews.react.net.spa.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CrawlSource>>> GetCrawlSources()
         {
-            return await _context.CrawlSources.ToListAsync();
+            return await _context.CrawlSources.Include(s => s.CrawlStepper).ToListAsync();
         }
 
         // GET: api/CrawlSources/5
         [HttpGet("{id}")]
         public async Task<ActionResult<CrawlSource>> GetCrawlSource(int id)
         {
-            var crawlSource = await _context.CrawlSources.FindAsync(id);
+            var crawlSource = await _context.CrawlSources.Include(s => s.CrawlStepper).SingleAsync(s=> s.Id == id);
 
             if (crawlSource == null)
             {
                 return NotFound();
             }
-
             return crawlSource;
         }
 

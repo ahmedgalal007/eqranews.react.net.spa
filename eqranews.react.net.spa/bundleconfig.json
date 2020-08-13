@@ -6,6 +6,7 @@
       "../wwwroot/css/animate.css",
       "../wwwroot/css/loading-bar.css",
       "../wwwroot/css/style-rtl.css",
+      "../wwwroot/css/waves.css",
       "../wwwroot/css/materialize.css",
       "../wwwroot/css/style.css",
       "../wwwroot/css/custom.css",
@@ -13,9 +14,9 @@
     ]
   },
   {
-    "outputFileName": "ClientApp/public/js/vendors.min.js",
+    "outputFileName": "public/js/vendors.min.js",
     "inputFiles": [
-      "wwwroot/js/site.js"
+      "../wwwroot/js/site.js"
     ],
     "minify": {
       "enabled": true,

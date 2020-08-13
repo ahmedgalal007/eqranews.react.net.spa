@@ -7,7 +7,9 @@ import {
 	receiveDeleteCrawlStepType,
 } from '../Actions/CrawlStepType';
 import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
-import Api from '../Api/CrawlStepType';
+//import Api from '../Api/CrawlStepType';
+import ApiProxy from '../../_shared/api/ApiProxy';
+const Api = ApiProxy('CrawlSetpTypes');
 
 function* fetchAllCrawlStepTypes() {
 	yield put({
@@ -15,13 +17,6 @@ function* fetchAllCrawlStepTypes() {
 		data: true,
 	});
 	const data = yield call(Api.fetchAll);
-	// const data = yield call(() => {
-	// 	return [
-	// 		{ Id: 1, Name: 'Egypt', IsoCode: 'EG' },
-	// 		{ Id: 2, Name: 'Saudi Erabia', IsoCode: 'SA' },
-	// 		{ Id: 3, Name: 'Kuwait', IsoCode: 'KW' },
-	// 	];
-	// });
 	yield delay(4000);
 	yield put(receiveFetchAllCrawlStepTypes(data));
 	yield put({

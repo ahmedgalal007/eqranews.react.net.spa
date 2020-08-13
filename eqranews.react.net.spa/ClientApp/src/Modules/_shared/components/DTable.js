@@ -6,7 +6,6 @@ import '../css/dataTables/fixedColumns.dataTables.min.css';
 
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import CrawlRecord from '../../Crawling/Components/CrawlRecord';
 import * as AppUtilities from '../lib/AppUtilities';
 import { bindActionCreators } from 'redux';
 // const $ = require('jquery');

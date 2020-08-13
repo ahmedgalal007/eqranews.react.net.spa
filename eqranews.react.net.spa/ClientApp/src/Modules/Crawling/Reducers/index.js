@@ -16,4 +16,5 @@
 // };
 
 import * as CrawlSourcesReducers from './CrawlSource';
-export default { ...CrawlSourcesReducers };
+import * as CrawlSteppersReducers from './CrawlStepper';
+export default { ...CrawlSourcesReducers, ...CrawlSteppersReducers };

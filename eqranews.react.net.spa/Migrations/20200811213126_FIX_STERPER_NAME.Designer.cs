@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eqranews.react.net.spa.Data;
 
 namespace eqranews.react.net.spa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200811213126_FIX_STERPER_NAME")]
+    partial class FIX_STERPER_NAME
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -140,7 +142,10 @@ namespace eqranews.react.net.spa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CrawlSourceId")
+                    b.Property<int>("CrawlSourcId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("CrawlSourceId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -535,9 +540,7 @@ namespace eqranews.react.net.spa.Migrations
                 {
                     b.HasOne("DAL.Crawling.CrawlSource", "CrawlSource")
                         .WithMany("CrawlStepper")
-                        .HasForeignKey("CrawlSourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CrawlSourceId");
                 });
 
             modelBuilder.Entity("DAL.Store.Category", b =>

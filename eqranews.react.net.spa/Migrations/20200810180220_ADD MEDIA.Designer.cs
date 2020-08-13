@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eqranews.react.net.spa.Data;
 
 namespace eqranews.react.net.spa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200810180220_ADD MEDIA")]
+    partial class ADDMEDIA
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -96,6 +98,15 @@ namespace eqranews.react.net.spa.Migrations
                     b.Property<int>("CrawlStepperId")
                         .HasColumnType("int");
 
+                    b.Property<string>("LoopSelector")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<int>("LoopsMax")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoopsPagerSelector")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
                     b.Property<string>("Selector")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -140,11 +151,14 @@ namespace eqranews.react.net.spa.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("CrawlSourceId")
+                    b.Property<int>("CrawlSourcId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+                    b.Property<int?>("CrawlSourceId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Name")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -535,9 +549,7 @@ namespace eqranews.react.net.spa.Migrations
                 {
                     b.HasOne("DAL.Crawling.CrawlSource", "CrawlSource")
                         .WithMany("CrawlStepper")
-                        .HasForeignKey("CrawlSourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CrawlSourceId");
                 });
 
             modelBuilder.Entity("DAL.Store.Category", b =>

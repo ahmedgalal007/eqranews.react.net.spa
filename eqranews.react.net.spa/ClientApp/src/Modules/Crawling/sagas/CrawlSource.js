@@ -1,65 +1,122 @@
 import {
-	take,
-	call,
-	put,
-	takeLatest,
-	delay,
-	takeEvery,
-	takeLeading,
-} from 'redux-saga/effects';
-import {
-	ACTION_TYPES,
-	receiveCrawlSourceFetchAll,
-	crawlSourceLoadEnd,
-	crawlSourceLoadStart,
+	CRAWL_SOURCE_ACTIONS,
+	receiveFetchAllCrawlSources,
+	receiveFetchCrawlSourceById,
+	receiveCreateCrawlSource,
+	receiveUpdateCrawlSource,
+	receiveDeleteCrawlSource,
 } from '../Actions/CrawlSource';
+import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
+//import Api from '../Api/CrawlSource';
+import ApiProxy, { AddApiFilter } from '../../_shared/api/ApiProxy';
 
-import * as api from '../Api/CrawlSource';
-// const api = CrawlSourceApi();
+const Api = ApiProxy('crawlsources');
+// const ApiStepper = AddApiFilter(ApiProxy('crawlsteppers'), 'Source');
 
-function* crawlSourceFetchAll(action) {
-	console.log('Responding to the Saga!!!');
+console.log('API_WITH_FILTER:', Api);
+
+function* fetchAllCrawlSources() {
 	try {
-		//const data = yield call(api.fetchAll);
-		const data = yield call(() => {
-			const res = [];
-			for (let i = 0; i < 87; i++) {
-				res.push({
-					Id: i + 1,
-					DomainUrl: 'http://Akhbar.com',
-					Name: 'AKHBAR',
-					CountryId: 1,
-				});
-			}
-			return res;
-		});
 		yield put({
 			type: 'PAGE_LOADING',
 			data: true,
 		});
-		yield delay(4000);
-
-		//yield put(crawlSourceLoadStart());
-		yield put(receiveCrawlSourceFetchAll(data));
-		//yield put(crawlSourceLoadEnd());
-
+		const data = yield call(Api.fetchAll);
+		yield delay(2000);
+		console.log('CrawlSources Data From Saga', data);
+		yield put(receiveFetchAllCrawlSources(data));
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
 		});
 	} catch (err) {
-		//console.log(err);
+		console.log(err);
 	}
 }
 
-function* crawlSourceFetchAllSaga() {
-	console.log('Received the Saga Request!!!!!');
-	yield take(ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL);
-	yield call(crawlSourceFetchAll);
-	// yield takeEvery(
-	// 	ACTION_TYPES.REQUEST_CRAWL_SOURCE_FETCH_ALL,
-	// 	crawlSourceFetchAll
-	// );
+function* createCrawlSource(action) {
+	try {
+		yield put({
+			type: 'PAGE_LOADING',
+			data: true,
+		});
+		const data = yield call(Api.create, action.data); // data= newRecord
+		yield delay(2000);
+		yield put(receiveCreateCrawlSource(data));
+		yield put({
+			type: 'PAGE_LOADING',
+			data: false,
+		});
+	} catch (err) {
+		console.log(err);
+	}
 }
 
-export default [crawlSourceFetchAllSaga()];
+function* updateCrawlSource(action) {
+	console.log('Saga Update Action', action);
+	try {
+		yield put({
+			type: 'PAGE_LOADING',
+			data: true,
+		});
+		yield call(Api.update, action.data.id, action.data.data);
+		const data = Array.from(action.data.data).reduce(
+			(o, [k, v]) => ((o[k] = v), o),
+			{}
+		);
+		yield delay(4000);
+		yield put(receiveUpdateCrawlSource(data));
+		yield put({
+			type: 'PAGE_LOADING',
+			data: false,
+		});
+	} catch (err) {
+		console.log(err);
+	}
+}
+
+function* deleteCrawlSource(action) {
+	yield put({
+		type: 'PAGE_LOADING',
+		data: true,
+	});
+	console.log('DeleteCrawlSource Saga Action', action);
+	const data = yield call(Api.delete, action.data); //data = id
+	console.log('DeleteCrawlSource Saga data', data);
+	yield put(receiveDeleteCrawlSource(data.data));
+	yield put({
+		type: 'PAGE_LOADING',
+		data: false,
+	});
+}
+
+// All the Sagas Catchers to Export
+function* fetchAllCrawlSourcesSaga() {
+	yield take(CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_FETCH_ALL);
+	yield call(fetchAllCrawlSources);
+}
+function* createCrawlSourceSaga() {
+	yield takeLatest(
+		CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_CREATE,
+		createCrawlSource
+	);
+}
+function* updateCrawlSourceSaga() {
+	yield takeLatest(
+		CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_UPDATE,
+		updateCrawlSource
+	);
+}
+function* DeleteCrawlSourceSaga() {
+	yield takeLatest(
+		CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_DELETE,
+		deleteCrawlSource
+	);
+}
+
+export default [
+	fetchAllCrawlSourcesSaga(),
+	createCrawlSourceSaga(),
+	updateCrawlSourceSaga(),
+	DeleteCrawlSourceSaga(),
+];
