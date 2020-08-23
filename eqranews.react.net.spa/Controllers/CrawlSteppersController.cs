@@ -44,16 +44,16 @@ namespace eqranews.react.net.spa.Controllers
 
         // GET: api/CrawlSteppers/Source/5
         [HttpGet("Source/{id}")]
-        public async Task<ActionResult<List<CrawlStepper>>> GetCrawlStepperBySource(int id)
+        public async Task<ActionResult<IEnumerable<CrawlStepper>>> GetCrawlSteppersBySource(int id)
         {
-            var crawlStepper = await _context.CrawlSteppers.Include(S => S.CrawlSteps).Where(S => S.CrawlSourceId == id ).ToListAsync();
+            var crawlSteppers = await _context.CrawlSteppers.Include(S => S.CrawlSteps).Where(S => S.CrawlSourceId == id ).ToListAsync();
 
-            if (crawlStepper == null || crawlStepper.Count() ==0)
+            if (crawlSteppers == null || crawlSteppers.Count() ==0)
             {
-                return NotFound();
+                return Array.Empty<CrawlStepper>();
             }
 
-            return crawlStepper;
+            return crawlSteppers;
         }
 
         // PUT: api/CrawlSteppers/5

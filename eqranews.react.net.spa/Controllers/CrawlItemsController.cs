@@ -42,6 +42,20 @@ namespace eqranews.react.net.spa.Controllers
             return crawlItem;
         }
 
+        // GET: api/CrawlItemss/Step/5
+        [HttpGet("Step/{id}")]
+        public async Task<ActionResult<IEnumerable<CrawlItem>>> GetCrawlItemsByStep(int id)
+        {
+            var crawlItems = await _context.CrawlItems.Where(S => S.CrawlStepId == id).ToListAsync();
+
+            if (crawlItems == null || crawlItems.Count() == 0)
+            {
+                return Array.Empty<CrawlItem>();
+            }
+
+            return crawlItems;
+        }
+
         // PUT: api/CrawlItems/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

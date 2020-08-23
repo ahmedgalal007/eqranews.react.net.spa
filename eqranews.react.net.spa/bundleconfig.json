@@ -6,7 +6,6 @@
       "../wwwroot/css/animate.css",
       "../wwwroot/css/loading-bar.css",
       "../wwwroot/css/style-rtl.css",
-      "../wwwroot/css/waves.css",
       "../wwwroot/css/materialize.css",
       "../wwwroot/css/style.css",
       "../wwwroot/css/custom.css",
@@ -14,9 +13,19 @@
     ]
   },
   {
-    "outputFileName": "public/js/vendors.min.js",
+    "outputFileName": "public/js/all-vendors.min.js",
     "inputFiles": [
-      "../wwwroot/js/site.js"
+      "../wwwroot/js/vendors.min.js",
+      "../wwwroot/js/dropify.min.js",
+      "../wwwroot/js/jquery.formatter.min.js",
+      "../wwwroot/js/scale.fix.js",
+      "../wwwroot/js/select2.full.min.js",
+      "../wwwroot/js/jquery.dataTables.min.js",
+      "../wwwroot/js/dataTables.responsive.min.js",
+      "../wwwroot/js/dataTables.select.min.js",
+      "../wwwroot/js/waves.min.js",
+      "../wwwroot/js/plugins.min.js",
+      "../wwwroot/js/search.min.js"
     ],
     "minify": {
       "enabled": true,

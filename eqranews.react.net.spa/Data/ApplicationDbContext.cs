@@ -41,6 +41,10 @@ namespace eqranews.react.net.spa.Data
                 .WithOne(p => p.Parent)
                 .HasForeignKey(p => p.ParentId)
                 .OnDelete(DeleteBehavior.SetNull);
+
+            builder.Entity<CrawlStep>()
+                .HasOne<CrawlSetpType>(s => s.CrawlStepType);
+
         }
     }
 }

@@ -1,9 +1,11 @@
+import '../../../vendors/select2/select2.min.css';
+import '../../../vendors/select2/select2-materialize.css';
 import React, { Component } from 'react';
 import {
-	requestFetchCrawlStepperBySource,
 	requestCreateCrawlStepper,
 	requestUpdateCrawlStepper,
 } from '../Actions/CrawlStepper';
+import { requestFetchCrawlStepByStepper } from '../Actions/CrawlStep';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
@@ -12,10 +14,45 @@ import { DTable } from '../../_shared/components/DTable';
 import FormUtils from '../../_shared/lib/FormUtils';
 import CrawlStep from './CrawlStep';
 
-export class CrawlStepper extends Component {
+class CrawlStepper extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { crawlSourceId: 0 };
+
+		const {
+			match: { params },
+		} = this.props;
+		console.log('Stepper Params:', params);
+		this.props.updateNavigationState({
+			...this.props.navigationState,
+			crawlStepperId: params.id,
+		});
+		this.columns = [
+			{ title: 'ID', name: 'id' },
+			{ title: 'URL', name: 'url' },
+			{ title: 'EDIT', defaultContent: '' },
+			{ title: 'DELETE', defaultContent: '' },
+		];
+		this.columnDefs = [
+			{ targets: [2, 3], orderable: false },
+			{
+				targets: 2,
+				createdCell: FormUtils.createEditButton(
+					'/crawl/step/',
+					this.props.history,
+					this.props.navigationState
+				),
+			},
+			{
+				targets: 3,
+				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+			},
+		];
+		// if (params.id) initialFieldValues.id = params.id;
+		this.initialFieldValues = this.initialFieldValues(
+			params?.id || 0,
+			this.props.location.state.crawlSourceId
+		);
+		this.state = { ...this.initialFieldValues, Errors: {} };
 	}
 
 	//validate({fullname: 'jenny'})
@@ -23,6 +60,8 @@ export class CrawlStepper extends Component {
 		let result = {
 			id: id,
 			name: '',
+			enabled: true,
+			recuringTime: '03',
 			crawlSourceId: sourceId,
 			crawlSteps: [],
 		};
@@ -38,7 +77,19 @@ export class CrawlStepper extends Component {
 	};
 
 	handelInputChange = function (e) {
-		const { name, value } = e.target;
+		let { name, value, checked } = e.target;
+		console.log('CHECKBOX:', e.target);
+		if (e.target.type == 'checkbox') {
+			value = checked ? true : false;
+			// value
+			// 	? e.target.setAttribute('checked', 'checked')
+			// 	: e.target.removeAttribute('checked');
+			// e.target['indeterminate'] = value;
+			e.target.setAttribute('value', value);
+		}
+		console.log(e.target);
+		console.log('Indeterminate', e.target['indeterminate']);
+
 		const fieldValue = { [name]: value };
 		//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
 		this.setState(fieldValue);
@@ -63,6 +114,10 @@ export class CrawlStepper extends Component {
 		console.log(e.target);
 		if (this.validate()) {
 			const formData = new FormData(e.target);
+			for (var value of formData.values()) {
+				value = value == 'on' ? true : value;
+				value = value == 'off' ? false : value;
+			}
 
 			if (formData.get('id') == 0) {
 				this.props.createCrawlStepper(formData);
@@ -74,45 +129,25 @@ export class CrawlStepper extends Component {
 	};
 
 	componentWillMount = () => {
-		const {
-			match: { params },
-		} = this.props;
-		console.log('Stepper Params:', params);
-		this.columns = [
-			{ title: 'ID', name: 'id' },
-			{ title: 'NAME', name: 'name' },
-			{ title: 'EDIT', defaultContent: '' },
-			{ title: 'DELETE', defaultContent: '' },
-		];
-		this.columnDefs = [
-			{ targets: [2, 3], orderable: false },
-			{
-				targets: 2,
-				createdCell: FormUtils.createEditButton(
-					'/crawl/stepper/' + params.source + '/' + params.id,
-					this.props.history
-				),
-			},
-			{
-				targets: 3,
-				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
-			},
-		];
-		// if (params.id) initialFieldValues.id = params.id;
-		const initialFieldValues = this.initialFieldValues(
-			params?.id || 0,
-			this.props.location.state.crawlSourceId
-		);
-		this.state = { ...initialFieldValues, Errors: {} };
 		// this.props.FetchCrawlStepperBySource(this.state.crawlSourceId);
 		console.log('CRAWl STEPPER PROPS', this.props);
+
 		const scripts = AppUtilities.populateAllSctions();
-		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			if (window.jQuery) {
-				const $ = window.jQuery;
-				$(document).ready(() => {});
-			}
-		});
+		scripts.PAGE_VENDOR_JS.scripts.push(
+			'app-assets/vendors/formatter/jquery.formatter.min.js'
+		);
+		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+		console.log(
+			'fetching crawl steps by staepper ID:',
+			this.initialFieldValues.id
+		);
+		this.props.FetchCrawlStepByStepper(this.initialFieldValues.id);
+
+		if (window.jQuery) {
+			const $ = window.jQuery;
+			$(document).ready(() => {});
+		}
+		// });
 	};
 
 	componentDidMount = () => {
@@ -120,6 +155,9 @@ export class CrawlStepper extends Component {
 
 		if (window.jQuery && window.M) {
 			const $ = window.jQuery;
+			$('#recuringTime').formatter({
+				pattern: '{{99}}:{{99}}',
+			});
 		} else if (window.M) {
 			document.addEventListener('DOMContentLoaded', function () {
 				// var elems = document.querySelectorAll('select');
@@ -129,9 +167,16 @@ export class CrawlStepper extends Component {
 	};
 
 	render() {
-		const { id, name, crawlSourceId, crawlSteps } = this.state;
+		const {
+			id,
+			name,
+			enabled,
+			recuringTime,
+			crawlSourceId,
+			crawlSteps,
+		} = this.state;
 		const errors = this.state.Errors;
-		console.log('Props', this.state);
+		console.log('Steps:', this.props);
 		return (
 			<div className="row">
 				{console.log(this.props)}
@@ -153,6 +198,29 @@ export class CrawlStepper extends Component {
 									onSubmit={this.handelSubmit}
 								>
 									<div className="row">
+										<div className="input-field col s12">
+											<div className="switch">
+												<label htmlFor="enabled">
+													<input
+														id="enabled"
+														name="enabled"
+														type="checkbox"
+														onChange={this.handelInputChange}
+														checked={enabled}
+													/>
+													<span className="lever"></span>
+													Enabled
+												</label>
+											</div>
+											<input
+												placeholder="00:00"
+												id="recuringTime"
+												name="recuringTime"
+												type="text"
+												onChange={this.handelInputChange}
+												value={recuringTime}
+											/>
+										</div>
 										<div className="input-field col s12">
 											<input
 												className="validate"
@@ -221,20 +289,27 @@ export class CrawlStepper extends Component {
 								<section className="users-list-wrapper section">
 									<div className="users-list-table">
 										<Link
-											to={`/crawl/step/${id}`}
+											to={{
+												pathname: '/crawl/step/',
+												state: { crawlStepperId: id },
+											}}
 											component={CrawlStep}
 											className="btn-floating btn-large waves-effect waves-light red"
 										>
 											<i className="material-icons">add</i>
 										</Link>
 
-										<a className="waves-effect waves-red btn white red-text primary-content">
-											<i class="material-icons left">add_to_photos</i> جديد
-										</a>
 										<div className="card">
 											<div className="card-content">
 												<DTable
-													data={FormUtils.tableData(this.columns, crawlSteps)}
+													data={FormUtils.tableData(
+														this.columns,
+														this.props.crawlSteps.length > 0
+															? this.props.crawlSteps.filter(
+																	x => x.crawlStepperId == id
+															  )
+															: []
+													)}
 													columns={this.columns}
 													formate={this.formate}
 													columnDefs={this.columnDefs}
@@ -247,7 +322,6 @@ export class CrawlStepper extends Component {
 						</div>
 					</div>
 				</div>
-				<script src="../../../app-assets/js/scripts/form-file-uploads.js"></script>
 			</div>
 		);
 	}
@@ -256,14 +330,20 @@ export class CrawlStepper extends Component {
 const mapStateToProps = state => {
 	return {
 		data: state.CrawlSteppers,
+		crawlSteps: state.CrawlSteps,
 		countries: state.Countries,
+		navigationState: state.NavigationState,
 	};
 };
 
 const mapActionToProps = {
-	FetchCrawlStepperBySource: requestFetchCrawlStepperBySource,
+	FetchCrawlStepByStepper: requestFetchCrawlStepByStepper,
 	createCrawlStepper: requestCreateCrawlStepper,
 	updateCrawlStepper: requestUpdateCrawlStepper,
+	updateNavigationState: data => ({
+		type: 'UPDATE_NAVIGATION_STATE',
+		data: data,
+	}),
 };
 
 export default connect(

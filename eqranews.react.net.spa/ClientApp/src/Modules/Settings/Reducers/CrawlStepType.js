@@ -9,9 +9,7 @@ export const CrawlStepTypes = (state = [], { type: type, data: data }) => {
 		case SETTINGS_CRAWLSTEPTYPE_ACTIONS.RECEIVE_SETTINGS_CRAWLSTEPTYPE_CREATE:
 			return [...state, data.data];
 		case SETTINGS_CRAWLSTEPTYPE_ACTIONS.RECEIVE_SETTINGS_CRAWLSTEPTYPE_UPDATE:
-			return state.map(x =>
-				x.id == data.id ? { ...data, crawlSources: null } : x
-			);
+			return state.map(x => (x.id == data.id ? { ...data } : x));
 		case SETTINGS_CRAWLSTEPTYPE_ACTIONS.RECEIVE_SETTINGS_CRAWLSTEPTYPE_DELETE:
 			console.log('Deleted', data);
 			return [...state.filter(x => x.id != data.id)];

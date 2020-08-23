@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AngleSharp;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,6 +7,8 @@ namespace eqranews.crawling.Models.CrawlSteps
 {
     public class CrawlStepGetLinkList: CrawlStep
     {
+        public CrawlStepGetLinkList(int Id, CrawlSetpType crawlSetpType, Url url, string Selector):base(Id, crawlSetpType,url,Selector){}
+
         public override List<CrawlResult> Process(List<CrawlResult> results)
         {
             var document = PageCrawler.GetPage(this.Url);

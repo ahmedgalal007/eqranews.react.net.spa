@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.12" />
+    <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.6" />
@@ -41,7 +43,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Kubernetes.Tools.Targets" Version="1.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
@@ -65,6 +67,27 @@
     <Content Remove="wwwroot\css\vendors-rtl.min.css" />
     <Content Remove="wwwroot\css\vendors.min.css" />
     <Content Remove="wwwroot\css\waves.css" />
+    <Content Remove="wwwroot\js\custom-script.js" />
+    <Content Remove="wwwroot\js\custom-script.min.js" />
+    <Content Remove="wwwroot\js\dataTables.bootstrap4.js" />
+    <Content Remove="wwwroot\js\dataTables.bootstrap4.min.js" />
+    <Content Remove="wwwroot\js\datatables.checkboxes.min.js" />
+    <Content Remove="wwwroot\js\dataTables.responsive.js" />
+    <Content Remove="wwwroot\js\dataTables.responsive.min.js" />
+    <Content Remove="wwwroot\js\dataTables.select.min.js" />
+    <Content Remove="wwwroot\js\dropify.min.js" />
+    <Content Remove="wwwroot\js\jquery.dataTables.js" />
+    <Content Remove="wwwroot\js\jquery.dataTables.min.js" />
+    <Content Remove="wwwroot\js\jquery.formatter.min.js" />
+    <Content Remove="wwwroot\js\materialize.js" />
+    <Content Remove="wwwroot\js\materialize.min.js" />
+    <Content Remove="wwwroot\js\plugins.js" />
+    <Content Remove="wwwroot\js\plugins.min.js" />
+    <Content Remove="wwwroot\js\scale.fix.js" />
+    <Content Remove="wwwroot\js\search.js" />
+    <Content Remove="wwwroot\js\search.min.js" />
+    <Content Remove="wwwroot\js\select2.full.min.js" />
+    <Content Remove="wwwroot\js\vendors.min.js" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="_MySQL_Init_Script\MySQL.sh" />
@@ -85,6 +108,27 @@
     <None Include="wwwroot\css\vendors-rtl.min.css" />
     <None Include="wwwroot\css\vendors.min.css" />
     <None Include="wwwroot\css\waves.css" />
+    <None Include="wwwroot\js\custom-script.js" />
+    <None Include="wwwroot\js\custom-script.min.js" />
+    <None Include="wwwroot\js\dataTables.bootstrap4.js" />
+    <None Include="wwwroot\js\dataTables.bootstrap4.min.js" />
+    <None Include="wwwroot\js\datatables.checkboxes.min.js" />
+    <None Include="wwwroot\js\dataTables.responsive.js" />
+    <None Include="wwwroot\js\dataTables.responsive.min.js" />
+    <None Include="wwwroot\js\dataTables.select.min.js" />
+    <None Include="wwwroot\js\dropify.min.js" />
+    <None Include="wwwroot\js\jquery.dataTables.js" />
+    <None Include="wwwroot\js\jquery.dataTables.min.js" />
+    <None Include="wwwroot\js\jquery.formatter.min.js" />
+    <None Include="wwwroot\js\materialize.js" />
+    <None Include="wwwroot\js\materialize.min.js" />
+    <None Include="wwwroot\js\plugins.js" />
+    <None Include="wwwroot\js\plugins.min.js" />
+    <None Include="wwwroot\js\scale.fix.js" />
+    <None Include="wwwroot\js\search.js" />
+    <None Include="wwwroot\js\search.min.js" />
+    <None Include="wwwroot\js\select2.full.min.js" />
+    <None Include="wwwroot\js\vendors.min.js" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL.csproj" />
@@ -103,7 +147,7 @@
   </Target>
   
   <Target Name="MyPreCompileTarget" BeforeTargets="Build">
-    <Exec WorkingDirectory="$(SpaRoot)" Command="gulp min:css" />
+    <Exec WorkingDirectory="$(SpaRoot)" Command="gulp min" />
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">

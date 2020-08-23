@@ -1,7 +1,7 @@
-// import '../css/dataTables/jquery.dataTables.min.css';
 import '../css/dataTables/responsive.dataTables.min.css';
-import '../css/dataTables/page-users.css';
+import '../css/dataTables/jquery.dataTables.min.css';
 import '../css/dataTables/fixedColumns.dataTables.min.css';
+import '../css/dataTables/page-users.css';
 // import 'datatables.net-buttons-dt/css/buttons.dataTables.css';
 
 import React, { Component } from 'react';
@@ -18,18 +18,22 @@ import { bindActionCreators } from 'redux';
 // window.JSZip = jzip;
 
 export class DTable extends Component {
-	componentWillMount = () => {
+	_IsMounted = false;
+	componentDidMount = () => {
+		this._IsMounted = true;
 		this.dt = null;
 		//this.state = { loaded: false };
-		const scripts = AppUtilities.populateAllSctions();
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'/app-assets/vendors/data-tables/js/jquery.dataTables.min.js'
-		);
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'/app-assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js'
-		);
-		// scripts.PAGE_LEVEL_JS.scripts.push('../../Crawling/JS/page-users.js');
-		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+		if (this._IsMounted) {
+			const scripts = AppUtilities.populateAllSctions();
+			scripts.PAGE_VENDOR_JS.scripts.push(
+				'/app-assets/vendors/data-tables/js/jquery.dataTables.min.js'
+			);
+			scripts.PAGE_VENDOR_JS.scripts.push(
+				'/app-assets/vendors/data-tables/extensions/responsive/js/dataTables.responsive.min.js'
+			);
+			// scripts.PAGE_LEVEL_JS.scripts.push('../../Crawling/JS/page-users.js');
+
+			//AppUtilities.loadAllSectionsScripts(scripts).then(() => {
 			// document.addEventListener(
 			// 	'DOMContentLoaded',
 			// 	function (event) {
@@ -37,12 +41,19 @@ export class DTable extends Component {
 			// 	}.bind(this)
 			// );
 
-			this.forceUpdate();
-		});
+			// this.forceUpdate();
+			//});
+		}
 	};
-	// componentWillUnmount = () => {
-	// 	this.dt.destroy();
-	// };
+
+	componentWillUnmount = () => {
+		this._IsMounted = false;
+
+		//this.dt.destroy();
+		this.setState = (state, callback) => {
+			return {};
+		};
+	};
 
 	createForm = (data, tr) => {
 		//return ReactDOM.render(formate(data(), columns), tr);
@@ -119,7 +130,7 @@ export class DTable extends Component {
 				<table
 					id="users-list-datatable"
 					className="table mdl-data-table"
-					style={{ 'min-height': '100px' }}
+					style={{ minHeight: '100px' }}
 					ref={el => (this.el = el)}
 				></table>
 			</div>

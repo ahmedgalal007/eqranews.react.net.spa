@@ -23,8 +23,8 @@ export class App extends Component {
 		return (
 			<Layout>
 				<Route exact path="/" component={Home} />
-				<Route path={CrawlPrefix} component={CrawlRoutes} />
-				<Route path={SettingsPrefix} component={SettingsRoutes} />
+				<Route path={CrawlPrefix} component={withRouter(CrawlRoutes)} />
+				<Route path={SettingsPrefix} component={withRouter(SettingsRoutes)} />
 				<AuthorizeRoute path="/about" component={About} />
 				{
 					//<AuthorizeRoute path='/fetch-data' component={FetchData} />
@@ -38,9 +38,9 @@ export class App extends Component {
 	}
 }
 
-const mapStateToProps = state => {
-	//console.log('qwnProps', ownProps);
-	return state;
-};
+// const mapStateToProps = state => {
+// 	//console.log('qwnProps', ownProps);
+// 	return state;
+// };
 
-export default connect(mapStateToProps)(App);
+export default App;

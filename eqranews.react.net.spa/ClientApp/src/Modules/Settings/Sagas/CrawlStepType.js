@@ -17,6 +17,7 @@ function* fetchAllCrawlStepTypes() {
 		data: true,
 	});
 	const data = yield call(Api.fetchAll);
+	yield console.log('CrawlStepTypesData:', data);
 	yield delay(4000);
 	yield put(receiveFetchAllCrawlStepTypes(data));
 	yield put({

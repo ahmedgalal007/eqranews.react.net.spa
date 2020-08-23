@@ -72,8 +72,8 @@ export class Aside extends Component {
 						</div>
 					</li>
 					<li className="navigation-header">
-						<a className="navigation-header-text" href="#">
-							Misc{' '}
+						<a className="navigation-header-text" href="/hangfire">
+							JOBS{' '}
 						</a>
 						<i className="navigation-header-icon material-icons">more_horiz</i>
 					</li>

@@ -2,8 +2,11 @@ import React, { Component } from 'react';
 import RightSidebarMessages from './LayoutComponents/RightSidebarMessages';
 import RightSidebarSettings from './LayoutComponents/RightSidebarSettings';
 import RightSidebarActivities from './LayoutComponents/RightSidebarActivities';
-
 export default class RightSidebarNav extends Component {
+	constructor(props) {
+		super(props);
+		if (window.slideOutChat) this.slideOutChat = window.slideOutChat;
+	}
 	render() {
 		return (
 			<aside id="right-sidebar-nav">
@@ -215,13 +218,13 @@ export default class RightSidebarNav extends Component {
 					<li className="center-align chat-footer">
 						<form
 							className="col s12"
-							onsubmit="slideOutChat()"
+							onSubmit={this.slideOutChat}
 							action="javascript:void(0);"
 						>
 							<div className="input-field">
 								<input id="icon_prefix" type="text" className="search" />
 								<label htmlFor="icon_prefix">Type here..</label>
-								<a onClick="slideOutChat()">
+								<a onClick={this.slideOutChat}>
 									<i className="material-icons prefix">send</i>
 								</a>
 							</div>

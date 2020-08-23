@@ -63,6 +63,7 @@ export class CategoryForm extends Component {
 								placeholder: 'Select an option',
 								allowClear: true,
 								width: '100%',
+								dir: 'rtl',
 								data: [
 									{
 										id: '',

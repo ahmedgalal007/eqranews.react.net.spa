@@ -100,15 +100,15 @@ export const populateAllSctions = () => {
 	return SCRIPT_SECTIONS;
 };
 export const loadAllSectionsScripts = sections => {
-	let latestSection;
-	Object.keys(sections).map(key => {
-		document.querySelector(sections[key].id).innerHTML = '';
-		let itm = sections[key];
-		if (latestSection) {
-			latestSection = latestSection.then(res => loadScriptsAsync(itm));
-		} else {
-			latestSection = loadScriptsAsync(itm);
-		}
-	});
-	return latestSection;
+	//let latestSection;
+	//Object.keys(sections).map(key => {
+	//	document.querySelector(sections[key].id).innerHTML = '';
+	//	let itm = sections[key];
+	//	if (latestSection) {
+	//		latestSection = latestSection.then(res => loadScriptsAsync(itm));
+	//	} else {
+	//		latestSection = loadScriptsAsync(itm);
+	//	}
+	//});
+	//return latestSection;
 };

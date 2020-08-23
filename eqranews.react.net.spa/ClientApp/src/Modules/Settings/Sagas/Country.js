@@ -88,8 +88,10 @@ function* deleteCountry(action) {
 
 // All the Sagas Catchers to Export
 function* fetchAllCountriesSaga() {
-	yield take(SETTINGS_COUNTRY_ACTIONS.REQUEST_SETTINGS_COUNTRY_FETCH_ALL);
-	yield call(fetchAllCountries);
+	const action = yield take(
+		SETTINGS_COUNTRY_ACTIONS.REQUEST_SETTINGS_COUNTRY_FETCH_ALL
+	);
+	yield call(fetchAllCountries, action);
 }
 function* createCountrySaga() {
 	yield takeLatest(

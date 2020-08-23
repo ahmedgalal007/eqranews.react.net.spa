@@ -23,10 +23,20 @@ const RouterCurrentPage = (state = {}, { type: type, data: data }) => {
 			return { title: 'Home', path: '/' };
 	}
 };
+const NavigationState = (state = {}, { type: type, data: data }) => {
+	switch (type) {
+		case 'UPDATE_NAVIGATION_STATE':
+			return { ...data };
+			break;
+		default:
+			return {};
+	}
+};
 
 export default combineReducers({
 	IsPageLoading,
 	RouterCurrentPage,
+	NavigationState,
 	...CrawlReducers,
 	...SettingsReducers,
 	...AuthenticationReducers,

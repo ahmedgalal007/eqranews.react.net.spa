@@ -44,8 +44,15 @@ const Countries = (control, baseUrl = '/api/') => {
 			return {
 				...this,
 				[key]: async id => {
-					const res = await axios.get(this.url + filterName + '/' + id);
-					return res.data;
+					const res = await axios
+						.get(this.url + filterName + '/' + id)
+						.then(response => response.data)
+						.catch(error => {
+							if (error.response.status === 404) {
+								return [];
+							}
+						});
+					return res;
 				},
 			};
 		},
@@ -54,13 +61,7 @@ const Countries = (control, baseUrl = '/api/') => {
 
 export const AddApiFilter = (Api, filterName) => {
 	const DFilter = async id => {
-		const res = await axios.get(Api.url + filterName + '/' + id, {
-			// headers: {
-			// 	Accept: 'application/json, application/xml, text/plain, text/html, *.*',
-			// 	'Content-Type':
-			// 		'multipart/form-data, application/x-www-form-urlencoded; charset=utf-8',
-			// },
-		});
+		const res = await axios.get(Api.url + filterName + '/' + id);
 		return res.data;
 	};
 	return { ...Api, ['filterBy' + filterName]: DFilter };

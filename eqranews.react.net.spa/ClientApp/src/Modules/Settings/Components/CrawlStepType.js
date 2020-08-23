@@ -8,17 +8,19 @@ import {
 	requestDeleteCrawlStepType,
 } from '../Actions/CrawlStepType';
 import { Link } from 'react-router-dom';
-import { CategoryForm } from './CategoryForm';
+import CategoryForm from './CategoryForm';
 
 export class CrawlStepType extends Component {
 	componentWillMount = () => {
 		//this.state = { loaded: false };
+		this.props.FetchAllCrawlStepTypes();
+
 		this.columns = [
 			{ title: 'Id', name: 'id', width: 100 },
 			{ title: 'Name', name: 'name' },
 			{
 				title: 'DELETE   /   EDIT',
-				width: 200,
+				width: 100,
 				className: 'dt-body-center dt-head-center ',
 				orderable: false,
 				data: null,
@@ -84,7 +86,6 @@ export class CrawlStepType extends Component {
 		];
 
 		//if (this.props.data.length == 0)
-		this.props.FetchAllCrawlStepTypes();
 	};
 
 	componentDidMount = () => {
@@ -97,6 +98,7 @@ export class CrawlStepType extends Component {
 	};
 
 	tableData = dataArray => {
+		console.log('dataArray:', dataArray);
 		return dataArray.map((x, i) => {
 			const res = [];
 			this.columns.map((n, l) => {
@@ -161,7 +163,7 @@ export class CrawlStepType extends Component {
 }
 
 const mapStateToProps = state => {
-	console.log('Categories', state);
+	console.log('CRAWL STEP TYPES :', state);
 	return {
 		data: state.CrawlStepTypes,
 	};

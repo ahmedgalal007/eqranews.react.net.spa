@@ -15,6 +15,15 @@ namespace eqranews.crawling.Models.CrawlSteps
         {
             CrawlItems = crawlItems;
         }
+
+        public CrawlStep(int Id, CrawlSetpType crawlSetpType,Url url, string Selector )
+        {
+            CrawlItems = new List<CrawlItem>();
+            this.Id = Id;
+            this.CrawlStepType = crawlSetpType;
+            this.Url = url;
+            this.Selector = Selector;
+        }
         public int Id { get; set; }
         public Url Url { get; set; }
         public CrawlSetpType CrawlStepType { get; set; }

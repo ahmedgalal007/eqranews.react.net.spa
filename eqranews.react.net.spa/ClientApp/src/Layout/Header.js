@@ -29,25 +29,18 @@ export default class Header extends Component {
 									</a>
 								</li>
 								<li className="hide-on-med-and-down">
-									<a
-										className="waves-effect waves-block waves-light toggle-fullscreen"
-										href="javascript:void(0);"
-									>
+									<a className="waves-effect waves-block waves-light toggle-fullscreen">
 										<i className="material-icons">settings_overscan</i>
 									</a>
 								</li>
 								<li className="hide-on-large-only search-input-wrapper">
-									<a
-										className="waves-effect waves-block waves-light search-button"
-										href="javascript:void(0);"
-									>
+									<a className="waves-effect waves-block waves-light search-button">
 										<i className="material-icons">search</i>
 									</a>
 								</li>
 								<li>
 									<a
 										className="waves-effect waves-block waves-light notification-button"
-										href="javascript:void(0);"
 										data-target="notifications-dropdown"
 									>
 										<i className="material-icons">
@@ -59,7 +52,6 @@ export default class Header extends Component {
 								<li>
 									<a
 										className="waves-effect waves-block waves-light profile-button"
-										href="javascript:void(0);"
 										data-target="profile-dropdown"
 									>
 										<span className="avatar-status avatar-online">
@@ -74,7 +66,6 @@ export default class Header extends Component {
 								<li>
 									<a
 										className="waves-effect waves-block waves-light sidenav-trigger"
-										href="#"
 										data-target="slide-out-right"
 									>
 										<i className="material-icons">format_indent_increase</i>
@@ -86,11 +77,7 @@ export default class Header extends Component {
 							}
 							<ul className="dropdown-content" id="translation-dropdown">
 								<li className="dropdown-item">
-									<a
-										className="grey-text text-darken-1"
-										href="#!"
-										data-language="en"
-									>
+									<a className="grey-text text-darken-1" data-language="en">
 										<i className="flag-icon flag-icon-gb"></i> English
 									</a>
 								</li>
@@ -104,20 +91,12 @@ export default class Header extends Component {
 									</a>
 								</li>
 								<li className="dropdown-item">
-									<a
-										className="grey-text text-darken-1"
-										href="#!"
-										data-language="pt"
-									>
+									<a className="grey-text text-darken-1" data-language="pt">
 										<i className="flag-icon flag-icon-pt"></i> Portuguese
 									</a>
 								</li>
 								<li className="dropdown-item">
-									<a
-										className="grey-text text-darken-1"
-										href="#!"
-										data-language="de"
-									>
+									<a className="grey-text text-darken-1" data-language="de">
 										<i className="flag-icon flag-icon-de"></i> German
 									</a>
 								</li>
@@ -235,7 +214,10 @@ export default class Header extends Component {
 									</a>
 								</li>
 								<li>
-									<a className="grey-text text-darken-1" href="/Identity/Account/logout">
+									<a
+										className="grey-text text-darken-1"
+										href="/Identity/Account/logout"
+									>
 										<i className="material-icons">keyboard_tab</i> Logout
 									</a>
 								</li>

@@ -13,15 +13,24 @@ import {
 import reduxLoginActions from '../../Modules/Authentication/Actions/login';
 
 class ApiAuthorizationRoutes extends Component {
+	componentDidMount = () => {
+		this.state = {};
+	};
+
+	componentWillMount = () => {
+		this.setState = (state, callback) => {
+			return;
+		};
+	};
 	loginAction = name => {
 		return connect((state, ownProps) => {
-			return { ...state, ...ownProps, action: name };
+			return { ...ownProps, ...state, action: name };
 		}, reduxLoginActions)(Login);
 	};
 
 	logoutAction = name => {
 		return connect((state, ownProps) => {
-			return { ...state, ...ownProps, action: name };
+			return { ...ownProps, ...state, action: name };
 		})(Logout);
 	};
 

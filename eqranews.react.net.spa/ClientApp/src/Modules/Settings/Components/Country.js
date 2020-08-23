@@ -14,7 +14,7 @@ import {
 	requestDeleteCountry,
 } from '../Actions/Country';
 import { Link } from 'react-router-dom';
-import { CountryForm } from './CountryForm';
+import CountryForm from './CountryForm';
 // var $ = require('jquery');
 export class Country extends Component {
 	componentWillMount = () => {

@@ -1,6 +1,4 @@
 import { SETTINGS_COUNTRY_ACTIONS } from '../Actions/Country';
-import { type } from 'jquery';
-//import Countries from '../../_shared/components/Countries';
 
 export const Countries = (state = [], { type: type, data: data }) => {
 	switch (type) {

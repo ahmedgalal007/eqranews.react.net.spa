@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eqranews.geoTests", "eqrane
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "eqranews.crawlingTests", "eqranews.crawlingTests\eqranews.crawlingTests.csproj", "{30A4B096-9158-4BDD-926C-36249245F937}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{DE374078-006C-4B63-A8CA-53262B76D07F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DAL", "DAL\DAL.csproj", "{DE374078-006C-4B63-A8CA-53262B76D07F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

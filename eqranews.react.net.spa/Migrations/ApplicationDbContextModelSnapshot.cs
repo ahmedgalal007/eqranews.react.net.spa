@@ -143,8 +143,14 @@ namespace eqranews.react.net.spa.Migrations
                     b.Property<int>("CrawlSourceId")
                         .HasColumnType("int");
 
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<TimeSpan>("RecuringTime")
+                        .HasColumnType("time(6)");
 
                     b.HasKey("Id");
 

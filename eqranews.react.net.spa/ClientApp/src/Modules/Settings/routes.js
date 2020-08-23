@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import Country from './Components/Country';
 import CountryForm from './Components/CountryForm';
 import Category from './Components/Category';
@@ -35,36 +35,46 @@ export const routes = {
 	],
 };
 
-export const SettingsRoutes = props => {
-	return (
-		<Fragment>
-			<Route exact path={`${SettingsPrefix}/countries`} component={Country} />
-			{
+export class SettingsRoutes extends React.Component {
+	render() {
+		return (
+			<Fragment>
 				<Route
-					path={`${SettingsPrefix}/country/:id?`}
-					component={CountryForm}
+					exact
+					path={`${SettingsPrefix}/countries`}
+					component={withRouter(Country)}
 				/>
-			}
-			<Route exact path={`${SettingsPrefix}/categories`} component={Category} />
-			{
+				{
+					<Route
+						path={`${SettingsPrefix}/country/:id?`}
+						component={withRouter(CountryForm)}
+					/>
+				}
 				<Route
-					path={`${SettingsPrefix}/category/:id?`}
-					component={CategoryForm}
+					exact
+					path={`${SettingsPrefix}/categories`}
+					component={withRouter(Category)}
 				/>
-			}
-			<Route
-				exact
-				path={`${SettingsPrefix}/crawlsteptypes`}
-				component={CrawlStepType}
-			/>
-			{
+				{
+					<Route
+						path={`${SettingsPrefix}/category/:id?`}
+						component={withRouter(CategoryForm)}
+					/>
+				}
 				<Route
-					path={`${SettingsPrefix}/crawlsteptype/:id?`}
-					component={CrawlStepTypeForm}
+					exact
+					path={`${SettingsPrefix}/crawlsteptypes`}
+					component={withRouter(CrawlStepType)}
 				/>
-			}
-		</Fragment>
-	);
-};
+				{
+					<Route
+						path={`${SettingsPrefix}/crawlsteptype/:id?`}
+						component={withRouter(CrawlStepTypeForm)}
+					/>
+				}
+			</Fragment>
+		);
+	}
+}
 
 export default SettingsRoutes;

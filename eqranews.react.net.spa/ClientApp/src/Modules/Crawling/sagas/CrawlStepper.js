@@ -6,7 +6,14 @@ import {
 	receiveUpdateCrawlStepper,
 	receiveDeleteCrawlStepper,
 } from '../Actions/CrawlStepper';
-import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
+import {
+	take,
+	takeLatest,
+	put,
+	call,
+	delay,
+	takeLeading,
+} from 'redux-saga/effects';
 //import Api from '../Api/CrawlStepper';
 import ApiProxy, { AddApiFilter } from '../../_shared/api/ApiProxy';
 
@@ -97,11 +104,12 @@ function* deleteCrawlStepper(action) {
 
 // All the Sagas Catchers to Export
 function* fetchCrawlStepperBySourceSaga() {
-	yield take(
-		CRAWL_STEPPER_ACTIONS.REQUEST_CRAWL_STEPPER_FETCH_BY_SOURCE,
-		fetchCrawlStepperBySource
+	const action = yield take(
+		CRAWL_STEPPER_ACTIONS.REQUEST_CRAWL_STEPPER_FETCH_BY_SOURCE
 	);
+	yield call(fetchCrawlStepperBySource, action);
 }
+
 function* createCrawlStepperSaga() {
 	yield console.log('Crawl Stepper Create Requested!!!');
 	yield takeLatest(

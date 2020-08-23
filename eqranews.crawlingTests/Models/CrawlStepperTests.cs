@@ -19,13 +19,10 @@ namespace eqranews.crawling.Models.Tests
         {
             // Arrange
             var stepper = new CrawlStepper();
-            stepper.StepSequence.Add(new CrawlStepGetLinkList
-            {
-                Id = 1,
-                CrawlStepType = CrawlSetpType.Single,
-                Url = new AngleSharp.Url("http://gate.ahram.org.eg/index.aspx"),
-                Selector = "#ContentPlaceHolder1_divUrgent .blok_file > a"
-            });
+            stepper.StepSequence.Add(new CrawlStepGetLinkList(1, CrawlSetpType.Single,
+                new AngleSharp.Url("http://gate.ahram.org.eg/index.aspx"),
+                "#ContentPlaceHolder1_divUrgent .blok_file > a"
+            ));
             // Act
             var res = stepper.Crawl();
             // Assert
@@ -36,12 +33,9 @@ namespace eqranews.crawling.Models.Tests
         {
             // Arrange
             var stepper = new CrawlStepper();
-            stepper.StepSequence.Add(new CrawlStepGetLinkList
-            {
-                Id = 1,
-                Url = new AngleSharp.Url("http://gate.ahram.org.eg/index.aspx"),
-                Selector = "#ContentPlaceHolder1_divUrgent .blok_file > a"
-            });
+            stepper.StepSequence.Add(new CrawlStepGetLinkList(
+                1, CrawlSetpType.Single, new AngleSharp.Url("http://gate.ahram.org.eg/index.aspx"),"#ContentPlaceHolder1_divUrgent .blok_file > a"
+            ));
             stepper.StepSequence.Add(new CrawlStepParseLinkList
             {
                 Id = 2,

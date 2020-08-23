@@ -42,6 +42,20 @@ namespace eqranews.react.net.spa.Controllers
             return crawlStep;
         }
 
+        // GET: api/CrawlSteps/Stepper/5
+        [HttpGet("Stepper/{id}")]
+        public async Task<ActionResult<IEnumerable<CrawlStep>>> GetCrawlStepsByStepper(int id)
+        {
+            var crawlSteps = await _context.CrawlSteps.Include(S => S.CrawlItems).Where(S => S.CrawlStepperId == id).ToListAsync();
+
+            if (crawlSteps == null || crawlSteps.Count() == 0)
+            {
+                return Array.Empty<CrawlStep>();
+            }
+
+            return crawlSteps;
+        }
+
         // PUT: api/CrawlSteps/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.

@@ -12,6 +12,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using Hangfire;
+using Hangfire.MemoryStorage;
+using eqranews.react.net.spa.Services;
 
 namespace eqranews.react.net.spa
 {
@@ -23,16 +26,24 @@ namespace eqranews.react.net.spa
         }
 
         public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseDefaultTypeSerializer()
+                .UseMemoryStorage());
+
+            services.AddHangfireServer();
+
             string conn = $"server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
                 $"port={Environment.GetEnvironmentVariable("MYSQL_TCP_PORT")};" +
                 $"user={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
                 $"password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
                 $"database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")}";
             Console.WriteLine(conn);
+            services.AddScoped<ApplicationDbContext>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
                     // Configuration.GetConnectionString("DevConnectionMySQL")
@@ -47,11 +58,12 @@ namespace eqranews.react.net.spa
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer(opt => {
-                    var jwtState = opt.Endpoints.EnableJwtRequestUri;
-                    // opt.Events.RaiseSuccessEvents
-                    // opt.Authentication.CookieLifetime
-                })
+            services.AddIdentityServer(opt =>
+            {
+                var jwtState = opt.Endpoints.EnableJwtRequestUri;
+                // opt.Events.RaiseSuccessEvents
+                // opt.Authentication.CookieLifetime
+            })
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddAuthentication()
@@ -69,10 +81,14 @@ namespace eqranews.react.net.spa
             {
                 configuration.RootPath = "ClientApp/build";
             });
+
+            //new CrawlUtils(services);
+            services.AddSingleton<ICrawlManager, CrawlManager>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ICrawlManager crawlManager)
         {
             if (env.IsDevelopment())
             {
@@ -85,23 +101,42 @@ namespace eqranews.react.net.spa
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 // app.UseHsts();
             }
-
+            app.UseCors();
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            // //Hangfire Service 
+            app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            {
+                Authorization = new[] { new MyAuthorizationFilter() },
+                IgnoreAntiforgeryToken = true                                 // <--This
+            });
+
+
             app.UseRouting();
+            app.UseHangfireServer();
+
+           
+
 
             app.UseAuthentication();
             app.UseIdentityServer();
             app.UseAuthorization();
+
+            
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
+                endpoints.MapHangfireDashboard();
             });
+
+          
+
 
             app.UseSpa(spa =>
             {
@@ -113,8 +148,16 @@ namespace eqranews.react.net.spa
                 }
             });
 
+
             // Apply Migration to Database
             InitializeDatabase(app);
+
+            // Add HangFire
+            // backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hangfire job!!!!"));
+            // recurringJobManager.AddOrUpdate("Run Every Minute", () => Console.WriteLine("Test Recuring Job !!!"), "* * * * *");
+
+            //CrawlUtils.Instance.createJobs();
+            crawlManager.CreateEnabledSourcesJobs(app);
         }
 
         private void InitializeDatabase(IApplicationBuilder app)
@@ -123,8 +166,8 @@ namespace eqranews.react.net.spa
             {
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
                 // scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-               
-    }
+
+            }
         }
     }
 }

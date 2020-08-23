@@ -15,71 +15,83 @@ import {
 import { requestFetchAllCountries } from '../../Settings/Actions/Country';
 
 export class Crawl extends Component {
-	componentWillMount = () => {
-		this.columns = [
-			{ title: 'ID', name: 'id', style: { width: '50px' } },
-			{ title: 'NAME', name: 'name' },
-			{ title: 'DOMIAN', name: 'domainURL' },
-			{ title: 'COUNTRY', name: 'countryId' },
-			{
-				title: 'Edit',
-				width: 120,
-				class: '',
-				orderable: false,
-				data: null,
-				defaultContent: '',
-			},
-			{
-				Title: 'Delete',
-				width: 120,
-				class: '',
-				orderable: false,
-				data: null,
-				defaultContent: '',
-			},
-		];
+	_IsMounted = false;
 
-		this.columnDefs = [
-			{
-				targets: 3,
-				createdCell: (td, cellData, rowData, row, col) => {
-					const linkStr = '/settings/country/' + rowData[3];
-					return ReactDOM.render(
-						<a
-							style={{ cursor: 'pointer' }}
-							class="danger"
-							onClick={() => {
-								//console.log(props.history);
-								this.props.history.push(linkStr);
-							}}
-						>
-							{this.props.countries.filter(x => x.id == rowData[3])[0].name}
-						</a>,
-						td
-					);
-				},
-			},
-			{
-				targets: 4,
-				createdCell: FormUtils.createEditButton(
-					'/crawl/source/',
-					this.props.history
-				),
-			},
-			{
-				targets: 5,
-				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
-			},
-			{ orderable: false, targets: [0, 4, 5] },
-			// { visible: true, targets: [6] },
-		];
-
-		if (!(this.props.countries && this.props.countries.length > 0))
-			this.props.FetchAllCountries();
+	componentDidMount = () => {
+		//if (!(this.props.countries && this.props.countries.length > 0))
+		this.props.FetchAllCountries();
 		this.props.FetchAllCrawlSources();
 	};
-	componentDidMount = () => {
-		this.forceUpdate();
+
+	componentWillMount = () => {
+		this._IsMounted = true;
+
+		if (this._IsMounted) {
+			this.columns = [
+				{ title: 'ID', name: 'id' },
+				{ title: 'NAME', name: 'name' },
+				{ title: 'DOMIAN', name: 'domainURL' },
+				{ title: 'COUNTRY', name: 'countryId' },
+				{
+					title: 'Edit',
+					width: 50,
+					class: '',
+					orderable: false,
+					data: null,
+					defaultContent: '',
+				},
+				{
+					title: 'Delete',
+					width: 50,
+					class: '',
+					orderable: false,
+					data: null,
+					defaultContent: '',
+				},
+			];
+
+			this.columnDefs = [
+				{
+					targets: 3,
+					createdCell: (td, cellData, rowData, row, col) => {
+						const linkStr = '/settings/country/' + rowData[3];
+						const Country = this.props.countries.filter(
+							x => x.id == rowData[3]
+						);
+						return ReactDOM.render(
+							<a
+								style={{ cursor: 'pointer' }}
+								className="danger"
+								onClick={() => {
+									//console.log(props.history);
+									this.props.history.push(linkStr);
+								}}
+							>
+								{Country && Country.length > 0
+									? Country[0].name
+									: 'Country Not Found!'}
+							</a>,
+							td
+						);
+					},
+				},
+				{
+					targets: 4,
+					createdCell: FormUtils.createEditButton(
+						'/crawl/source/',
+						this.props.history
+					),
+				},
+				{
+					targets: 5,
+					createdCell: FormUtils.createDeleteButton(
+						this.props.DeleteCrawlSource
+					),
+				},
+				{ orderable: false, targets: [0, 4, 5] },
+				// { visible: true, targets: [6] },
+			];
+		}
 	};
 
 	formate = (d, cols = []) => {
@@ -100,6 +112,15 @@ export class Crawl extends Component {
 		);
 	};
 
+	componentWillUnmount = () => {
+		this._IsMounted = false;
+
+		//this.dt.destroy();
+		this.setState = (state, callback) => {
+			return;
+		};
+	};
+
 	render() {
 		console.log('Crawl M', window.M);
 		console.log('Crawl props', this.props);
@@ -115,7 +136,7 @@ export class Crawl extends Component {
 					</Link>
 
 					<a className="waves-effect waves-red btn white red-text primary-content">
-						<i class="material-icons left">add_to_photos</i> جديد
+						<i className="material-icons left">add_to_photos</i> جديد
 					</a>
 					<div className="card">
 						<div className="card-content">

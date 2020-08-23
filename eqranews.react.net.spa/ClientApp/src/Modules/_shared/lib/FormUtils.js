@@ -12,15 +12,15 @@ export const tableData = (columns, dataArray) => {
 	});
 };
 
-export const createEditButton = (path, history) => {
+export const createEditButton = (path, history, routeState = {}) => {
 	return (td, cellData, rowData, row, col) => {
 		const linkStr = path + rowData[0];
 		return ReactDOM.render(
 			<a
 				style={{ cursor: 'pointer' }}
-				class="danger"
+				className="danger"
 				onClick={() => {
-					history.push(linkStr);
+					history.push({ pathname: linkStr, state: routeState });
 				}}
 			>
 				<i className="material-icons">edit</i>
@@ -46,10 +46,10 @@ export const createDeleteButton = action => {
 	};
 };
 
-export const createEditLink = (path, parameters) => {
+export const createEditLink = (path, routeState = null) => {
 	return (td, cellData, rowData, row, col) => {
 		return ReactDOM.render(
-			<Link to={path + rowData[0]} params={parameters}>
+			<Link to={{ pathname: path + rowData[0], state: routeState }}>
 				<i className="material-icons">edit</i>
 			</Link>,
 			td

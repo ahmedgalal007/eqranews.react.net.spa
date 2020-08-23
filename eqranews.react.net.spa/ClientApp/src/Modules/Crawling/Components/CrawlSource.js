@@ -55,11 +55,21 @@ class CrawlSource extends React.Component {
 				// }),
 				createdCell: (td, cellData, rowData, row, col) => {
 					const lnkSTr = '/crawl/stepper/' + rowData[0];
+					this.props.updateNavigationState({
+						...this.props.navigationState,
+						crawlSourceId: this.state.id,
+					});
 					return ReactDOM.render(
 						<a
 							style={{ cursor: 'pointer', color: 'green' }}
 							onClick={() => {
-								this.props.history.push(lnkSTr);
+								// this.props.location.state = {
+								// 	crawlSourceId: this.state.id,
+								// };
+								this.props.history.push({
+									pathname: lnkSTr,
+									state: this.props.navigationState,
+								});
 							}}
 						>
 							<i className="material-icons">edit</i>
@@ -155,46 +165,48 @@ class CrawlSource extends React.Component {
 		scripts.PAGE_LEVEL_JS.scripts.push(
 			'/app-assets/js/scripts/form-file-uploads.js'
 		);
-		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			// if (this.state.id && !this.state.IsChildrenLoaded) {
-			this.props.FetchCrawlStepperBySource(this.state.id);
-			// 	this.setState({ IsChildrenLoaded: true });
-			// }
+		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+		// if (this.state.id && !this.state.IsChildrenLoaded) {
+		this.props.FetchCrawlStepperBySource(this.state.id);
+		// 	this.setState({ IsChildrenLoaded: true });
+		// }
 
-			if (window.jQuery) {
-				const $ = window.jQuery;
-				console.log('SELECT COUNTRIES', this.props.countries);
-				$(document).ready(() => {
-					for (let i = 0; i < 3; i++) {
-						if ($().select2) {
-							$('#countryId').select2({
-								dropdownAutoWidth: true,
-								placeholder: 'Select Country',
-								allowClear: true,
-								width: '100%',
-								data: [
-									{
-										id: '',
-										text: 'Select a Country',
-										selected: this.state.countryId > 0 ? false : true,
-									},
-									...$.map(this.props.countries, obj => {
-										obj.id = obj.id || obj.pk; // replace pk with your identifier
-										obj.text = obj.text || obj.name;
-										obj.selected = obj.id == this.state.countryId;
-										return obj;
-									}),
-								],
-							});
-							break;
-						} else {
-							this.forceUpdate();
-						}
+		if (window.jQuery) {
+			const $ = window.jQuery;
+			console.log('SELECT COUNTRIES', this.props.countries);
+			$(document).ready(() => {
+				if (window.M) window.M.updateTextFields();
+				for (let i = 0; i < 3; i++) {
+					if ($().select2) {
+						$('#countryId').select2({
+							dropdownAutoWidth: true,
+							placeholder: 'Select Country',
+							allowClear: true,
+							width: '100%',
+							dir: 'rtl',
+							data: [
+								{
+									id: '',
+									text: 'Select a Country',
+									selected: this.state.countryId > 0 ? false : true,
+								},
+								...$.map(this.props.countries, obj => {
+									obj.id = obj.id || obj.pk; // replace pk with your identifier
+									obj.text = obj.text || obj.name;
+									obj.selected = obj.id == this.state.countryId;
+									return obj;
+								}),
+							],
+						});
+						break;
+					} else {
+						// this.forceUpdate();
 					}
-					// Load Select2 for parent
-				});
-			}
-		});
+				}
+				// Load Select2 for parent
+			});
+		}
+		// });
 	};
 
 	componentDidMount = () => {
@@ -256,7 +268,9 @@ class CrawlSource extends React.Component {
 											/>
 										</div>
 										<div className="input-field col s12">
-											<label htmlFor="name">Name*</label>
+											<label className="active" htmlFor="name">
+												Name*
+											</label>
 											<input
 												className="validate"
 												id="name"
@@ -274,8 +288,11 @@ class CrawlSource extends React.Component {
 											<small className="errorTxt1"></small>
 										</div>
 										<div className="input-field col s12">
-											<label htmlFor="domainURL">Domain URL *</label>
+											<label className="active" htmlFor="domainURL">
+												Domain URL *
+											</label>
 											<input
+												dir="ltr"
 												className="validate"
 												id="domainURL"
 												type="url"
@@ -289,6 +306,7 @@ class CrawlSource extends React.Component {
 										</div>
 										<div className="input-field col s12">
 											<label
+												className="active"
 												htmlFor="countryId"
 												style={{
 													position: 'absolute',
@@ -311,7 +329,7 @@ class CrawlSource extends React.Component {
 										</div>
 										<div className="input-field col s12">
 											<div className=" section">
-												<label htmlFor="logo">
+												<label className="active" htmlFor="logo">
 													Maximum file upload size 512K.
 												</label>
 											</div>
@@ -358,7 +376,6 @@ class CrawlSource extends React.Component {
 												pathname: '/crawl/stepper/',
 												state: { id: 0, crawlSourceId: id },
 											}}
-											component={CrawlStepper}
 											params={{ source: id }}
 											className="btn-floating btn-large waves-effect waves-light red"
 										>
@@ -373,9 +390,11 @@ class CrawlSource extends React.Component {
 												<DTable
 													data={FormUtils.tableData(
 														this.columns,
-														this.props.crawlSteppers.filter(
-															x => x.crawlSourceId == id
-														)
+														this.props.crawlSteppers.length > 0
+															? this.props.crawlSteppers.filter(
+																	x => x.crawlSourceId == id
+															  )
+															: []
 													)}
 													columns={this.columns}
 													formate={this.formate}
@@ -436,6 +455,7 @@ const mapStateToProps = state => {
 		data: state.CrawlSources,
 		crawlSteppers: state.CrawlSteppers,
 		countries: state.Countries,
+		navigationState: state.NavigationState,
 	};
 };
 
@@ -443,6 +463,10 @@ const mapActionToProps = {
 	createCrawlSources: requestCreateCrawlSource,
 	updateCrawlSources: requestUpdateCrawlSource,
 	FetchCrawlStepperBySource: requestFetchCrawlStepperBySource,
+	updateNavigationState: data => ({
+		type: 'UPDATE_NAVIGATION_STATE',
+		data: data,
+	}),
 };
 
 export default connect(

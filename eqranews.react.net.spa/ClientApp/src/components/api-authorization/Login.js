@@ -21,6 +21,13 @@ export class Login extends Component {
 		};
 	}
 
+	componentWillMount = () => {
+		delete this.action;
+		this.setState = (state, callback) => {
+			return;
+		};
+	};
+
 	componentDidMount() {
 		const action = this.props.action;
 
