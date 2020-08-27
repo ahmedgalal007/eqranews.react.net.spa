@@ -7,7 +7,7 @@ export const Countries = (state = [], { type: type, data: data }) => {
 		case SETTINGS_COUNTRY_ACTIONS.RECEIVE_SETTINGS_COUNTRY_FETCH_BY_ID:
 			return [...state.filter(x => x.id == data)];
 		case SETTINGS_COUNTRY_ACTIONS.RECEIVE_SETTINGS_COUNTRY_CREATE:
-			return [...state, data.data];
+			return [...state, data];
 		case SETTINGS_COUNTRY_ACTIONS.RECEIVE_SETTINGS_COUNTRY_UPDATE:
 			return state.map(x =>
 				x.id == data.id ? { ...data, crawlSources: null } : x

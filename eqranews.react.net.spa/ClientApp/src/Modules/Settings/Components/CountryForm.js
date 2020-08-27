@@ -18,10 +18,10 @@ export class CountryForm extends Component {
 		console.log('Values: ', this.state);
 	}
 	componentDidMount = () => {
-		const scripts = AppUtilities.populateAllSctions();
-		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			this.forceUpdate();
-		});
+		// const scripts = AppUtilities.populateAllSctions();
+		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+		// 	this.forceUpdate();
+		// });
 	};
 	//validate({fullname: 'jenny'})
 	initialFieldValues = (id = 0) => {

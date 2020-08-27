@@ -7,6 +7,7 @@ export const tableData = (columns, dataArray) => {
 		const res = [];
 		columns.map((n, l) => {
 			res.push(n.name ? x[n.name] : '');
+			return n;
 		});
 		return res;
 	});

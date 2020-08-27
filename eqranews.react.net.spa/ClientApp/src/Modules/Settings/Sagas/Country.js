@@ -41,6 +41,7 @@ function* createCountry(action) {
 		const data = yield call(Api.create, action.data); // data= newRecord
 		yield delay(4000);
 		yield put(receiveCreateCountry(data));
+		yield call(fetchAllCountries);
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,

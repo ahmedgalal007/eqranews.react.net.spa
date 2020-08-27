@@ -6,7 +6,7 @@ export const CrawlSources = (state = [], { type: type, data: data }) => {
 			return data;
 
 		case CRAWL_SOURCE_ACTIONS.RECEIVE_CRAWL_SOURCE_CREATE:
-			return [...state, data.data];
+			return [...state, data];
 
 		case CRAWL_SOURCE_ACTIONS.RECEIVE_CRAWL_SOURCE_UPDATE:
 			return state.map(x => (x.id == data.id ? data : x));

@@ -7,7 +7,8 @@ export const CrawlSteps = (state = [], { type: type, data: data }) => {
 		case CRAWL_STEP_ACTIONS.RECEIVE_CRAWL_STEP_FETCH_BY_STEPPER:
 			return data;
 		case CRAWL_STEP_ACTIONS.RECEIVE_CRAWL_STEP_CREATE:
-			return [...state, data.data];
+			console.log('SAGA_CREATE_TYPE_DATA:', data);
+			return [...state, data];
 		case CRAWL_STEP_ACTIONS.RECEIVE_CRAWL_STEP_UPDATE:
 			return state.map(x => (x.id == data.id ? data : x));
 		case CRAWL_STEP_ACTIONS.RECEIVE_CRAWL_STEP_DELETE:

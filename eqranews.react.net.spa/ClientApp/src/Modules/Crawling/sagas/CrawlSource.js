@@ -41,6 +41,7 @@ function* createCrawlSource(action) {
 			data: true,
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
+		console.log('CRAWL NEW_RECORD DATA', data);
 		yield delay(2000);
 		yield put(receiveCreateCrawlSource(data));
 		yield put({

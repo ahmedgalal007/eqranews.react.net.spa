@@ -76,6 +76,7 @@
     <Content Remove="wwwroot\js\dataTables.responsive.min.js" />
     <Content Remove="wwwroot\js\dataTables.select.min.js" />
     <Content Remove="wwwroot\js\dropify.min.js" />
+    <Content Remove="wwwroot\js\form-file-uploads.min.js" />
     <Content Remove="wwwroot\js\jquery.dataTables.js" />
     <Content Remove="wwwroot\js\jquery.dataTables.min.js" />
     <Content Remove="wwwroot\js\jquery.formatter.min.js" />
@@ -117,6 +118,7 @@
     <None Include="wwwroot\js\dataTables.responsive.min.js" />
     <None Include="wwwroot\js\dataTables.select.min.js" />
     <None Include="wwwroot\js\dropify.min.js" />
+    <None Include="wwwroot\js\form-file-uploads.min.js" />
     <None Include="wwwroot\js\jquery.dataTables.js" />
     <None Include="wwwroot\js\jquery.dataTables.min.js" />
     <None Include="wwwroot\js\jquery.formatter.min.js" />

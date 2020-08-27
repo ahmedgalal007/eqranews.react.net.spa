@@ -15,6 +15,7 @@ using System;
 using Hangfire;
 using Hangfire.MemoryStorage;
 using eqranews.react.net.spa.Services;
+using Newtonsoft.Json;
 
 namespace eqranews.react.net.spa
 {
@@ -33,7 +34,12 @@ namespace eqranews.react.net.spa
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
                 .UseDefaultTypeSerializer()
-                .UseMemoryStorage());
+                .UseMemoryStorage()
+                .UseSerializerSettings(new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                })
+            );
 
             services.AddHangfireServer();
 
@@ -51,7 +57,8 @@ namespace eqranews.react.net.spa
                     {
                         sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
                     }
-                ).UseLazyLoadingProxies(false)
+                )
+                .UseLazyLoadingProxies(false)
 
             );
 
@@ -107,11 +114,11 @@ namespace eqranews.react.net.spa
             app.UseSpaStaticFiles();
 
             // //Hangfire Service 
-            app.UseHangfireDashboard("/hangfire", new DashboardOptions
-            {
-                Authorization = new[] { new MyAuthorizationFilter() },
-                IgnoreAntiforgeryToken = true                                 // <--This
-            });
+            //app.UseHangfireDashboard("/hangfire", new DashboardOptions
+            //{
+            //    Authorization = new[] { new MyAuthorizationFilter() },
+            //    IgnoreAntiforgeryToken = true                                 // <--This
+            //});
 
 
             app.UseRouting();
@@ -132,7 +139,11 @@ namespace eqranews.react.net.spa
                     name: "default",
                     pattern: "{controller}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();
-                endpoints.MapHangfireDashboard();
+                endpoints.MapHangfireDashboard(new DashboardOptions
+                {
+                    Authorization = new[] { new MyAuthorizationFilter() },
+                    IgnoreAntiforgeryToken = true                                 // <--This
+                });
             });
 
           

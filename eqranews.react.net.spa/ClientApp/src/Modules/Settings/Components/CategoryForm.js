@@ -26,70 +26,70 @@ export class CategoryForm extends Component {
 	}
 
 	componentDidMount = () => {
-		const scripts = AppUtilities.populateAllSctions();
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'app-assets/vendors/select2/select2.full.min.js'
-		);
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'app-assets/vendors/materialize-colorpicker/js/materialize-colorpicker.min.js'
-		);
+		// const scripts = AppUtilities.populateAllSctions();
+		// scripts.PAGE_VENDOR_JS.scripts.push(
+		// 	'app-assets/vendors/select2/select2.full.min.js'
+		// );
+		// scripts.PAGE_VENDOR_JS.scripts.push(
+		// 	'app-assets/vendors/materialize-colorpicker/js/materialize-colorpicker.min.js'
+		// );
 
-		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-			//this.forceUpdate();
+		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+		//this.forceUpdate();
 
-			if (window.jQuery) {
-				const $ = window.jQuery;
-				$(document).ready(() => {
-					for (let i = 0; i < 3; i++) {
-						if ($.fn.colorpicker) {
-							// Load the colorPicker
-							const color = this.state.color ? this.state.color : '#ffffff';
-							const colorPicker = $('#color-component').colorpicker({
-								component: '.btn',
-								format: 'hex',
-								color: color,
-							});
-							colorPicker.colorpicker('setValue', color);
-							break;
-						} else {
-							this.forceUpdate();
-						}
+		if (window.jQuery) {
+			const $ = window.jQuery;
+			$(document).ready(() => {
+				for (let i = 0; i < 3; i++) {
+					if ($.fn.colorpicker) {
+						// Load the colorPicker
+						const color = this.state.color ? this.state.color : '#ffffff';
+						const colorPicker = $('#color-component').colorpicker({
+							component: '.btn',
+							format: 'hex',
+							color: color,
+						});
+						colorPicker.colorpicker('setValue', color);
+						break;
+					} else {
+						this.forceUpdate();
 					}
+				}
 
-					for (let i = 0; i < 3; i++) {
-						if ($().select2) {
-							$('#parentId').select2({
-								dropdownAutoWidth: true,
-								placeholder: 'Select an option',
-								allowClear: true,
-								width: '100%',
-								dir: 'rtl',
-								data: [
-									{
-										id: '',
-										text: 'Select Parent Category',
-										selected: this.state.parentId > 0 ? false : true,
-									},
-									...$.map(this.props.data, obj => {
-										obj.id = obj.id || obj.pk; // replace pk with your identifier
-										obj.text = obj.text || obj.name;
-										obj.selected = obj.id == this.state.parentId;
-										return obj.id !== this.state.id &&
-											obj.parentId !== this.state.id
-											? obj
-											: null;
-									}),
-								],
-							});
-							break;
-						} else {
-							this.forceUpdate();
-						}
+				for (let i = 0; i < 3; i++) {
+					if ($().select2) {
+						$('#parentId').select2({
+							dropdownAutoWidth: true,
+							placeholder: 'Select an option',
+							allowClear: true,
+							width: '100%',
+							dir: 'rtl',
+							data: [
+								{
+									id: '',
+									text: 'Select Parent Category',
+									selected: this.state.parentId > 0 ? false : true,
+								},
+								...$.map(this.props.data, obj => {
+									obj.id = obj.id || obj.pk; // replace pk with your identifier
+									obj.text = obj.text || obj.name;
+									obj.selected = obj.id == this.state.parentId;
+									return obj.id !== this.state.id &&
+										obj.parentId !== this.state.id
+										? obj
+										: null;
+								}),
+							],
+						});
+						break;
+					} else {
+						this.forceUpdate();
 					}
-					// Load Select2 for parent
-				});
-			}
-		});
+				}
+				// Load Select2 for parent
+			});
+		}
+		//});
 	};
 	//validate({fullname: 'jenny'})
 	initialFieldValues = (id = 0) => {

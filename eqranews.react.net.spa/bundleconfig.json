@@ -17,15 +17,16 @@
     "inputFiles": [
       "../wwwroot/js/vendors.min.js",
       "../wwwroot/js/dropify.min.js",
+      "../wwwroot/js/materialize-colorpicker.min.js",
       "../wwwroot/js/jquery.formatter.min.js",
       "../wwwroot/js/scale.fix.js",
       "../wwwroot/js/select2.full.min.js",
       "../wwwroot/js/jquery.dataTables.min.js",
       "../wwwroot/js/dataTables.responsive.min.js",
       "../wwwroot/js/dataTables.select.min.js",
-      "../wwwroot/js/waves.min.js",
       "../wwwroot/js/plugins.min.js",
-      "../wwwroot/js/search.min.js"
+      "../wwwroot/js/search.min.js",
+      "../wwwroot/js/waves.min.js"
     ],
     "minify": {
       "enabled": true,

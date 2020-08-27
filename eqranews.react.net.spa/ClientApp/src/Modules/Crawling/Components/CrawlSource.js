@@ -8,7 +8,10 @@ import {
 	requestCreateCrawlSource,
 	requestUpdateCrawlSource,
 } from '../Actions/CrawlSource';
-import { requestFetchCrawlStepperBySource } from '../Actions/CrawlStepper';
+import {
+	requestFetchCrawlStepperBySource,
+	requestDeleteCrawlStepper,
+} from '../Actions/CrawlStepper';
 // import useForm from '../../_shared/components/useForm';
 // import $ from 'jquery';
 //import M from 'materialize-css';
@@ -80,7 +83,9 @@ class CrawlSource extends React.Component {
 			},
 			{
 				targets: 3,
-				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+				createdCell: FormUtils.createDeleteButton(
+					this.props.DeleteCrawlStepper
+				),
 			},
 		];
 		console.log('Values: ', this.state);
@@ -212,22 +217,41 @@ class CrawlSource extends React.Component {
 	componentDidMount = () => {
 		// var dropify = require('../../../vendors/dropify/js/dropify');
 		console.log('CarwlSource-Props', this.props);
-		if (window.jQuery) console.log('jQuery Defined!!');
 		if (window.jQuery && window.M) {
 			const $ = window.jQuery;
-			$(document).ready(
-				function () {
-					//if (window.jQuery) this.loadPageScripts(window.jQuery);
-					$('select').formSelect();
-					console.log($('select'));
-					//this.loadPageScripts($);
-				}.bind(this)
-			);
-		} else if (window.M) {
-			document.addEventListener('DOMContentLoaded', function () {
-				var elems = document.querySelectorAll('select');
-				var instances = window.M.FormSelect.init(elems, {});
+			// $(document).ready(
+			// 	function () {
+			//if (window.jQuery) this.loadPageScripts(window.jQuery);
+			$('select').formSelect();
+			console.log($('select'));
+			//this.loadPageScripts($);
+			//	}.bind(this)
+			//	);
+			$(document).ready(function () {
+				// Basic
+				$('.dropify').dropify();
+
+				// Used events
+				var drEvent = $('.dropify-event').dropify();
+
+				drEvent.on('dropify.beforeClear', function (event, element) {
+					// eslint-disable-next-line no-restricted-globals
+					return confirm(
+						'Do you really want to delete "' + element.filename + '" ?'
+					);
+				});
+
+				drEvent.on('dropify.afterClear', function (event, element) {
+					alert('File deleted');
+				});
 			});
+		} else {
+			if (window.M) {
+				// document.addEventListener('DOMContentLoaded', function () {
+				// 	var elems = document.querySelectorAll('select');
+				// 	var instances = window.M.FormSelect.init(elems, {});
+				// });
+			}
 		}
 	};
 
@@ -463,6 +487,7 @@ const mapActionToProps = {
 	createCrawlSources: requestCreateCrawlSource,
 	updateCrawlSources: requestUpdateCrawlSource,
 	FetchCrawlStepperBySource: requestFetchCrawlStepperBySource,
+	DeleteCrawlStepper: requestDeleteCrawlStepper,
 	updateNavigationState: data => ({
 		type: 'UPDATE_NAVIGATION_STATE',
 		data: data,

@@ -11,5 +11,6 @@ namespace DAL.Store
         public string Mime { get; set; }
         public string Path { get; set; }
         public string Keywords { get; set; }
+        public string SourceUrl { get; set; }
     }
 }

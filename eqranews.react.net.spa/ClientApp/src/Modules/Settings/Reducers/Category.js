@@ -8,7 +8,7 @@ export const Categories = (state = [], { type: type, data: data }) => {
 		case SETTINGS_CATEGORY_ACTIONS.RECEIVE_SETTINGS_CATEGORY_FETCH_BY_ID:
 			return [...state.filter(x => x.id == data)];
 		case SETTINGS_CATEGORY_ACTIONS.RECEIVE_SETTINGS_CATEGORY_CREATE:
-			return [...state, data.data];
+			return [...state, data];
 		case SETTINGS_CATEGORY_ACTIONS.RECEIVE_SETTINGS_CATEGORY_UPDATE:
 			return state.map(x =>
 				x.id == data.id ? { ...data, crawlSources: null } : x

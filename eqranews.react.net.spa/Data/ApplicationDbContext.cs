@@ -16,7 +16,6 @@ namespace eqranews.react.net.spa.Data
 {
     public class ApplicationDbContext : ApiAuthorizationDbContext<ApplicationUser>
     {
-
         public ApplicationDbContext(
             DbContextOptions options,
             IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
@@ -32,6 +31,11 @@ namespace eqranews.react.net.spa.Data
         public DbSet<CrawlStepTypeRequiredAttribute> CrawlStepTypeRequiredAttribute { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Media> Medias { get; set; }
+        public DbSet<News> News { get; set; }
+        public DbSet<NewsCategory> NewsCategories { get; set; }
+        public DbSet<NewsItem> NewsItems { get; set; }
+
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

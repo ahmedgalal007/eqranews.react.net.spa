@@ -7,7 +7,10 @@ import {
 	requestCreateCrawlStep,
 	requestUpdateCrawlStep,
 } from '../Actions/CrawlStep';
-import { requestFetchCrawlItemByStep } from '../Actions/CrawlItem';
+import {
+	requestFetchCrawlItemByStep,
+	requestDeleteCrawlItem,
+} from '../Actions/CrawlItem';
 import { requestFetchAllCrawlStepTypes } from '../../Settings/Actions/CrawlStepType';
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
 import MaterDetails from '../../_shared/components/MaterDetails';
@@ -114,7 +117,7 @@ class CrawlStep extends Component {
 			},
 			{
 				targets: 3,
-				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlItem),
 			},
 		];
 
@@ -372,6 +375,7 @@ const mapStateToProps = state => {
 const mapActionToProps = {
 	FetchAllCrawlStepTypes: requestFetchAllCrawlStepTypes,
 	FetchCrawlItemByStep: requestFetchCrawlItemByStep,
+	DeleteCrawlItem: requestDeleteCrawlItem,
 	createCrawlStep: requestCreateCrawlStep,
 	updateCrawlStep: requestUpdateCrawlStep,
 	updateNavigationState: data => ({

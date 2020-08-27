@@ -13,14 +13,15 @@ import {
 import reduxLoginActions from '../../Modules/Authentication/Actions/login';
 
 class ApiAuthorizationRoutes extends Component {
+	_IsMounted = false;
 	componentDidMount = () => {
 		this.state = {};
 	};
 
 	componentWillMount = () => {
-		this.setState = (state, callback) => {
-			return;
-		};
+		// this.setState = (state, callback) => {
+		// 	return;
+		// };
 	};
 	loginAction = name => {
 		return connect((state, ownProps) => {

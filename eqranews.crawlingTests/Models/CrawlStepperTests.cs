@@ -36,8 +36,7 @@ namespace eqranews.crawling.Models.Tests
             stepper.StepSequence.Add(new CrawlStepGetLinkList(
                 1, CrawlSetpType.Single, new AngleSharp.Url("http://gate.ahram.org.eg/index.aspx"),"#ContentPlaceHolder1_divUrgent .blok_file > a"
             ));
-            stepper.StepSequence.Add(new CrawlStepParseLinkList
-            {
+            stepper.StepSequence.Add(new CrawlStepParseLinkList{ 
                 Id = 2,
                 CrawlItems = new List<CrawlItem>
                 {
@@ -57,7 +56,7 @@ namespace eqranews.crawling.Models.Tests
         {
             // Arrange
             var stepper = new CrawlStepper();
-            stepper.StepSequence.Add(new CrawlStepGetRssLinks
+            stepper.StepSequence.Add(new CrawlStepGetRssLinks()
             {
                 Id = 1,
                 CrawlStepType = CrawlSetpType.Single,

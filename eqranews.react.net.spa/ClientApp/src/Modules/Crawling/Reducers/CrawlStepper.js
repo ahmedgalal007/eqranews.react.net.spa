@@ -7,7 +7,7 @@ export const CrawlSteppers = (state = [], { type: type, data: data }) => {
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_FETCH_BY_SOURCE:
 			return data;
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_CREATE:
-			return [...state, data.data];
+			return [...state, data];
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_UPDATE:
 			return state.map(x => (x.id == data.id ? data : x));
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_DELETE:

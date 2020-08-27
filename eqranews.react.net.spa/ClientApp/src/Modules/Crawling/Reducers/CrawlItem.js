@@ -8,7 +8,7 @@ export const CrawlItems = (state = [], { type: type, data: data }) => {
 		case CRAWL_ITEM_ACTIONS.RECEIVE_CRAWL_ITEM_FETCH_BY_STEP:
 			return data;
 		case CRAWL_ITEM_ACTIONS.RECEIVE_CRAWL_ITEM_CREATE:
-			return [...state, data.data];
+			return [...state, data];
 		case CRAWL_ITEM_ACTIONS.RECEIVE_CRAWL_ITEM_UPDATE:
 			return state.map(x => (x.id == data.id ? data : x));
 		case CRAWL_ITEM_ACTIONS.RECEIVE_CRAWL_ITEM_DELETE:

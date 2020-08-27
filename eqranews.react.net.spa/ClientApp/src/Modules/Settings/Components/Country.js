@@ -93,7 +93,9 @@ export class Country extends Component {
 	tableData = dataArray => {
 		return dataArray.map((x, i) => {
 			const res = [];
+			console.log('X', x);
 			this.columns.map((n, l) => {
+				console.log('n', n);
 				res.push(n.name ? x[n.name] : '');
 			});
 			return res;

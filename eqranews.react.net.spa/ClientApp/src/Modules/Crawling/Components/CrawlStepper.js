@@ -5,7 +5,10 @@ import {
 	requestCreateCrawlStepper,
 	requestUpdateCrawlStepper,
 } from '../Actions/CrawlStepper';
-import { requestFetchCrawlStepByStepper } from '../Actions/CrawlStep';
+import {
+	requestFetchCrawlStepByStepper,
+	requestDeleteCrawlStep,
+} from '../Actions/CrawlStep';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
@@ -44,7 +47,7 @@ class CrawlStepper extends Component {
 			},
 			{
 				targets: 3,
-				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlStep),
 			},
 		];
 		// if (params.id) initialFieldValues.id = params.id;
@@ -129,6 +132,7 @@ class CrawlStepper extends Component {
 	};
 
 	componentWillMount = () => {
+		this.switch = React.createRef();
 		// this.props.FetchCrawlStepperBySource(this.state.crawlSourceId);
 		console.log('CRAWl STEPPER PROPS', this.props);
 
@@ -199,29 +203,6 @@ class CrawlStepper extends Component {
 								>
 									<div className="row">
 										<div className="input-field col s12">
-											<div className="switch">
-												<label htmlFor="enabled">
-													<input
-														id="enabled"
-														name="enabled"
-														type="checkbox"
-														onChange={this.handelInputChange}
-														checked={enabled}
-													/>
-													<span className="lever"></span>
-													Enabled
-												</label>
-											</div>
-											<input
-												placeholder="00:00"
-												id="recuringTime"
-												name="recuringTime"
-												type="text"
-												onChange={this.handelInputChange}
-												value={recuringTime}
-											/>
-										</div>
-										<div className="input-field col s12">
 											<input
 												className="validate"
 												id="id"
@@ -247,6 +228,31 @@ class CrawlStepper extends Component {
 												})}
 											></input>
 											<small className="errorTxt1"></small>
+										</div>
+										<div className="input-field col s12">
+											<div className="switch">
+												<label htmlFor="enabled">
+													<input
+														ref={el => (this.switch = el)}
+														id="enabled"
+														name="enabled"
+														type="checkbox"
+														onChange={this.handelInputChange}
+														checked={enabled}
+													/>
+													<span className="lever"></span>
+													Enabled
+												</label>
+											</div>
+											<input
+												placeholder="00:00"
+												id="recuringTime"
+												name="recuringTime"
+												type="text"
+												enabled={this.switch.value == true ? true : false}
+												onChange={this.handelInputChange}
+												value={recuringTime}
+											/>
 										</div>
 										<div className="input-field col s12">
 											<input
@@ -340,6 +346,7 @@ const mapActionToProps = {
 	FetchCrawlStepByStepper: requestFetchCrawlStepByStepper,
 	createCrawlStepper: requestCreateCrawlStepper,
 	updateCrawlStepper: requestUpdateCrawlStepper,
+	DeleteCrawlStep: requestDeleteCrawlStep,
 	updateNavigationState: data => ({
 		type: 'UPDATE_NAVIGATION_STATE',
 		data: data,
