@@ -12,6 +12,7 @@ import {
 	requestFetchCrawlStepperBySource,
 	requestDeleteCrawlStepper,
 } from '../Actions/CrawlStepper';
+import BackButton from '../../_shared/components/BackButton';
 // import useForm from '../../_shared/components/useForm';
 // import $ from 'jquery';
 //import M from 'materialize-css';
@@ -262,8 +263,10 @@ class CrawlSource extends React.Component {
 		console.log('Steppers', this.props.crawlSteppers);
 		return (
 			<div className="row">
-				{console.log(this.props)}
 				<div className="col s12">
+					<div style={{ float: 'left' }}>
+						<BackButton link="/crawl/"></BackButton>
+					</div>
 					<div id="validations" className="card card-tabs">
 						<div className="card-content">
 							<div className="card-title">
@@ -382,61 +385,68 @@ class CrawlSource extends React.Component {
 					</div>
 				</div>
 
-				<div className="col s12">
-					<div id="validations" className="card card-tabs">
-						<div className="card-content">
-							<div className="card-title">
-								<div className="row">
-									<div className="col s12 m6 l10">
-										<h4 className="card-title">Crawl Steppers</h4>
-									</div>
-								</div>
-							</div>
-							<div id="Crawl-Steppers">
-								<section className="users-list-wrapper section">
-									<div className="users-list-table">
-										<Link
-											to={{
-												pathname: '/crawl/stepper/',
-												state: { id: 0, crawlSourceId: id },
-											}}
-											params={{ source: id }}
-											className="btn-floating btn-large waves-effect waves-light red"
-										>
-											<i className="material-icons">add</i>
-										</Link>
-
-										<a className="waves-effect waves-red btn white red-text primary-content">
-											<i class="material-icons left">add_to_photos</i> جديد
-										</a>
-										<div className="card">
-											<div className="card-content">
-												<DTable
-													data={FormUtils.tableData(
-														this.columns,
-														this.props.crawlSteppers.length > 0
-															? this.props.crawlSteppers.filter(
-																	x => x.crawlSourceId == id
-															  )
-															: []
-													)}
-													columns={this.columns}
-													formate={this.formate}
-													columnDefs={this.columnDefs}
-												></DTable>
-											</div>
-										</div>
-									</div>
-								</section>
-							</div>
-						</div>
-					</div>
-				</div>
-
+				{id && id > 0 ? this.renderChildForm() : null}
 				<script src="../../../app-assets/js/scripts/form-file-uploads.js"></script>
 			</div>
 		);
 	}
+
+	renderChildForm = () => {
+		const { id, name, domainURL, countryId, logo, crawlStepper } = this.state;
+
+		return (
+			<div className="col s12">
+				<div id="validations" className="card card-tabs">
+					<div className="card-content">
+						<div className="card-title">
+							<div className="row">
+								<div className="col s12 m6 l10">
+									<h4 className="card-title">Crawl Steppers</h4>
+								</div>
+							</div>
+						</div>
+						<div id="Crawl-Steppers">
+							<section className="users-list-wrapper section">
+								<div className="users-list-table">
+									<Link
+										to={{
+											pathname: '/crawl/stepper/',
+											state: { id: 0, crawlSourceId: id },
+										}}
+										params={{ source: id }}
+										className="btn-floating btn-large waves-effect waves-light red"
+									>
+										<i className="material-icons">add</i>
+									</Link>
+
+									<a className="waves-effect waves-red btn white red-text primary-content">
+										<i class="material-icons left">add_to_photos</i> جديد
+									</a>
+									<div className="card">
+										<div className="card-content">
+											<DTable
+												data={FormUtils.tableData(
+													this.columns,
+													this.props.crawlSteppers.length > 0
+														? this.props.crawlSteppers.filter(
+																x => x.crawlSourceId == id
+														  )
+														: []
+												)}
+												columns={this.columns}
+												formate={this.formate}
+												columnDefs={this.columnDefs}
+											></DTable>
+										</div>
+									</div>
+								</div>
+							</section>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	};
 
 	loadPageScripts = () => {
 		if (window.jQuery) {

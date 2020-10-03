@@ -14,6 +14,7 @@ import { ApplicationPaths } from './components/api-authorization/ApiAuthorizatio
 import './custom.css';
 import CrawlRoutes, { CrawlPrefix } from './Modules/Crawling/routes';
 import { SettingsRoutes, SettingsPrefix } from './Modules/Settings/routes';
+import { NewsRoutes, NewsPrefix } from './Modules/News/routes';
 
 export class App extends Component {
 	static displayName = App.name;
@@ -25,6 +26,7 @@ export class App extends Component {
 				<Route exact path="/" component={Home} />
 				<Route path={CrawlPrefix} component={withRouter(CrawlRoutes)} />
 				<Route path={SettingsPrefix} component={withRouter(SettingsRoutes)} />
+				<Route path={NewsPrefix} component={withRouter(NewsRoutes)} />
 				<AuthorizeRoute path="/about" component={About} />
 				{
 					//<AuthorizeRoute path='/fetch-data' component={FetchData} />

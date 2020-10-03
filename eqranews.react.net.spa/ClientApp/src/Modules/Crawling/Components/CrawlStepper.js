@@ -59,13 +59,14 @@ class CrawlStepper extends Component {
 	}
 
 	//validate({fullname: 'jenny'})
-	initialFieldValues = (id = 0, sourceId) => {
+	initialFieldValues = (id = 0, crawlSourceId) => {
+		console.log('crawlSourceId:', crawlSourceId);
 		let result = {
 			id: id,
 			name: '',
 			enabled: true,
 			recuringTime: '03',
-			crawlSourceId: sourceId,
+			crawlSourceId: crawlSourceId,
 			crawlSteps: [],
 		};
 
@@ -79,17 +80,24 @@ class CrawlStepper extends Component {
 		return result;
 	};
 
+	handeCkeckboxChange = e => {
+		console.log('Checked Box Clicked!!  ', e.target.type);
+		let { value, checked } = e.target;
+		if (e.target.type == 'checkbox') {
+			value = checked ? true : false;
+			this.switch.setAttribute('value', value ? 'true' : 'false');
+			this.switch.value = value ? 'true' : 'false';
+			const fieldValue = { [this.switch.name]: value };
+			//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
+			this.setState(fieldValue);
+			this.validate(fieldValue);
+		}
+	};
+
 	handelInputChange = function (e) {
 		let { name, value, checked } = e.target;
 		console.log('CHECKBOX:', e.target);
-		if (e.target.type == 'checkbox') {
-			value = checked ? true : false;
-			// value
-			// 	? e.target.setAttribute('checked', 'checked')
-			// 	: e.target.removeAttribute('checked');
-			// e.target['indeterminate'] = value;
-			e.target.setAttribute('value', value);
-		}
+
 		console.log(e.target);
 		console.log('Indeterminate', e.target['indeterminate']);
 
@@ -231,25 +239,30 @@ class CrawlStepper extends Component {
 										</div>
 										<div className="input-field col s12">
 											<div className="switch">
-												<label htmlFor="enabled">
+												<label htmlFor="Ckeck01">
 													<input
-														ref={el => (this.switch = el)}
-														id="enabled"
-														name="enabled"
+														id="Ckeck01"
 														type="checkbox"
-														onChange={this.handelInputChange}
+														onChange={this.handeCkeckboxChange}
 														checked={enabled}
 													/>
 													<span className="lever"></span>
 													Enabled
 												</label>
+												<input
+													id="enabled"
+													ref={el => (this.switch = el)}
+													name="enabled"
+													type="hidden"
+													value={enabled ? 'true' : 'false'}
+												></input>
 											</div>
 											<input
 												placeholder="00:00"
 												id="recuringTime"
 												name="recuringTime"
 												type="text"
-												enabled={this.switch.value == true ? true : false}
+												enabled={this.switch.value == 'true' ? 'true' : 'false'}
 												onChange={this.handelInputChange}
 												value={recuringTime}
 											/>

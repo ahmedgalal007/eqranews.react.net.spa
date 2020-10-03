@@ -1,0 +1,38 @@
+[
+  {
+    "outputFileName": "css/all.min.css",
+    "inputFiles": [
+      "css/bootstrap.min.css",
+      "css/jquery.bxslider.css",
+      "css/font-awesome.css",
+      "css/magnific-popup.css",
+      "css/owl.carousel.css",
+      "css/owl.theme.css",
+      "css/ticker-style.css",
+      "css/style.css"
+    ]
+  },
+  {
+    "outputFileName": "public/js/all-vendors.min.js",
+    "inputFiles": [
+      "../wwwroot/js/jquery.min.js",
+      "../wwwroot/js/jquery.migrate.js",
+      "../wwwroot/js/jquery.bxslider.min.js",
+      "../wwwroot/js/jquery.magnific-popup.min.js",
+      "../wwwroot/js/bootstrap.min.js",
+      "../wwwroot/js/jquery.ticker.js",
+      "../wwwroot/js/jquery.imagesloaded.min.js",
+      "../wwwroot/js/jquery.isotope.min.js",
+      "../wwwroot/js/owl.carousel.min.js",
+      "../wwwroot/js/theia-sticky-sidebar.js",
+      "../wwwroot/js/sticky.js",
+      "../wwwroot/js/retina-1.1.0.min.js",
+      "../wwwroot/js/script.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

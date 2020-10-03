@@ -5,6 +5,7 @@ WORKDIR /app
 EXPOSE 80
 EXPOSE 443
 
+
 #Ahmed Galal -Install nodejs
 #RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -

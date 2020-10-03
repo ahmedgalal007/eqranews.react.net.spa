@@ -18,6 +18,7 @@ export class Layout extends Component {
 			'vertical-layout',
 			'page-header-light',
 			'vertical-menu-collapsible',
+			'vertical-menu-nav-dark',
 			'preload-transitions',
 			'2-columns'
 		);

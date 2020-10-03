@@ -87,28 +87,30 @@ export const loadScriptsAsync = section => {
 };
 
 export const populateAllSctions = () => {
-	SCRIPT_SECTIONS.VENDOR_JS.scripts = ['app-assets/js/vendors.min.js'];
+	SCRIPT_SECTIONS.VENDOR_JS.scripts = [
+		/*'app-assets/js/vendors.min.js'*/
+	];
 	SCRIPT_SECTIONS.THEME_JS.scripts = [
 		//'/app-assets/vendors/jquery-validation/jquery.validate.min.js',
 		'app-assets/js/plugins.js',
 		'app-assets/js/search.js',
 		'app-assets/js/custom/custom-script.js',
 	];
-	// SCRIPT_SECTIONS.PAGE_LEVEL_JS.scripts = [
-	// 	'app-assets/vendors/waves/waves.min.js',
-	// ];
+	SCRIPT_SECTIONS.PAGE_LEVEL_JS.scripts = [
+		// 	'app-assets/vendors/waves/waves.min.js',
+	];
 	return SCRIPT_SECTIONS;
 };
 export const loadAllSectionsScripts = sections => {
-	//let latestSection;
-	//Object.keys(sections).map(key => {
-	//	document.querySelector(sections[key].id).innerHTML = '';
-	//	let itm = sections[key];
-	//	if (latestSection) {
-	//		latestSection = latestSection.then(res => loadScriptsAsync(itm));
-	//	} else {
-	//		latestSection = loadScriptsAsync(itm);
-	//	}
-	//});
-	//return latestSection;
+	let latestSection;
+	Object.keys(sections).map(key => {
+		document.querySelector(sections[key].id).innerHTML = '';
+		let itm = sections[key];
+		if (latestSection) {
+			latestSection = latestSection.then(res => loadScriptsAsync(itm));
+		} else {
+			latestSection = loadScriptsAsync(itm);
+		}
+	});
+	return latestSection;
 };

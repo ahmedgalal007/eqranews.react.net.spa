@@ -25,8 +25,8 @@ const store = createStore(
 	reducers,
 	persistedState,
 	compose(
-		applyMiddleware(sagaMiddleware),
-		window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+		applyMiddleware(sagaMiddleware)
+		// window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 	)
 );
 
@@ -70,23 +70,23 @@ ReactDOM.render(
 		// 	// document.body.innerHTML = document.querySelector('#root').innerHTML;
 		//  document.querySelector('#root').style.height = '100%';
 
-		//const scripts = AppUtilities.populateAllSctions();
-		//AppUtilities.loadAllSectionsScripts(scripts).then(() => {
-		if (window.jQuery && window.Waves) {
-			const $ = window.jQuery,
-				Waves = window.Waves;
-			$(document).ready(function () {
-				Waves.init(); //Preloading script
-			});
-		}
-		const loader = document.querySelector('#reactloader');
-		if (loader) {
-			loader.classList.add('animated', 'fadeOut');
-			setTimeout(() => {
-				loader.style.display = 'none';
-			}, 4000);
-		}
-		//});
+		const scripts = AppUtilities.populateAllSctions();
+		AppUtilities.loadAllSectionsScripts(scripts).then(() => {
+			if (window.jQuery && window.Waves) {
+				const $ = window.jQuery,
+					Waves = window.Waves;
+				$(document).ready(function () {
+					// Waves.init(); //Preloading script
+				});
+			}
+			const loader = document.querySelector('#reactloader');
+			if (loader) {
+				loader.classList.add('animated', 'fadeOut');
+				setTimeout(() => {
+					loader.style.display = 'none';
+				}, 4000);
+			}
+		});
 
 		// 	// 	const elem1 = (AppUtilities.appendScript(
 		// 	// 		'app-assets/js/vendors.min.js',

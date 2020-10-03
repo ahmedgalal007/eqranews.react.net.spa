@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
     <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
     <IsPackable>false</IsPackable>
@@ -24,27 +25,27 @@
 
   <ItemGroup>
     <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.12" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.14" />
     <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.6" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.6.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.6">
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" version="3.1.7" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" version="3.1.7" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" version="3.1.7">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Kubernetes.Tools.Targets" Version="1.1.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
-    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.1" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.1.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
 
@@ -80,6 +81,7 @@
     <Content Remove="wwwroot\js\jquery.dataTables.js" />
     <Content Remove="wwwroot\js\jquery.dataTables.min.js" />
     <Content Remove="wwwroot\js\jquery.formatter.min.js" />
+    <Content Remove="wwwroot\js\loading-bar.min.js" />
     <Content Remove="wwwroot\js\materialize.js" />
     <Content Remove="wwwroot\js\materialize.min.js" />
     <Content Remove="wwwroot\js\plugins.js" />
@@ -122,6 +124,7 @@
     <None Include="wwwroot\js\jquery.dataTables.js" />
     <None Include="wwwroot\js\jquery.dataTables.min.js" />
     <None Include="wwwroot\js\jquery.formatter.min.js" />
+    <None Include="wwwroot\js\loading-bar.min.js" />
     <None Include="wwwroot\js\materialize.js" />
     <None Include="wwwroot\js\materialize.min.js" />
     <None Include="wwwroot\js\plugins.js" />

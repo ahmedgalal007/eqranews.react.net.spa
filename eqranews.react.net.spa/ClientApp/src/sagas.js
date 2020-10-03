@@ -2,6 +2,7 @@ import { fork, all, call } from 'redux-saga/effects';
 // import CrawlingSagas from './Modules/Crawling/sagas';
 import crawlSagas from './Modules/Crawling/sagas';
 import SettingsSagas from './Modules/Settings/Sagas';
+import NewsSagas from './Modules/News/Sagas';
 
 export default function* rootSaga() {
 	// console.log('sagas:', [...CrawlingSagas]);

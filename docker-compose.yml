@@ -54,6 +54,26 @@ services:
       testing_net:
         ipv4_address: 172.28.1.3
 
+  eqranews.client.mvc:
+    depends_on:
+      - db
+    image: ${DOCKER_REGISTRY-}eqranewsclientmvc
+    build:
+      context: .
+      dockerfile: eqranews.client.mvc/Dockerfile
+    environment:
+      MYSQL_HOST: 172.28.1.1
+      MYSQL_ROOT_PASSWORD: Sico007_
+      MYSQL_USER: root
+      MYSQL_PASSWORD: Sico007_
+      MYSQL_DATABASE: eqranews
+      MYSQL_TCP_PORT: 3306
+      ASPNETCORE_ENVIRONMENT: Development
+    networks:
+      testing_net:
+        ipv4_address: 172.28.1.4
+
+
 volumes:
   dbdata:
 

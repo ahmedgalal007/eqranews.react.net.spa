@@ -47,46 +47,6 @@ class CrawlStep extends Component {
 		return result;
 	};
 
-	handelInputChange = e => {
-		const { name, value } = e.target;
-		const fieldValue = { [name]: value };
-		//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
-		this.setState(fieldValue);
-		this.validate(fieldValue);
-		console.log(fieldValue);
-	};
-
-	validate = (fieldValues = this.state) => {
-		console.log('fieldValues:', fieldValues);
-		let temp = {};
-		if ('url' in fieldValues)
-			temp.url = fieldValues.url ? '' : 'This field is required.';
-		if ('selector' in fieldValues)
-			temp.selector = fieldValues.selector ? '' : 'This field is required.';
-
-		this.setState({ Errors: { ...temp } });
-		if (fieldValues == this.state)
-			//[ ...this.state ].filter(x => x !== this.state.Errors)
-			return Object.values(temp).every(x => x == '');
-	};
-
-	handelSubmit = e => {
-		e.preventDefault();
-		console.log(e.target);
-		if (this.validate()) {
-			const formData = new FormData(e.target);
-
-			if (formData.get('id') == 0) {
-				this.props.createCrawlStep(formData);
-				this.props.history.goBack();
-			} else {
-				alert('update Form');
-				this.props.updateCrawlStep(formData.get('id'), formData);
-				this.props.history.goBack();
-			}
-		}
-	};
-
 	componentWillMount = () => {
 		const {
 			match: { params },
@@ -122,12 +82,13 @@ class CrawlStep extends Component {
 		];
 
 		let stepperId = 0;
-		if (
-			this.props.location.state &&
-			this.props.location.state.crawlStepperId &&
-			this.props.location.state.crawlStepperId > 0
-		) {
-			stepperId = this.props.location.state.crawlStepperId;
+		if (this.props.location.state) {
+			if (
+				this.props.location.state.crawlStepperId &&
+				this.props.location.state.crawlStepperId > 0
+			) {
+				stepperId = this.props.location.state.crawlStepperId;
+			}
 		}
 		const initialFieldValues = this.initialFieldValues(
 			params?.id || 0,
@@ -178,6 +139,46 @@ class CrawlStep extends Component {
 			});
 		}
 		// });
+	};
+
+	handelInputChange = e => {
+		const { name, value } = e.target;
+		const fieldValue = { [name]: value };
+		//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
+		this.setState(fieldValue);
+		this.validate(fieldValue);
+		console.log(fieldValue);
+	};
+
+	validate = (fieldValues = this.state) => {
+		console.log('fieldValues:', fieldValues);
+		let temp = {};
+		if ('url' in fieldValues)
+			temp.url = fieldValues.url ? '' : 'This field is required.';
+		if ('selector' in fieldValues)
+			temp.selector = fieldValues.selector ? '' : 'This field is required.';
+
+		this.setState({ Errors: { ...temp } });
+		if (fieldValues == this.state)
+			//[ ...this.state ].filter(x => x !== this.state.Errors)
+			return Object.values(temp).every(x => x == '');
+	};
+
+	handelSubmit = e => {
+		e.preventDefault();
+		console.log(e.target);
+		if (this.validate()) {
+			const formData = new FormData(e.target);
+
+			if (formData.get('id') == 0) {
+				this.props.createCrawlStep(formData);
+				this.props.history.goBack();
+			} else {
+				alert('update Form');
+				this.props.updateCrawlStep(formData.get('id'), formData);
+				this.props.history.goBack();
+			}
+		}
 	};
 
 	render() {

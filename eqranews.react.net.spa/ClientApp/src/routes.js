@@ -1,5 +1,6 @@
 import { routes as SettingsRoutes } from './Modules/Settings/routes';
 import { routes as CrawlingRoutes } from './Modules/Crawling/routes';
+import { routes as NewsRoutes } from './Modules/News/routes';
 
 const routes = {
 	title: 'JOBS',

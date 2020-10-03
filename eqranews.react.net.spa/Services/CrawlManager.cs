@@ -122,7 +122,7 @@ namespace eqranews.react.net.spa.Services
                         var source = db.CrawlSources.Find(new object[] { stepper.CrawlSourceId });
                         News newsEntry = new News
                         {
-                            Title = item.CrawlItems.Where(x => x.Name == "Title").FirstOrDefault().Value,
+                            Title = item.CrawlItems.Where(x => x.Name == "Title").FirstOrDefault()?.Value,
                             SourceLink = item.Url.Href,
                             Created = DateTime.Now,
                             SourceId = source.Id,

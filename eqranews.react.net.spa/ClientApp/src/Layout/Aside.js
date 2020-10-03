@@ -23,10 +23,7 @@ export class Aside extends Component {
 	};
 	render() {
 		return (
-			<aside
-				ref={el => (this.el = el)}
-				className="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-light navbar-full sidenav-active-rounded"
-			>
+			<aside className="sidenav-main nav-expanded nav-lock nav-collapsible sidenav-light navbar-full sidenav-active-rounded">
 				<div className="brand-sidebar">
 					<h1 className="logo-wrapper">
 						<a className="brand-logo darken-1" href="index.html">
@@ -42,6 +39,7 @@ export class Aside extends Component {
 					</h1>
 				</div>
 				<ul
+					ref={el => (this.el = el)}
 					className="sidenav sidenav-collapsible leftside-navigation collapsible sidenav-fixed menu-shadow"
 					id="slide-out"
 					data-menu="menu-navigation"
