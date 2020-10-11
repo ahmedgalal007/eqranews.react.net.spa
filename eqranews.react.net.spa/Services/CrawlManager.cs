@@ -19,26 +19,37 @@ namespace eqranews.react.net.spa.Services
 {
     public class CrawlManager : ICrawlManager
     {
+        private static IServiceProvider _serviceProvider;
+
         public static IApplicationBuilder builder;
         private IBackgroundJobClient backgroundJobClient;
         private IRecurringJobManager recurringJobManager;
 
-        public CrawlManager(IServiceProvider serviceProvider)
+
+        //public CrawlManager(IServiceProvider serviceProvider)
+        //{
+        //    //this.db = serviceProvider.GetRequiredService<ApplicationDbContext>();
+        //    //this.backgroundJobClient = serviceProvider.GetRequiredService<IBackgroundJobClient>();
+        //    //this.recurringJobManager = serviceProvider.GetRequiredService<IRecurringJobManager>();
+        //}
+        //public CrawlManager(IApplicationBuilder app)
+        //{
+        //    builder = app;
+        //}
+
+        protected internal CrawlManager(IServiceProvider sp)
         {
-            //this.db = serviceProvider.GetRequiredService<ApplicationDbContext>();
-            //this.backgroundJobClient = serviceProvider.GetRequiredService<IBackgroundJobClient>();
-            //this.recurringJobManager = serviceProvider.GetRequiredService<IRecurringJobManager>();
+            _serviceProvider = sp;
         }
 
-        public void CreateEnabledSourcesJobs(IApplicationBuilder app)
+        public void CreateEnabledSourcesJobs()
         {
-            builder = app;
-            using (var scope = app.ApplicationServices.CreateScope())
+            //builder = app;
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                ApplicationDbContext db = services.GetRequiredService<ApplicationDbContext>();
-                this.backgroundJobClient = services.GetRequiredService<IBackgroundJobClient>();
-                this.recurringJobManager = services.GetRequiredService<IRecurringJobManager>();
+                ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                this.backgroundJobClient = scope.ServiceProvider.GetRequiredService<IBackgroundJobClient>();
+                this.recurringJobManager = scope.ServiceProvider.GetRequiredService<IRecurringJobManager>();
                 db.CrawlSources.ToList();
                 backgroundJobClient.Enqueue(() => Console.WriteLine("Hello From CrawlManager"));
                 recurringJobManager.AddOrUpdate("Run Every Minute", () => Console.WriteLine("Test Recuring Job !!!"), "* * * * *");
@@ -69,10 +80,10 @@ namespace eqranews.react.net.spa.Services
             var stepperEng = new eqranews.crawling.Models.CrawlStepper();
             List<eqranews.crawling.Models.CrawlResult> results = new List<eqranews.crawling.Models.CrawlResult>();
 
-            using (var scope = CrawlManager.builder.ApplicationServices.CreateScope())
+            using (var scope = _serviceProvider.CreateScope())
             {
-                var services = scope.ServiceProvider;
-                ApplicationDbContext db = services.GetRequiredService<ApplicationDbContext>();
+                // var services = _serviceProvider;
+                ApplicationDbContext db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 if(db.CrawlSteppers.Where(x => x.Id == Id).Any())
                 {
                     DAL.Crawling.CrawlStepper stepper = db.CrawlSteppers.Include(s => s.CrawlSteps).ThenInclude(i => i.CrawlItems).Include("CrawlSteps.CrawlStepType").Where(x => x.Id == Id).SingleOrDefault();

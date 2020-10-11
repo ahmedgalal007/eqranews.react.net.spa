@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
+import BackButton from '../../_shared/components/BackButton';
 
 class CrawlItem extends Component {
 	constructor(props) {
@@ -92,6 +93,11 @@ class CrawlItem extends Component {
 			<div className="row">
 				{console.log(this.props)}
 				<div className="col s12">
+					<div style={{ float: 'left' }}>
+						<BackButton
+							link={'/crawl/step/' + this.props.location.state.crawlStepId}
+						></BackButton>
+					</div>
 					<div id="validations" className="card card-tabs">
 						<div className="card-content">
 							<div className="card-title">

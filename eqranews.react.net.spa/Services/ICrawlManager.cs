@@ -10,7 +10,7 @@ namespace eqranews.react.net.spa.Services
 {
     public interface ICrawlManager
     {
-        abstract void CreateEnabledSourcesJobs(IApplicationBuilder app);
+        abstract void CreateEnabledSourcesJobs();
 
     }
 }

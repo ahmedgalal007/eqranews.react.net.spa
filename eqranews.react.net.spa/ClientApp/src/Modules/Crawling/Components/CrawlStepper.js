@@ -16,6 +16,7 @@ import { Link } from 'react-router-dom';
 import { DTable } from '../../_shared/components/DTable';
 import FormUtils from '../../_shared/lib/FormUtils';
 import CrawlStep from './CrawlStep';
+import BackButton from '../../_shared/components/BackButton';
 
 class CrawlStepper extends Component {
 	constructor(props) {
@@ -193,6 +194,11 @@ class CrawlStepper extends Component {
 			<div className="row">
 				{console.log(this.props)}
 				<div className="col s12">
+					<div style={{ float: 'left' }}>
+						<BackButton
+							link={'/crawl/source/' + this.props.location.state.crawlSourceId}
+						></BackButton>
+					</div>
 					<div id="validations" className="card card-tabs">
 						<div className="card-content">
 							<div className="card-title">

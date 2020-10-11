@@ -16,39 +16,55 @@ using Hangfire;
 using Hangfire.MemoryStorage;
 using eqranews.react.net.spa.Services;
 using Newtonsoft.Json;
+using Hangfire.MySql.Core;
+using System.Threading.Tasks;
 
 namespace eqranews.react.net.spa
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
-        public IConfiguration Configuration { get; }
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddHangfire(config =>
-                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
-                .UseSimpleAssemblyNameTypeSerializer()
-                .UseDefaultTypeSerializer()
-                .UseMemoryStorage()
-                .UseSerializerSettings(new JsonSerializerSettings()
-                {
-                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-                })
-            );
-
-            services.AddHangfireServer();
-
-            string conn = $"server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
+        string conn = $"server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
                 $"port={Environment.GetEnvironmentVariable("MYSQL_TCP_PORT")};" +
                 $"user={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
                 $"password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
                 $"database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")}";
-            Console.WriteLine(conn);
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
+        {
+            Configuration = configuration;
+            Env = webHostEnvironment;
+        }
+
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; set; }
+
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            IMvcBuilder builder = services.AddRazorPages();
+#if DEBUG
+            if (Env.IsDevelopment())
+            {
+                builder.AddRazorRuntimeCompilation();
+            }
+#endif
+
+            services.AddHangfire(config =>
+                config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseDefaultTypeSerializer()
+                //.UseMemoryStorage(new MemoryStorageOptions { CountersAggregateInterval = TimeSpan.FromSeconds(30)})
+                .UseStorage(new MySqlStorage(conn + "; Allow User Variables=True"))
+                .UseSerializerSettings(new JsonSerializerSettings()
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                })
+                
+            );
+
+            services.AddHangfireServer();
+
+            
             services.AddScoped<ApplicationDbContext>();
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(
@@ -63,7 +79,7 @@ namespace eqranews.react.net.spa
             );
 
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer(opt =>
             {
@@ -71,7 +87,9 @@ namespace eqranews.react.net.spa
                 // opt.Events.RaiseSuccessEvents
                 // opt.Authentication.CookieLifetime
             })
-                .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+            .AddProfileService<ProfileService>();
+            
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
@@ -90,12 +108,12 @@ namespace eqranews.react.net.spa
             });
 
             //new CrawlUtils(services);
-            services.AddSingleton<ICrawlManager, CrawlManager>();
+            services.AddSingleton<CrawlManager>(sp => new CrawlManager(sp));
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ICrawlManager crawlManager)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, CrawlManager crawlManager)
         {
             if (env.IsDevelopment())
             {
@@ -162,13 +180,13 @@ namespace eqranews.react.net.spa
 
             // Apply Migration to Database
             InitializeDatabase(app);
-
+            CreateRoles(app.ApplicationServices);
             // Add HangFire
             // backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hangfire job!!!!"));
             // recurringJobManager.AddOrUpdate("Run Every Minute", () => Console.WriteLine("Test Recuring Job !!!"), "* * * * *");
 
             //CrawlUtils.Instance.createJobs();
-            crawlManager.CreateEnabledSourcesJobs(app);
+            crawlManager.CreateEnabledSourcesJobs();
         }
 
         private void InitializeDatabase(IApplicationBuilder app)
@@ -180,5 +198,51 @@ namespace eqranews.react.net.spa
 
             }
         }
+
+
+        private void CreateRoles(IServiceProvider serviceProvider)
+        {
+            using (var scope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+            {
+
+                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                Task<IdentityResult> roleResult;
+                string email = "ahmedgalal007@gmail.com";
+
+                //Check that there is an Administrator role and create if not
+                Task<bool> hasAdminRole = roleManager.RoleExistsAsync("Administrator");
+                hasAdminRole.Wait();
+
+                if (!hasAdminRole.Result)
+                {
+                    roleResult = roleManager.CreateAsync(new IdentityRole("Administrator"));
+                    roleResult.Wait();
+                }
+
+                //Check if the admin user exists and create it if not
+                //Add to the Administrator role
+
+                Task<ApplicationUser> testUser = userManager.FindByEmailAsync(email);
+                testUser.Wait();
+
+                if (testUser.Result == null)
+                {
+                    ApplicationUser administrator = new ApplicationUser();
+                    administrator.Email = email;
+                    administrator.UserName = email;
+
+                    Task<IdentityResult> newUser = userManager.CreateAsync(administrator, "Sico007_");
+                    newUser.Wait();
+
+                    if (newUser.Result.Succeeded)
+                    {
+                        Task<IdentityResult> newUserRole = userManager.AddToRoleAsync(administrator, "Administrator");
+                        newUserRole.Wait();
+                    }
+                }
+            }
+        }
+
     }
 }

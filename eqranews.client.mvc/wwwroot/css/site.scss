@@ -1,0 +1,13 @@
+﻿body {
+    direction:rtl;
+}
+
+@import "../scss/_Navbar.scss";
+
+
+
+.theiaStickySidebar:after {
+    content: "";
+    display: table;
+    clear: both;
+}

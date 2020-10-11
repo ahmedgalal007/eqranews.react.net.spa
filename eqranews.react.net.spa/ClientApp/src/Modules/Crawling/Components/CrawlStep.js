@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom';
 import { DTable } from '../../_shared/components/DTable';
 import FormUtils from '../../_shared/lib/FormUtils';
 import CrawlItem from './CrawlItem';
+import BackButton from '../../_shared/components/BackButton';
 
 class CrawlStep extends Component {
 	constructor(props) {
@@ -81,18 +82,18 @@ class CrawlStep extends Component {
 			},
 		];
 
-		let stepperId = 0;
+		this.stepperId = 0;
 		if (this.props.location.state) {
 			if (
 				this.props.location.state.crawlStepperId &&
 				this.props.location.state.crawlStepperId > 0
 			) {
-				stepperId = this.props.location.state.crawlStepperId;
+				this.stepperId = this.props.location.state.crawlStepperId;
 			}
 		}
 		const initialFieldValues = this.initialFieldValues(
 			params?.id || 0,
-			stepperId
+			this.stepperId
 		);
 		this.setState({ ...initialFieldValues, Errors: {} });
 		this.props.FetchCrawlItemByStep(initialFieldValues.id);
@@ -196,6 +197,9 @@ class CrawlStep extends Component {
 			<div className="row">
 				{console.log(this.props)}
 				<div className="col s12">
+					<div style={{ float: 'left' }}>
+						<BackButton link={'/crawl/stepper/' + this.stepperId}></BackButton>
+					</div>
 					<div id="validations" className="card card-tabs">
 						<div className="card-content">
 							<div className="card-title">

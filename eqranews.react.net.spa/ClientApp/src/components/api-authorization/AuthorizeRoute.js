@@ -42,6 +42,8 @@ export default class AuthorizeRoute extends Component {
 					{...rest}
 					render={props => {
 						if (authenticated) {
+							authService.getUser().then(_user => console.log('UserInfo: ', _user) );
+							
 							return <Component {...props} />;
 						} else {
 							return <Redirect to={redirectUrl} />;

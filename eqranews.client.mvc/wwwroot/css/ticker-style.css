@@ -36,7 +36,8 @@
 	left: 0 !important;
 }
 .ticker-content:focus {
-	none;
+	outline: none;
+	box-shadow: none;
 }
 .ticker-content a {
 	text-decoration: none;	
