@@ -1,6 +1,15 @@
 #See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
 
+# FROM node:12.18.3-stretch
+# WORKDIR /app
+# EXPOSE 3001
+# RUN npm install -g prettier
+
+#See https://aka.ms/containerfastmode to understand how Visual Studio uses this Dockerfile to build your images for faster debugging.
+
+
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
+
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
@@ -12,7 +21,6 @@ EXPOSE 3001
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g gulp-cli
-RUN npm install -g nodemon
 
 
 #ENV MYSQL_VERSION=8.0
@@ -28,15 +36,14 @@ RUN npm install -g nodemon
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["eqranews.react.net.spa/eqranews.react.net.spa.csproj", "eqranews.react.net.spa/"]
-COPY ["DAL/DAL.csproj", "DAL/"]
-COPY ["eqranews.geo/eqranews.geo.csproj", "eqranews.geo/"]
-COPY ["eqranews.crawling/eqranews.crawling.csproj", "eqranews.crawling/"]
+COPY ["../../../eqranews.react.net.spa/eqranews.react.net.spa.csproj", "eqranews.react.net.spa/"]
+COPY ["../../../DAL/DAL.csproj", "DAL/"]
+COPY ["../../../eqranews.geo/eqranews.geo.csproj", "eqranews.geo/"]
+COPY ["../../../eqranews.crawling/eqranews.crawling.csproj", "eqranews.crawling/"]
 RUN dotnet restore "eqranews.react.net.spa/eqranews.react.net.spa.csproj"
-COPY . .
+COPY ../../../ .
 WORKDIR "/src/eqranews.react.net.spa"
 RUN npm install -g gulp-cli
-RUN npm install -g nodemon
 RUN dotnet build "eqranews.react.net.spa.csproj" -c Release -o /app/build
 
 FROM build AS publish

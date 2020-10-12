@@ -1,0 +1,16 @@
+{
+	"containerEnv": {},
+	"name": "Eqra News React .NET SPA",
+	"dockerFile": "../Dockerfile",
+	"appPort": [3001],
+	"runArgs": ["-u", "node"],
+	"settings": {
+		"workbench.colorTheme": "Cobalt2",
+		"terminal.integrated.shell.linux": null
+	},
+	"extensions": ["esbenp.prettier-vscode", "wesbos.theme-cobalt2"],
+	"forwardPorts": [3001, 3001],
+	"build": {
+		"context": "../../"
+	}
+}

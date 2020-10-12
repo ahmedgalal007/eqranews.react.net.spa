@@ -4,7 +4,7 @@ export default class UsersList extends Component {
 	render() {
 		return (
 			<div className="users-list">
-				<div  className="row">
+				<div className="row">
 					<div className="col s12">
 						<div className="container">
 							{
@@ -16,7 +16,9 @@ export default class UsersList extends Component {
 										<div className="row">
 											<form>
 												<div className="col s12 m6 l3">
-													<label htmlFor="users-list-verified">VVVerified</label>
+													<label htmlFor="users-list-verified">
+														MMFVerified
+													</label>
 													<div className="input-field">
 														<select
 															className="form-control"

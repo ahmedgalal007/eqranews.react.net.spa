@@ -41,13 +41,13 @@ namespace eqranews.react.net.spa
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            IMvcBuilder builder = services.AddRazorPages();
-#if DEBUG
-            if (Env.IsDevelopment())
-            {
-                builder.AddRazorRuntimeCompilation();
-            }
-#endif
+            // IMvcBuilder builder = services.AddRazorPages();
+//#if DEBUG
+//            if (Env.IsDevelopment())
+//            {
+//                builder.AddRazorRuntimeCompilation();
+//            }
+//#endif
 
             services.AddHangfire(config =>
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -174,6 +174,7 @@ namespace eqranews.react.net.spa
                 if (env.IsDevelopment())
                 {
                     spa.UseReactDevelopmentServer(npmScript: "start");
+                    // spa.UseProxyToSpaDevelopmentServer("https://localhost:3000/");
                 }
             });
 
