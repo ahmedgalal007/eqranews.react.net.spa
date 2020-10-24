@@ -3,6 +3,7 @@ import { fork, all, call } from 'redux-saga/effects';
 import crawlSagas from './Modules/Crawling/sagas';
 import SettingsSagas from './Modules/Settings/Sagas';
 import NewsSagas from './Modules/News/Sagas';
+import UsersSagas from './Modules/Users/sagas';
 
 export default function* rootSaga() {
 	// console.log('sagas:', [...CrawlingSagas]);
@@ -13,5 +14,5 @@ export default function* rootSaga() {
 	// yield fork(SettingsSagas);
 	// code after all-effect
 	// { ...CrawlingSagas }
-	yield all([...crawlSagas, ...SettingsSagas]);
+	yield all([...crawlSagas, ...SettingsSagas, ...UsersSagas]);
 }

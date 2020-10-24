@@ -43,6 +43,7 @@ store.subscribe(() => {
 		CrawlSteppers: store.getState().CrawlSteppers,
 		CrawlSteps: store.getState().CrawlSteps,
 		CrawlItems: store.getState().CrawlItems,
+		Users: store.getState().Users,
 	});
 	//});
 });

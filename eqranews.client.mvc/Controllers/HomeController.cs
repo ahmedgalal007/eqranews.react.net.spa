@@ -1,4 +1,5 @@
 ﻿using eqranews.client.mvc.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -19,6 +20,12 @@ namespace eqranews.client.mvc.Controllers
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
+        public IActionResult secret()
         {
             return View();
         }

@@ -32,11 +32,15 @@ namespace eqranews.react.net.spa.Services
             {
                 roleClaims.Add(new Claim(JwtClaimTypes.Role, role));
             }
-
             //add user claims
-
             roleClaims.Add(new Claim(JwtClaimTypes.Name, user.UserName));
             context.IssuedClaims.AddRange(roleClaims);
+
+            var claims = await _userManager.GetClaimsAsync(user);
+            foreach (var claim in claims)
+            {
+                context.IssuedClaims.Add(new Claim(claim.Type, claim.Value));
+            }
         }
 
         public Task IsActiveAsync(IsActiveContext context)

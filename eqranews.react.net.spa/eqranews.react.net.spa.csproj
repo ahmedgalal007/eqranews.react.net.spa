@@ -34,7 +34,7 @@
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" version="3.1.7" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="3.1.7" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" version="3.1.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" version="3.1.9" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" version="3.1.7" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" version="3.1.7" />

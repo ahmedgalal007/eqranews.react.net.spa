@@ -4,15 +4,12 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 EXPOSE 80
 EXPOSE 443
-EXPOSE 3001
-
 
 #Ahmed Galal -Install nodejs
 #RUN curl -sL https://deb.nodesource.com/setup_10.x |  bash -
 RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install -g gulp-cli
-RUN npm install -g nodemon
 
 
 #ENV MYSQL_VERSION=8.0
@@ -36,7 +33,6 @@ RUN dotnet restore "eqranews.react.net.spa/eqranews.react.net.spa.csproj"
 COPY . .
 WORKDIR "/src/eqranews.react.net.spa"
 RUN npm install -g gulp-cli
-RUN npm install -g nodemon
 RUN dotnet build "eqranews.react.net.spa.csproj" -c Release -o /app/build
 
 FROM build AS publish

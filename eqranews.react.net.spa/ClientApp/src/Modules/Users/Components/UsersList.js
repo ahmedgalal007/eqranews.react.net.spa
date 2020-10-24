@@ -1,7 +1,99 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
+import FormUtils from '../../_shared/lib/FormUtils';
+import * as AppUtilities from '../../_shared/lib/AppUtilities';
+import { DTable } from '../../_shared/components/DTable';
+import { connect } from 'react-redux';
+import { withRouter, Link } from 'react-router-dom';
+import {
+	requestFetchAllUsers,
+	requestFetchUsersByRole,
+} from '../Actions/UsersList';
+class UsersList extends Component {
+	constructor(props) {
+		super(props);
+		const initialFieldValues = this.initialFieldValues();
+		this.state = { ...initialFieldValues, Errors: {} };
+		this.columns = [
+			{ title: 'Id', name: 'id' },
+			{ title: 'UserName', name: 'userName' },
+			{ title: 'Email', name: 'email' },
+			{ title: 'FirstName', name: 'firstName' },
+			{ title: 'LastName', name: 'lastName' },
+			{ title: 'lockoutEnabled', name: 'lockoutEnabled' },
+			{ title: 'Verified', name: 'emailConfirmed' },
 
-export default class UsersList extends Component {
+			{ title: 'EDIT', defaultContent: '' },
+			{ title: 'DELETE', defaultContent: '' },
+		];
+		this.columnDefs = [
+			{ targets: 0, visible: false },
+			{ targets: [7, 8], orderable: false },
+			{
+				targets: 7,
+				createdCell: (td, cellData, rowData, row, col) => {
+					const lnkSTr = '/Users/' + rowData[0];
+					return ReactDOM.render(
+						<a
+							style={{ cursor: 'pointer', color: 'green' }}
+							onClick={() => {
+								this.props.history.push({
+									pathname: lnkSTr,
+								});
+							}}
+						>
+							<i className="material-icons">edit</i>
+						</a>,
+						td
+					);
+				},
+			},
+			{
+				targets: 8,
+				createdCell: FormUtils.createDeleteButton(
+					this.props.DeleteCrawlStepper
+				),
+			},
+		];
+	}
+	componentWillMount = () => {
+		this.props.requestFetchAllUsers();
+	};
+
+	initialFieldValues = (id = 0) => {
+		let result = {
+			id: id,
+			name: '',
+			username: '',
+			verified: '',
+			active: '',
+			status: '',
+			role: '',
+			lastActivity: '',
+		};
+
+		return result;
+	};
+
+	getData = () => {
+		return [
+			{
+				id: 1,
+				username: 'ahmedgalal008',
+				name: 'Ahmed Galal',
+				lastActivity: '2020/10/12',
+				verified: 'verified',
+				role: 'Admin',
+				status: 'Active',
+			},
+		];
+	};
+
 	render() {
+		return this.serverRender();
+	}
+
+	serverRender = () => {
 		return (
 			<div className="users-list">
 				<div className="row">
@@ -16,9 +108,141 @@ export default class UsersList extends Component {
 										<div className="row">
 											<form>
 												<div className="col s12 m6 l3">
-													<label htmlFor="users-list-verified">
-														MMFVerified
-													</label>
+													<label htmlFor="users-list-verified">Verified</label>
+													<div className="input-field">
+														<select
+															className="form-control"
+															id="users-list-verified"
+														>
+															<option value="">Any</option>
+															<option value="Yes">Yes</option>
+															<option value="No">No</option>
+														</select>
+													</div>
+												</div>
+												<div className="col s12 m6 l3">
+													<label htmlFor="users-list-role">Role</label>
+													<div className="input-field">
+														<select
+															className="form-control"
+															id="users-list-role"
+														>
+															<option value="">Any</option>
+															<option value="User">User</option>
+															<option value="Staff">Staff</option>
+														</select>
+													</div>
+												</div>
+												<div className="col s12 m6 l3">
+													<label htmlFor="users-list-status">Status</label>
+													<div className="input-field">
+														<select
+															className="form-control"
+															id="users-list-status"
+														>
+															<option value="">Any</option>
+															<option value="Active">Active</option>
+															<option value="Close">Close</option>
+															<option value="Banned">Banned</option>
+														</select>
+													</div>
+												</div>
+												<div className="col s12 m6 l3 display-flex align-items-center show-btn">
+													<button
+														type="submit"
+														className="btn btn-block indigo waves-effect waves-light"
+													>
+														Show
+													</button>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+								<div className="users-list-table">
+									<div className="card">
+										<div className="card-content">
+											{
+												// <!-- datatable start -->
+											}
+											<div className="responsive-table">
+												<DTable
+													data={FormUtils.tableData(
+														this.columns,
+														this.props.Users //this.getData()
+													)}
+													columns={this.columns}
+													formate={this.formate}
+													columnDefs={this.columnDefs}
+												></DTable>
+											</div>
+											{
+												//<!-- datatable ends -->
+											}
+										</div>
+									</div>
+								</div>
+							</section>
+							{
+								//<!-- users list ends -->
+							}
+							<div
+								style={{ bottom: '50px', right: '19px' }}
+								className="fixed-action-btn direction-top"
+							>
+								<a className="btn-floating btn-large gradient-45deg-light-blue-cyan gradient-shadow">
+									<i className="material-icons">add</i>
+								</a>
+								<ul>
+									<li>
+										<a href="css-helpers.html" className="btn-floating blue">
+											<i className="material-icons">help_outline</i>
+										</a>
+									</li>
+									<li>
+										<a
+											href="cards-extended.html"
+											className="btn-floating green"
+										>
+											<i className="material-icons">widgets</i>
+										</a>
+									</li>
+									<li>
+										<a href="app-calendar.html" className="btn-floating amber">
+											<i className="material-icons">today</i>
+										</a>
+									</li>
+									<li>
+										<a href="app-email.html" className="btn-floating red">
+											<i className="material-icons">mail_outline</i>
+										</a>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div className="content-overlay"></div>
+					</div>
+				</div>
+			</div>
+		);
+	};
+
+	sourceRender() {
+		return (
+			<div className="users-list">
+				<div className="row">
+					<div className="col s12">
+						<div className="container">
+							{
+								//<!-- users list start -->
+							}
+							<section className="users-list-wrapper section">
+								<div className="users-list-filter">
+									<div className="card-panel">
+										<div className="row">
+											<form>
+												<div className="col s12 m6 l3">
+													<label htmlFor="users-list-verified">Verified</label>
 													<div className="input-field">
 														<select
 															className="form-control"
@@ -1154,3 +1378,25 @@ export default class UsersList extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	console.log('users', state.Users);
+	return {
+		countries: state.Countries,
+		Users: state.Users,
+	};
+};
+
+const mapActionToProps = {
+	requestFetchAllUsers: requestFetchAllUsers,
+	requestFetchUsersByRole: requestFetchUsersByRole,
+	updateNavigationState: data => ({
+		type: 'UPDATE_NAVIGATION_STATE',
+		data: data,
+	}),
+};
+
+export default connect(
+	mapStateToProps,
+	mapActionToProps
+)(withRouter(UsersList));

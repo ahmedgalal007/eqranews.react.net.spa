@@ -17,11 +17,9 @@ import BackButton from '../../_shared/components/BackButton';
 // import $ from 'jquery';
 //import M from 'materialize-css';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 
 import * as AppUtilities from '../../_shared/lib/AppUtilities';
-
-import { Link } from 'react-router-dom';
 
 import { DTable } from '../../_shared/components/DTable';
 

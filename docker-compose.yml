@@ -4,14 +4,14 @@ services:
   db:
     image: mysql:5.7
     ports:
-      - '3306:3306'
-      - '33060:33060'
+      - '3307:3306'
+      - '33070:33060'
     environment:
     - MYSQL_ROOT_PASSWORD=Sico007_
     - MYSQL_USER=root
     - MYSQL_PASSWORD=Sico007_
     - MYSQL_DATABASE=eqranews
-    - MYSQL_TCP_PORT=3306
+    - MYSQL_TCP_PORT=3307
     volumes:
       - dbdata:/var/lib/mysql
       - ./_MySQL_Init_Script:/docker-entrypoint-initdb.d
@@ -50,7 +50,7 @@ services:
       -  MYSQL_USER=root
       -  MYSQL_PASSWORD=Sico007_
       -  MYSQL_DATABASE=eqranews
-      -  MYSQL_TCP_PORT=3306
+      -  MYSQL_TCP_PORT=3307
       -  ASPNETCORE_ENVIRONMENT=Development
       -  CHOKIDAR_USEPOLLING=true
     volumes:
@@ -73,7 +73,7 @@ services:
       MYSQL_USER: root
       MYSQL_PASSWORD: Sico007_
       MYSQL_DATABASE: eqranews
-      MYSQL_TCP_PORT: 3306
+      MYSQL_TCP_PORT: 3307
       ASPNETCORE_ENVIRONMENT: Development
     networks:
       testing_net:

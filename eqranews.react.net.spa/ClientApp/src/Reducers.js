@@ -2,6 +2,7 @@
 import AuthenticationReducers from './Modules/Authentication/Reducers';
 import CrawlReducers from './Modules/Crawling/Reducers';
 import SettingsReducers from './Modules/Settings/Reducers';
+import UsersReducers from './Modules/Users/Reducers';
 // import NewsReducers from './Modules/News/Reducers';
 
 const IsPageLoading = (state = false, { type: type, data: data }) => {
@@ -41,4 +42,5 @@ export default combineReducers({
 	...CrawlReducers,
 	...SettingsReducers,
 	...AuthenticationReducers,
+	...UsersReducers,
 });

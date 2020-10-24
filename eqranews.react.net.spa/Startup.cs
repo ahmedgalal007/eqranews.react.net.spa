@@ -18,16 +18,14 @@ using eqranews.react.net.spa.Services;
 using Newtonsoft.Json;
 using Hangfire.MySql.Core;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using eqranews.react.net.spa.IdentityServer;
 
 namespace eqranews.react.net.spa
 {
     public class Startup
     {
-        string conn = $"server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
-                $"port={Environment.GetEnvironmentVariable("MYSQL_TCP_PORT")};" +
-                $"user={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
-                $"password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
-                $"database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")}";
+        string conn;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
@@ -42,13 +40,28 @@ namespace eqranews.react.net.spa
         public void ConfigureServices(IServiceCollection services)
         {
             // IMvcBuilder builder = services.AddRazorPages();
-//#if DEBUG
-//            if (Env.IsDevelopment())
-//            {
-//                builder.AddRazorRuntimeCompilation();
-//            }
-//#endif
-
+            //#if DEBUG
+            //            if (Env.IsDevelopment())
+            //            {
+            //                builder.AddRazorRuntimeCompilation();
+            //            }
+            //#endif
+            if (Env.IsEnvironment("Docker"))
+            {
+                conn = $"server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
+                $"port={Environment.GetEnvironmentVariable("MYSQL_TCP_PORT")};" +
+                $"user={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
+                $"password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
+                $"database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")}";
+            }
+            else if (Env.IsDevelopment())
+            {
+                conn = $"server=localhost;" +
+                $"port=3306;" +
+                $"user=ahmedgalal007;" +
+                $"password=Sico007_;" +
+                $"database=eqranews";
+            }
             services.AddHangfire(config =>
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
@@ -71,7 +84,7 @@ namespace eqranews.react.net.spa
                     // Configuration.GetConnectionString("DevConnectionMySQL")
                     conn, mySqlOptionsAction: sqlOptions =>
                     {
-                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(30), errorNumbersToAdd: null);
+                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(40), errorNumbersToAdd: null);
                     }
                 )
                 .UseLazyLoadingProxies(false)
@@ -87,7 +100,16 @@ namespace eqranews.react.net.spa
                 // opt.Events.RaiseSuccessEvents
                 // opt.Authentication.CookieLifetime
             })
-            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>()
+            // .AddInMemoryApiResources(Id4Configuration.GetApis())
+            // .AddInMemoryClients(Id4Configuration.GetClients())
+            // .AddDeveloperSigningCredential()
+            .AddApiAuthorization<ApplicationUser, ApplicationDbContext>(config =>
+            {
+                // config.IdentityResources.Add(new IdentityServer4.Models.IdentityResource( System.Security.Claims.ClaimTypes.GivenName));
+                Id4Configuration.AddIdentityResources(config.IdentityResources);
+                Id4Configuration.AddApis(config.ApiResources);
+                Id4Configuration.AddClients(config.Clients);
+            })
             .AddProfileService<ProfileService>();
             
 
@@ -173,6 +195,7 @@ namespace eqranews.react.net.spa
 
                 if (env.IsDevelopment())
                 {
+                    spa.Options.StartupTimeout = TimeSpan.FromSeconds(120);
                     spa.UseReactDevelopmentServer(npmScript: "start");
                     // spa.UseProxyToSpaDevelopmentServer("https://localhost:3000/");
                 }
@@ -212,14 +235,19 @@ namespace eqranews.react.net.spa
                 string email = "ahmedgalal007@gmail.com";
 
                 //Check that there is an Administrator role and create if not
-                Task<bool> hasAdminRole = roleManager.RoleExistsAsync("Administrator");
-                hasAdminRole.Wait();
-
-                if (!hasAdminRole.Result)
+                List<string> _roleNames = new List<string>() { "Administrator", "Subscriber", "Editor", "Moderator" };
+                foreach (string role in _roleNames)
                 {
-                    roleResult = roleManager.CreateAsync(new IdentityRole("Administrator"));
-                    roleResult.Wait();
+                    Task<bool> hasAdminRole = roleManager.RoleExistsAsync(role);
+                    hasAdminRole.Wait();
+
+                    if (!hasAdminRole.Result)
+                    {
+                        roleResult = roleManager.CreateAsync(new IdentityRole(role));
+                        roleResult.Wait();
+                    }
                 }
+                
 
                 //Check if the admin user exists and create it if not
                 //Add to the Administrator role
