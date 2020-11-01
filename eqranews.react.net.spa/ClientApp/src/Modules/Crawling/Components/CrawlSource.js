@@ -7,7 +7,6 @@ import ReactDOM from 'react-dom';
 import {
 	requestCreateCrawlSource,
 	requestUpdateCrawlSource,
-	requestFetchCrawlSourceById,
 	requestFetchAllCrawlSources,
 } from '../Actions/CrawlSource';
 import {
@@ -33,7 +32,7 @@ import { CrawlStepper } from './CrawlStepper';
 class CrawlSource extends React.Component {
 	constructor(props) {
 		super(props);
-
+		this.props.FetchAllCrawlSources();
 		const {
 			match: { params },
 		} = this.props;
@@ -107,6 +106,7 @@ class CrawlSource extends React.Component {
 			console.log('Initialized Data:', this.props.data);
 			const record = this.props.data.filter(x => x.id == id)[0];
 			if (record) {
+				// record.logoUrl = record.logo;
 				console.log('Initialized Record:', record);
 				result = record;
 			}
@@ -140,7 +140,7 @@ class CrawlSource extends React.Component {
 			//[ ...this.state ].filter(x => x !== this.state.Errors)
 			return Object.values(temp).every(x => x == '');
 	};
-	handelSubmit = e => {
+	handelSubmit = async e => {
 		e.preventDefault();
 
 		console.log('Post-Data');
@@ -149,20 +149,19 @@ class CrawlSource extends React.Component {
 
 		console.log('Form-Data', formData);
 		if (formData.get('id') == 0) {
-			this.props.createCrawlSources(formData);
+			await this.props.createCrawlSources(formData);
 		} else {
-			this.props.updateCrawlSources(formData.get('id'), formData);
+			await this.props.updateCrawlSources(formData.get('id'), formData);
 		}
 		// $('.dropify-clear').click();
-		e.target.files = null;
 		// }
+		await this.props.FetchAllCrawlSources();
 	};
 
 	setFile = e => {
-		// this.setState({ Logo: e.target.files[0] });
+		//e.target.value = '';
 		console.log('target from setFile', e.target);
-		this.forceUpdate();
-		e.target.value = '';
+		//this.forceUpdate();
 	};
 
 	componentWillMount = () => {
@@ -287,15 +286,21 @@ class CrawlSource extends React.Component {
 				// });
 			}
 		}
+		this.props.FetchAllCrawlSources();
+
+		document.getElementsByClassName('dropify-event').filename = '';
+		document
+			.getElementsByClassName('dropify-event')[0]
+			.setAttribute('data-default-file', this.state.logo);
+		//.data({ defaultFile: DLogo });
+		// .setAttribute('data-default-file', DLogo);
 	};
 
 	render() {
-		const { id, name, domainURL, countryId, crawlStepper } = this.state;
-		let DLogo = this.state.logo;
-		if (this.state.logo == undefined || this.state.logo == '')
-			DLogo = '/images/sources/Al_Ahram.png';
+		const { id, name, domainURL, logo, countryId, crawlStepper } = this.state;
+		let DLogo = logo;
+		if (logo == undefined || logo == '') DLogo = '/images/sources/Al_Ahram.png';
 		// document.querySelector('.dropify-render img').src = logo;
-		// document.querySelector(".dropify-event").setAttribute("data-default-file", DLogo);
 
 		console.log('logo var in render', this.state.logo);
 		const errors = this.state.Errors;
@@ -331,12 +336,12 @@ class CrawlSource extends React.Component {
 														Maximum file upload size 512K.
 													</label>
 												</div>
+												<input type="hidden" name="logo" value={DLogo} />
 												<input
-													name="logo"
-													type="file"
-													id="input-file-max-fs"
-													className="dropify-event"
 													onChange={this.setFile}
+													type="file"
+													name="dropify"
+													className="dropify-event"
 													data-max-file-size="512K"
 													data-allowed-file-extensions="jpg png jpeg webp"
 													data-default-file={DLogo}
@@ -495,41 +500,6 @@ class CrawlSource extends React.Component {
 			</div>
 		);
 	};
-
-	loadPageScripts = () => {
-		if (window.jQuery) {
-			const $ = window.jQuery;
-			$(document).ready(() => {
-				// Basic
-				// $('.dropify').dropify();
-				// console.log($('.dropify').dropify());
-				// Translated
-				// $('.dropify-fr').dropify({
-				// 	messages: {
-				// 		default: 'Glissez-déposez un fichier ici ou cliquez',
-				// 		replace: 'Glissez-déposez un fichier ou cliquez pour remplacer',
-				// 		remove: 'Supprimer',
-				// 		error: 'Désolé, le fichier trop volumineux',
-				// 	},
-				// });
-
-				// Used events
-				var drEvent = $('.dropify-event').dropify();
-
-				drEvent.on('dropify.beforeClear', function (event, element) {
-					console.log('File Element:', element);
-					return window.confirm(
-						'Do you really want to delete "' + element.filename + '" ?'
-					);
-				});
-
-				drEvent.on('dropify.afterClear', function (event, element) {
-					console.log('File Element:', element);
-					alert(element);
-				});
-			});
-		}
-	};
 }
 
 const mapStateToProps = state => {
@@ -542,7 +512,6 @@ const mapStateToProps = state => {
 };
 
 const mapActionToProps = {
-	FetchCrawlSourceById: requestFetchCrawlSourceById,
 	FetchAllCrawlSources: requestFetchAllCrawlSources,
 	createCrawlSources: requestCreateCrawlSource,
 	updateCrawlSources: requestUpdateCrawlSource,

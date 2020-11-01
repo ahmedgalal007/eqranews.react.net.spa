@@ -22,7 +22,6 @@ function* fetchAllCrawlSources() {
 			data: true,
 		});
 		const data = yield call(Api.fetchAll);
-		yield delay(2000);
 		console.log('CrawlSources Data From Saga', data);
 		yield put(receiveFetchAllCrawlSources(data));
 		yield put({
@@ -42,8 +41,8 @@ function* createCrawlSource(action) {
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
 		console.log('CRAWL NEW_RECORD DATA', data);
-		yield delay(2000);
 		yield put(receiveCreateCrawlSource(data));
+		yield call(fetchAllCrawlSources);
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
@@ -65,8 +64,8 @@ function* updateCrawlSource(action) {
 			(o, [k, v]) => ((o[k] = v), o),
 			{}
 		);
-		yield delay(4000);
 		yield put(receiveUpdateCrawlSource(data));
+		yield call(fetchAllCrawlSources);
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
