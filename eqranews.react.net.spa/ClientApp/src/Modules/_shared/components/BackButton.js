@@ -11,7 +11,7 @@ export default class BackButton extends Component {
 						name="action"
 					>
 						Back
-						<i class="material-icons right">arrow_back</i>
+						<i className="material-icons right">arrow_back</i>
 					</button>
 				</a>
 			</div>

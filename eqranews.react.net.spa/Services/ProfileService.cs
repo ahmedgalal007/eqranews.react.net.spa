@@ -39,6 +39,10 @@ namespace eqranews.react.net.spa.Services
             var claims = await _userManager.GetClaimsAsync(user);
             foreach (var claim in claims)
             {
+                if(context.IssuedClaims.Any(C => C.Type == claim.Type))
+                {
+                    context.IssuedClaims.Remove(context.IssuedClaims.Find(C => C.Type == claim.Type)) ;
+                }
                 context.IssuedClaims.Add(new Claim(claim.Type, claim.Value));
             }
         }

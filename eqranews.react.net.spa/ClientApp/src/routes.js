@@ -15,4 +15,4 @@ const routes = {
 	],
 };
 
-export default [CrawlingRoutes, SettingsRoutes, UsersRoutes];
+export default [CrawlingRoutes, SettingsRoutes, UsersRoutes, NewsRoutes];

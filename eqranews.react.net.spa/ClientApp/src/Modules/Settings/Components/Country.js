@@ -132,10 +132,10 @@ export class Country extends Component {
 						component={CountryForm}
 						className="btn-floating btn-large waves-effect waves-light red"
 					>
-						<i class="material-icons">add</i>
+						<i className="material-icons">add</i>
 					</Link>
 					<a
-						class="waves-effect waves-red btn white black-text primary-content"
+						className="waves-effect waves-red btn white black-text primary-content"
 						href="javascript:{void(0)}"
 					>
 						Wave

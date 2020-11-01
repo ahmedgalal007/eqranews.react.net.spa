@@ -44,6 +44,7 @@ store.subscribe(() => {
 		CrawlSteps: store.getState().CrawlSteps,
 		CrawlItems: store.getState().CrawlItems,
 		Users: store.getState().Users,
+		NewsItems: store.getState().NewsItems,
 	});
 	//});
 });

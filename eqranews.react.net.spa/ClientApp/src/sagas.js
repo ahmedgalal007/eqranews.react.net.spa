@@ -14,5 +14,5 @@ export default function* rootSaga() {
 	// yield fork(SettingsSagas);
 	// code after all-effect
 	// { ...CrawlingSagas }
-	yield all([...crawlSagas, ...SettingsSagas, ...UsersSagas]);
+	yield all([...crawlSagas, ...SettingsSagas, ...UsersSagas, ...NewsSagas]);
 }

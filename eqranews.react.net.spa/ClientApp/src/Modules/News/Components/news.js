@@ -30,7 +30,7 @@ export class News extends Component {
 				{ title: 'ID', name: 'id' },
 				{ title: 'Title', name: 'title' },
 				{ title: 'Country', name: 'countryId' },
-				{ title: 'Source', name: 'SourceId' },
+				{ title: 'Source', name: 'sourceId' },
 				{
 					title: 'Edit',
 					width: 50,
@@ -109,7 +109,7 @@ export class News extends Component {
 					targets: 5,
 					createdCell: FormUtils.createDeleteButton(this.props.DeleteNews),
 				},
-				{ orderable: false, targets: [0, 4, 5] },
+				{ orderable: false, targets: [4, 5] },
 				// { visible: true, targets: [6] },
 			];
 		}
@@ -126,13 +126,13 @@ export class News extends Component {
 		return (
 			<section className="users-list-wrapper section">
 				<div className="users-list-table">
-					<Link
-						to="/crawl/source"
+					{/* <Link
+						to="/news"
 						component={News}
 						className="btn-floating btn-large waves-effect waves-light red"
 					>
 						<i className="material-icons">add</i>
-					</Link>
+					</Link> */}
 
 					<div className="card">
 						<div className="card-content">

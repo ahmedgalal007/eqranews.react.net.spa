@@ -9,6 +9,8 @@ using DAL.Crawling;
 using eqranews.react.net.spa.Data;
 using System.Net.Mime;
 using System.IO;
+using Microsoft.Win32.SafeHandles;
+using Microsoft.AspNetCore.Hosting;
 
 namespace eqranews.react.net.spa.Controllers
 {
@@ -18,9 +20,12 @@ namespace eqranews.react.net.spa.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public CrawlSourcesController(ApplicationDbContext context)
+        private readonly IWebHostEnvironment _env;
+
+        public CrawlSourcesController(IWebHostEnvironment env, ApplicationDbContext context)
         {
             _context = context;
+            _env = env;
         }
 
         // GET: api/CrawlSources
@@ -34,7 +39,8 @@ namespace eqranews.react.net.spa.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<CrawlSource>> GetCrawlSource(int id)
         {
-            var crawlSource = await _context.CrawlSources.Include(s => s.CrawlStepper).SingleAsync(s=> s.Id == id);
+            var crawlSource = await _context.CrawlSources.Include(s => s.CrawlStepper).SingleAsync(s => s.Id == id);
+            // crawlSource.Logo = Request.Scheme+ "://" + Request.Host.Value + "/" + crawlSource.Logo;
 
             if (crawlSource == null)
             {
@@ -47,12 +53,15 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCrawlSource([FromForm]int id, [FromForm]CrawlSource crawlSource)
+        public async Task<IActionResult> PutCrawlSource([FromForm] int id, [FromForm] CrawlSource crawlSource)
         {
             if (id != crawlSource.Id)
             {
                 return BadRequest();
             }
+
+            var files = HttpContext.Request.Form.Files;
+            await SaveFiles(files, _env.WebRootPath + "\\images\\sources\\", crawlSource);
 
             _context.Entry(crawlSource).State = EntityState.Modified;
 
@@ -79,23 +88,10 @@ namespace eqranews.react.net.spa.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<CrawlSource>> PostCrawlSource([FromForm]CrawlSource crawlSource)
+        public async Task<ActionResult<CrawlSource>> PostCrawlSource([FromForm] CrawlSource crawlSource)
         {
-            var fileBytes = new List<byte[]>();
             var files = HttpContext.Request.Form.Files;
-            foreach (var file in files)
-            {
-                if (file.Length > 0)
-                {
-                    using (var memoryStream = new MemoryStream())
-                    {
-                        await file.CopyToAsync(memoryStream);
-                        fileBytes.Add(memoryStream.ToArray());
-                    }
-                }
-            }
-            // TODO: Write Code For Save Or Send Result To Another Services For Save
-        
+            await SaveFiles(files, _env.WebRootPath + "\\images\\sources\\", crawlSource);
 
             _context.CrawlSources.Add(crawlSource);
             await _context.SaveChangesAsync();
@@ -122,6 +118,67 @@ namespace eqranews.react.net.spa.Controllers
         private bool CrawlSourceExists(int id)
         {
             return _context.CrawlSources.Any(e => e.Id == id);
+        }
+
+        public async Task SaveFiles(IFormFileCollection files, string path, CrawlSource crawlSource)
+        {
+            foreach (var file in files)
+            {
+                string name = crawlSource.Name.Replace(' ', '_');
+                string fileName = path + name + Path.GetExtension(GetValidFName(file.FileName));
+
+                await SaveFileToDisk(file, fileName);
+                crawlSource.Logo = "/" + path.TrimStart(_env.WebRootPath.ToCharArray()).Replace('\\', '/') + name + Path.GetExtension(GetValidFName(file.FileName));
+            }
+        }
+        public async Task SaveFileToDisk(IFormFile file, string fileName)
+        {
+            long size = file.Length;
+
+            if (file.Length > 0)
+            {
+                try
+                {
+                    //using (var memoryStream = new MemoryStream())
+                    //{
+                    //    //string location = "";
+                    //    file.CopyTo(memoryStream);
+                    //    using (FileStream fs = new FileStream(GetValidFName(fileName), FileMode.OpenOrCreate))
+                    //    {
+                    //        memoryStream.CopyTo(fs);
+                    //        // fs.Flush();
+                    //    }
+                    //}
+                    // using (var stream = System.IO.File.Create(GetValidFName(fileName)))
+
+                    Stream stream = new MemoryStream();
+                    file.CopyTo(stream);
+                    using (var fileStream = new FileStream(Path.GetFullPath(fileName), FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    {
+                        stream.Position = 0;
+                        await stream.CopyToAsync(fileStream);
+                    }
+                    stream.Dispose();
+
+                }
+                catch (Exception e)
+                {
+                    var err = e.Message;
+                }
+
+
+            }
+            // TODO: Write Code For Save Or Send Result To Another Services For Save
+
+        }
+
+        private string GetValidFName(string fileName)
+        {
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+            {
+                fileName = fileName.Replace(c, '_');
+            }
+            return fileName.Replace(' ', '_');
         }
     }
 }

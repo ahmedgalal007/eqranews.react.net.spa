@@ -1,3 +1,4 @@
 import newsSagas from './news';
+import newsItemSagas from './newsItem';
 
-export default [...newsSagas];
+export default [...newsSagas, ...newsItemSagas];

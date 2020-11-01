@@ -20,14 +20,14 @@ namespace eqranews.react.net.spa.Controllers
         }
 
         // GET: api/News
-        [HttpGet]
+        [HttpGet("GetNews")]
         public async Task<ActionResult<IEnumerable<News>>> GetNews()
         {
             return await _context.News.ToListAsync();
         }
 
         // GET: api/News/5
-        [HttpGet("{id}")]
+        [HttpGet("GetNews/{id}")]
         public async Task<ActionResult<News>> GetNews(int id)
         {
             var news = await _context.News.FindAsync(id);

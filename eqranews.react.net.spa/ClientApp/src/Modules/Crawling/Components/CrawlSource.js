@@ -7,6 +7,8 @@ import ReactDOM from 'react-dom';
 import {
 	requestCreateCrawlSource,
 	requestUpdateCrawlSource,
+	requestFetchCrawlSourceById,
+	requestFetchAllCrawlSources,
 } from '../Actions/CrawlSource';
 import {
 	requestFetchCrawlStepperBySource,
@@ -151,24 +153,31 @@ class CrawlSource extends React.Component {
 		} else {
 			this.props.updateCrawlSources(formData.get('id'), formData);
 		}
+		// $('.dropify-clear').click();
+		e.target.files = null;
 		// }
 	};
 
 	setFile = e => {
-		this.setState({ Logo: e.target.files[0] });
+		// this.setState({ Logo: e.target.files[0] });
+		console.log('target from setFile', e.target);
+		this.forceUpdate();
+		e.target.value = '';
 	};
 
 	componentWillMount = () => {
-		const scripts = AppUtilities.populateAllSctions();
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'app-assets/vendors/select2/select2.full.min.js'
-		);
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'/app-assets/vendors/dropify/js/dropify.js'
-		);
-		scripts.PAGE_LEVEL_JS.scripts.push(
-			'/app-assets/js/scripts/form-file-uploads.js'
-		);
+		// const scripts = AppUtilities.populateAllSctions();
+		// scripts.PAGE_VENDOR_JS.scripts.push(
+		// 	'app-assets/vendors/select2/select2.full.min.js'
+		// );
+		// scripts.PAGE_VENDOR_JS.scripts.push(
+		// 	'/app-assets/vendors/dropify/js/dropify.js'
+		// );
+
+		/////////////////////////////////////////////////////////////////
+		// scripts.PAGE_LEVEL_JS.scripts.push(
+		// 	'/app-assets/js/scripts/form-file-uploads.js'
+		// );
 		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
 		// if (this.state.id && !this.state.IsChildrenLoaded) {
 		this.props.FetchCrawlStepperBySource(this.state.id);
@@ -213,11 +222,34 @@ class CrawlSource extends React.Component {
 		// });
 	};
 
+	componentDidUpdate = () => {
+		// if (window.jQuery && window.M) {
+		// 	const $ = window.jQuery;
+		// 	var drEvent = $('.dropify-event');
+		// 	drEvent.empty();
+		// 	drEvent.dropify({
+		// 		defaultFile: this.state.logo,
+		// 	});
+		// }
+	};
 	componentDidMount = () => {
 		// var dropify = require('../../../vendors/dropify/js/dropify');
-		console.log('CarwlSource-Props', this.props);
+		// this.props.FetchAllCrawlSources();
+		// if (window.jQuery && window.M) {
+		// 	const $ = window.jQuery;
+		// 	var drEvent = $('.dropify-event');
+		// 	drEvent.empty();
+		// 	drEvent.data = null;
+		// 	drEvent.dropify({
+		// 		defaultFile: this.state.logo,
+		// 	});
+		// }
+
+		// console.log('CarwlSource-Props', this.props);
 		if (window.jQuery && window.M) {
 			const $ = window.jQuery;
+			//$('.dropify-event').val('');
+
 			// $(document).ready(
 			// 	function () {
 			//if (window.jQuery) this.loadPageScripts(window.jQuery);
@@ -228,17 +260,20 @@ class CrawlSource extends React.Component {
 			//	);
 			$(document).ready(function () {
 				// Basic
-				$('.dropify').dropify();
-
+				// $('.dropify').dropify();
 				// Used events
 				var drEvent = $('.dropify-event').dropify();
 
-				drEvent.on('dropify.beforeClear', function (event, element) {
-					// eslint-disable-next-line no-restricted-globals
-					return confirm(
-						'Do you really want to delete "' + element.filename + '" ?'
-					);
-				});
+				drEvent.on(
+					'dropify.beforeClear',
+					function (event, element) {
+						// eslint-disable-next-line no-restricted-globals
+						return confirm(
+							'Do you really want to delete "' + element.filename + '" ?'
+						);
+					},
+					this.loadPageScripts
+				);
 
 				drEvent.on('dropify.afterClear', function (event, element) {
 					alert('File deleted');
@@ -255,10 +290,16 @@ class CrawlSource extends React.Component {
 	};
 
 	render() {
-		const { id, name, domainURL, countryId, logo, crawlStepper } = this.state;
+		const { id, name, domainURL, countryId, crawlStepper } = this.state;
+		let DLogo = this.state.logo;
+		if (this.state.logo == undefined || this.state.logo == '')
+			DLogo = '/images/sources/Al_Ahram.png';
+		// document.querySelector('.dropify-render img').src = logo;
+		// document.querySelector(".dropify-event").setAttribute("data-default-file", DLogo);
 
+		console.log('logo var in render', this.state.logo);
 		const errors = this.state.Errors;
-		console.log('Steppers', this.props.crawlSteppers);
+		// console.log('Steppers', this.props.crawlSteppers);
 		return (
 			<div className="row">
 				<div className="col s12">
@@ -283,89 +324,98 @@ class CrawlSource extends React.Component {
 									onSubmit={this.handelSubmit}
 								>
 									<div className="row">
-										<div className="input-field col s12">
-											<input
-												className="validate"
-												id="id"
-												name="id"
-												type="hidden"
-												value={id}
-											/>
-										</div>
-										<div className="input-field col s12">
-											<label className="active" htmlFor="name">
-												Name*
-											</label>
-											<input
-												className="validate"
-												id="name"
-												name="name"
-												type="text"
-												data-error=".errorTxt1"
-												onChange={this.handelInputChange}
-												value={name}
-												required
-												{...(errors.name && {
-													error: 'true',
-													'data-pattern-error': errors.name,
-												})}
-											/>
-											<small className="errorTxt1"></small>
-										</div>
-										<div className="input-field col s12">
-											<label className="active" htmlFor="domainURL">
-												Domain URL *
-											</label>
-											<input
-												dir="ltr"
-												className="validate"
-												id="domainURL"
-												type="url"
-												name="domainURL"
-												data-error=".errorTxt5"
-												onChange={this.handelInputChange}
-												value={domainURL}
-												required
-											/>
-											<small className="errorTxt5"></small>
-										</div>
-										<div className="input-field col s12">
-											<label
-												className="active"
-												htmlFor="countryId"
-												style={{
-													position: 'absolute',
-													top: '-14px',
-													fontSize: '0.8rem',
-												}}
-											>
-												COUNTRY *
-											</label>
-											<select
-												className="validate select2-data-array browser-default"
-												id="countryId"
-												type="text"
-												name="countryId"
-												data-error=".errorTxt5"
-												onChange={this.handelInputChange}
-												value={countryId}
-											></select>
-											<small className="errorTxt5"></small>
-										</div>
-										<div className="input-field col s12">
-											<div className=" section">
-												<label className="active" htmlFor="logo">
-													Maximum file upload size 512K.
-												</label>
+										<div className="col s12 l4">
+											<div className="input-field col s12">
+												<div className=" section">
+													<label className="active" htmlFor="logo">
+														Maximum file upload size 512K.
+													</label>
+												</div>
+												<input
+													name="logo"
+													type="file"
+													id="input-file-max-fs"
+													className="dropify-event"
+													onChange={this.setFile}
+													data-max-file-size="512K"
+													data-allowed-file-extensions="jpg png jpeg webp"
+													data-default-file={DLogo}
+												/>
 											</div>
-											<input
-												name="logo"
-												type="file"
-												id="input-file-max-fs"
-												className="dropify-event"
-												data-max-file-size="512K"
-											/>
 										</div>
+										<div className="col s12 l8">
+											<div className="input-field col s12">
+												<input
+													className="validate"
+													id="id"
+													name="id"
+													type="hidden"
+													value={id}
+												/>
+											</div>
+											<div className="input-field col s12">
+												<label className="active" htmlFor="name">
+													Name*
+												</label>
+												<input
+													className="validate"
+													id="name"
+													name="name"
+													type="text"
+													data-error=".errorTxt1"
+													onChange={this.handelInputChange}
+													value={name}
+													required
+													{...(errors.name && {
+														error: 'true',
+														'data-pattern-error': errors.name,
+													})}
+												/>
+												<small className="errorTxt1"></small>
+											</div>
+											<div className="input-field col s12">
+												<label className="active" htmlFor="domainURL">
+													Domain URL *
+												</label>
+												<input
+													dir="ltr"
+													className="validate"
+													id="domainURL"
+													type="url"
+													name="domainURL"
+													data-error=".errorTxt5"
+													onChange={this.handelInputChange}
+													value={domainURL}
+													required
+												/>
+												<small className="errorTxt5"></small>
+											</div>
+											<div className="input-field col s12">
+												<label
+													className="active"
+													htmlFor="countryId"
+													style={{
+														position: 'absolute',
+														top: '-14px',
+														fontSize: '0.8rem',
+													}}
+												>
+													COUNTRY *
+												</label>
+												<select
+													className="validate select2-data-array browser-default"
+													id="countryId"
+													type="text"
+													name="countryId"
+													data-error=".errorTxt5"
+													onChange={this.handelInputChange}
+													value={countryId}
+												></select>
+												<small className="errorTxt5"></small>
+											</div>
+										</div>
+									</div>
+									<div className="row">
 										<div className="input-field col s12">
 											<button
 												className="btn waves-effect waves-light right submit"
@@ -384,7 +434,7 @@ class CrawlSource extends React.Component {
 				</div>
 
 				{id && id > 0 ? this.renderChildForm() : null}
-				<script src="../../../app-assets/js/scripts/form-file-uploads.js"></script>
+				{/* <script src="../../../app-assets/js/scripts/form-file-uploads.js"></script> */}
 			</div>
 		);
 	}
@@ -451,7 +501,7 @@ class CrawlSource extends React.Component {
 			const $ = window.jQuery;
 			$(document).ready(() => {
 				// Basic
-				$('.dropify').dropify();
+				// $('.dropify').dropify();
 				// console.log($('.dropify').dropify());
 				// Translated
 				// $('.dropify-fr').dropify({
@@ -492,6 +542,8 @@ const mapStateToProps = state => {
 };
 
 const mapActionToProps = {
+	FetchCrawlSourceById: requestFetchCrawlSourceById,
+	FetchAllCrawlSources: requestFetchAllCrawlSources,
 	createCrawlSources: requestCreateCrawlSource,
 	updateCrawlSources: requestUpdateCrawlSource,
 	FetchCrawlStepperBySource: requestFetchCrawlStepperBySource,

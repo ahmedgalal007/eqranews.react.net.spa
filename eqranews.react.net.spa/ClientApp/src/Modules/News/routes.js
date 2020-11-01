@@ -1,18 +1,19 @@
 import React, { Fragment } from 'react';
 import { Route, withRouter } from 'react-router-dom';
 import News from './Components/news';
+import NewsItem from './Components/newsItem';
 
 export const NewsPrefix = '/news';
 
 export const routes = {
 	title: 'NEWS',
-	icon: 'ac_unit',
+	icon: 'import_contacts',
 	color: '#ff8765',
 	routeArr: [
 		{
 			path: `${NewsPrefix}`,
 			exact: true,
-			title: 'NEWS',
+			title: 'News List',
 			component: News,
 		},
 		// {
@@ -41,6 +42,10 @@ export class NewsRoutes extends React.Component {
 		return (
 			<Fragment>
 				<Route exact path={`${NewsPrefix}`} component={withRouter(News)} />
+				<Route
+					path={`${NewsPrefix}/newsitem/:id?`}
+					component={withRouter(NewsItem)}
+				/>
 				{
 					// <Route
 					// 	path={`${NewsPrefix}/newsitem/:id?`}

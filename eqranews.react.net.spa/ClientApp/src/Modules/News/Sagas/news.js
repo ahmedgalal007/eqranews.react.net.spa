@@ -16,11 +16,13 @@ import {
 	delay,
 	takeLeading,
 } from 'redux-saga/effects';
-import ApiProxy, { AddApiFilter } from '../../_shared/api/ApiProxy';
 
-const Api = ApiProxy('news').AddApiFilter('Category');
+// import ApiProxy, { AddApiFilter } from '../../_shared/api/ApiProxy';
+// const Api = ApiProxy('news').AddApiFilter('Category');
 
-console.log('API_WITH_FILTER_CATEGORY:', Api);
+import ApiFactory from '../Api/news';
+const Api = ApiFactory();
+console.log('API_WITH_FILTER_NEWS:', Api);
 
 function* fetchAllNews() {
 	try {
@@ -48,7 +50,6 @@ function* fetchNewsByCategory(action) {
 		});
 
 		const data = yield call(Api.filterByCategory, action.data);
-		yield delay(2000);
 		yield put(receiveFetchNewsByCategory(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -66,7 +67,6 @@ function* createNews(action) {
 			data: true,
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
-		yield delay(2000);
 		yield put(receiveCreateNews(data));
 		yield put({
 			type: 'PAGE_LOADING',

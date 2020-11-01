@@ -61,7 +61,7 @@ namespace eqranews.react.net.spa.IdentityServer
                  {
                      ClientId = "client_id",
                      ClientSecrets = { new Secret("client_secret".ToSha256()) },
-                     AllowedGrantTypes = GrantTypes.Code,
+                     AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                      AlwaysIncludeUserClaimsInIdToken = true,
                      // where to redirect to after login
                      RedirectUris = { "https://localhost:44369/signin-oidc" },
