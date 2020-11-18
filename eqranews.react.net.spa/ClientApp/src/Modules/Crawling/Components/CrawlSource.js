@@ -13,6 +13,7 @@ import {
 	requestFetchCrawlStepperBySource,
 	requestDeleteCrawlStepper,
 } from '../Actions/CrawlStepper';
+
 import BackButton from '../../_shared/components/BackButton';
 // import useForm from '../../_shared/components/useForm';
 // import $ from 'jquery';
@@ -25,20 +26,29 @@ import * as AppUtilities from '../../_shared/lib/AppUtilities';
 import { DTable } from '../../_shared/components/DTable';
 
 import FormUtils from '../../_shared/lib/FormUtils';
-import { CrawlStepper } from './CrawlStepper';
+import CrawlStepper from './CrawlStepper';
 
 // var $ = require('jquery');
 
 class CrawlSource extends React.Component {
 	constructor(props) {
 		super(props);
-		this.props.FetchAllCrawlSources();
 		const {
 			match: { params },
 		} = this.props;
+		this.props.location.state = {
+			crawlSourceId: params.id,
+		};
+		this.props.updateNavigationState({
+			crawlSourceId: params.id,
+		});
+
+		// this.props.FetchAllCrawlSources();
+		this.props.FetchCrawlStepperBySource(params.id);
 
 		const initialFieldValues = this.initialFieldValues(params.id);
 		this.state = { ...initialFieldValues, Errors: {} };
+
 		this.columns = [
 			{ title: 'ID', name: 'id' },
 			{ title: 'NAME', name: 'name' },
@@ -58,20 +68,19 @@ class CrawlSource extends React.Component {
 				// }),
 				createdCell: (td, cellData, rowData, row, col) => {
 					const lnkSTr = '/crawl/stepper/' + rowData[0];
-					this.props.updateNavigationState({
-						...this.props.navigationState,
-						crawlSourceId: this.state.id,
-					});
+
+					console.log('this.props.location.state', this.props.location.state);
+
 					return ReactDOM.render(
 						<a
 							style={{ cursor: 'pointer', color: 'green' }}
 							onClick={() => {
-								// this.props.location.state = {
-								// 	crawlSourceId: this.state.id,
-								// };
+								this.props.location.state = {
+									crawlSourceId: this.state.id,
+								};
 								this.props.history.push({
 									pathname: lnkSTr,
-									state: this.props.navigationState,
+									state: { crawlSourceId: this.state.id }, //, this.props.navigationState
 								});
 							}}
 						>
@@ -179,7 +188,6 @@ class CrawlSource extends React.Component {
 		// );
 		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
 		// if (this.state.id && !this.state.IsChildrenLoaded) {
-		this.props.FetchCrawlStepperBySource(this.state.id);
 		// 	this.setState({ IsChildrenLoaded: true });
 		// }
 
@@ -286,7 +294,6 @@ class CrawlSource extends React.Component {
 				// });
 			}
 		}
-		this.props.FetchAllCrawlSources();
 
 		document.getElementsByClassName('dropify-event').filename = '';
 		document
@@ -438,14 +445,66 @@ class CrawlSource extends React.Component {
 					</div>
 				</div>
 
-				{id && id > 0 ? this.renderChildForm() : null}
+				{
+					// id && id > 0 ? this.renderChildForm(id) : null
+				}
+				<div className="col s12">
+					<div id="validations" className="card card-tabs">
+						<div className="card-content">
+							<div className="card-title">
+								<div className="row">
+									<div className="col s12 m6 l10">
+										<h4 className="card-title">Crawl Steppers</h4>
+									</div>
+								</div>
+							</div>
+							<div id="Crawl-Steppers">
+								<section className="users-list-wrapper section">
+									<div className="users-list-table">
+										<Link
+											to={{
+												pathname: '/crawl/stepper/',
+												state: { id: 0, crawlSourceId: this.state.id },
+											}}
+											component={CrawlStepper}
+											className="btn-floating btn-large waves-effect waves-light red"
+										>
+											<i className="material-icons">add</i>
+										</Link>
+
+										<a className="waves-effect waves-red btn white red-text primary-content">
+											<i className="material-icons left">add_to_photos</i> جديد
+										</a>
+										<div className="card">
+											<div className="card-content">
+												<DTable
+													data={FormUtils.tableData(
+														this.columns,
+														this.props.crawlSteppers.length > 0
+															? this.props.crawlSteppers.filter(
+																	x => x.crawlSourceId == id
+															  )
+															: []
+													)}
+													columns={this.columns}
+													formate={this.formate}
+													columnDefs={this.columnDefs}
+												></DTable>
+											</div>
+										</div>
+									</div>
+								</section>
+							</div>
+						</div>
+					</div>
+				</div>
 				{/* <script src="../../../app-assets/js/scripts/form-file-uploads.js"></script> */}
 			</div>
 		);
 	}
 
-	renderChildForm = () => {
-		const { id, name, domainURL, countryId, logo, crawlStepper } = this.state;
+	renderChildForm = id => {
+		//const { id, name, domainURL, countryId, logo, crawlStepper } = this.state;
 
 		return (
 			<div className="col s12">
@@ -473,7 +532,7 @@ class CrawlSource extends React.Component {
 									</Link>
 
 									<a className="waves-effect waves-red btn white red-text primary-content">
-										<i class="material-icons left">add_to_photos</i> جديد
+										<i className="material-icons left">add_to_photos</i> جديد
 									</a>
 									<div className="card">
 										<div className="card-content">

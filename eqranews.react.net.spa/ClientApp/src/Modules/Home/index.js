@@ -1,6 +1,16 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-export default class Home extends Component {
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { requestFetchAllCountries } from '../Settings/Actions/Country';
+import { requestFetchAllCrawlStepTypes } from '../Settings/Actions/CrawlStepType';
+import { requestFetchAllCategories } from '../Settings/Actions/Category';
+class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.props.FetchAllCategories();
+		this.props.FetchAllCountries();
+		this.props.FetchAllCrawlStepTypes();
+	}
 	render() {
 		return (
 			<div className="section">
@@ -20,3 +30,15 @@ export default class Home extends Component {
 		);
 	}
 }
+
+const mapStateToProps = state => {
+	return { ...state };
+};
+
+const mapActionToProps = {
+	FetchAllCategories: requestFetchAllCategories,
+	FetchAllCountries: requestFetchAllCountries,
+	FetchAllCrawlStepTypes: requestFetchAllCrawlStepTypes,
+};
+
+export default connect(mapStateToProps, mapActionToProps)(withRouter(Home));

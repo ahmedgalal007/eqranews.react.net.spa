@@ -12,86 +12,101 @@ import {
 	requestFetchAllCrawlSources,
 	requestDeleteCrawlSource,
 } from '../Actions/CrawlSource';
+
 import { requestFetchAllCountries } from '../../Settings/Actions/Country';
+import { requestFetchAllCategories } from '../../Settings/Actions/Category';
+import { requestFetchAllCrawlStepTypes } from '../../Settings/Actions/CrawlStepType';
+import { bindActionCreators } from 'redux';
 
 export class Crawl extends Component {
 	_IsMounted = false;
 
-	componentDidMount = () => {
+	constructor(props) {
+		super(props);
 		//if (!(this.props.countries && this.props.countries.length > 0))
 		this.props.FetchAllCountries();
-		this.props.FetchAllCrawlSources();
-	};
+		this.props.FetchAllCategories();
+		this.props.FetchAllCrawlStepTypes();
+
+		// const data = {
+		// 	callback: function () {
+		// 		this.forceUpdate;
+		// 	}.bind(this),
+		// };
+		this.props.FetchAllCrawlSources({
+			callback: () => {
+				this.forceUpdate();
+			},
+		});
+		this.forceUpdate();
+	}
 
 	componentWillMount = () => {
 		this._IsMounted = true;
 
-		if (this._IsMounted) {
-			this.columns = [
-				{ title: 'ID', name: 'id' },
-				{ title: 'NAME', name: 'name' },
-				{ title: 'DOMIAN', name: 'domainURL' },
-				{ title: 'COUNTRY', name: 'countryId' },
-				{
-					title: 'Edit',
-					width: 50,
-					class: '',
-					orderable: false,
-					data: null,
-					defaultContent: '',
-				},
-				{
-					title: 'Delete',
-					width: 50,
-					class: '',
-					orderable: false,
-					data: null,
-					defaultContent: '',
-				},
-			];
+		// if (this._IsMounted) {
+		this.columns = [
+			{ title: 'ID', name: 'id' },
+			{ title: 'NAME', name: 'name' },
+			{ title: 'DOMIAN', name: 'domainURL' },
+			{ title: 'COUNTRY', name: 'countryId' },
+			{
+				title: 'Edit',
+				width: 50,
+				class: '',
+				orderable: false,
+				data: null,
+				defaultContent: '',
+			},
+			{
+				title: 'Delete',
+				width: 50,
+				class: '',
+				orderable: false,
+				data: null,
+				defaultContent: '',
+			},
+		];
 
-			this.columnDefs = [
-				{
-					targets: 3,
-					createdCell: (td, cellData, rowData, row, col) => {
-						const linkStr = '/settings/country/' + rowData[3];
-						const Country = this.props.countries.filter(
-							x => x.id == rowData[3]
-						);
-						return ReactDOM.render(
-							<a
-								style={{ cursor: 'pointer' }}
-								className="danger"
-								onClick={() => {
-									//console.log(props.history);
-									this.props.history.push(linkStr);
-								}}
-							>
-								{Country && Country.length > 0
-									? Country[0].name
-									: 'Country Not Found!'}
-							</a>,
-							td
-						);
-					},
+		this.columnDefs = [
+			{
+				targets: 3,
+				createdCell: (td, cellData, rowData, row, col) => {
+					const linkStr = '/settings/country/' + rowData[3];
+					const Country = this.props.countries.filter(x => x.id == rowData[3]);
+					return ReactDOM.render(
+						<a
+							style={{ cursor: 'pointer' }}
+							className="danger"
+							onClick={() => {
+								//console.log(props.history);
+								this.props.history.push(linkStr);
+							}}
+						>
+							{Country && Country.length > 0
+								? Country[0].name
+								: 'Country Not Found!'}
+						</a>,
+						td
+					);
 				},
-				{
-					targets: 4,
-					createdCell: FormUtils.createEditButton(
-						'/crawl/source/',
-						this.props.history
-					),
-				},
-				{
-					targets: 5,
-					createdCell: FormUtils.createDeleteButton(
-						this.props.DeleteCrawlSource
-					),
-				},
-				{ orderable: false, targets: [0, 4, 5] },
-				// { visible: true, targets: [6] },
-			];
-		}
+			},
+			{
+				targets: 4,
+				createdCell: FormUtils.createEditButton(
+					'/crawl/source/',
+					this.props.history,
+					this.props.location.state
+				),
+			},
+			{
+				targets: 5,
+				createdCell: FormUtils.createDeleteButton(this.props.DeleteCrawlSource),
+			},
+			{ orderable: false, targets: [0, 4, 5] },
+			// { visible: true, targets: [6] },
+		];
+		// }
 	};
 
 	formate = (d, cols = []) => {
@@ -163,6 +178,8 @@ const mapStateToProps = state => {
 
 const mapActionToProps = {
 	FetchAllCountries: requestFetchAllCountries,
+	FetchAllCategories: requestFetchAllCategories,
+	FetchAllCrawlStepTypes: requestFetchAllCrawlStepTypes,
 	FetchAllCrawlSources: requestFetchAllCrawlSources,
 	DeleteCrawlSource: requestDeleteCrawlSource,
 };

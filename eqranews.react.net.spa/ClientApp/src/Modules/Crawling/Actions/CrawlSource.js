@@ -11,9 +11,13 @@ export const CRAWL_SOURCE_ACTIONS = {
 	RECEIVE_CRAWL_SOURCE_DELETE: 'RECEIVE_CRAWL_SOURCE_DELETE',
 };
 
-export const requestFetchAllCrawlSources = () => ({
+// export const requestFetchAllCrawlSources = () => ({
+// 	type: CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_FETCH_ALL,
+// 	data: null,
+// });
+export const requestFetchAllCrawlSources = data => ({
 	type: CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_FETCH_ALL,
-	data: null,
+	data: data,
 });
 
 export const requestFetchCrawlSourceById = id => ({

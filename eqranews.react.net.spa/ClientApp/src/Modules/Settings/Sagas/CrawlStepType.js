@@ -18,7 +18,6 @@ function* fetchAllCrawlStepTypes() {
 	});
 	const data = yield call(Api.fetchAll);
 	yield console.log('CrawlStepTypesData:', data);
-	yield delay(4000);
 	yield put(receiveFetchAllCrawlStepTypes(data));
 	yield put({
 		type: 'PAGE_LOADING',
@@ -33,7 +32,6 @@ function* createCrawlStepType(action) {
 			data: true,
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
-		yield delay(4000);
 		yield put(receiveCreateCrawlStepType(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -56,7 +54,6 @@ function* updateCrawlStepType(action) {
 			(o, [k, v]) => ((o[k] = v), o),
 			{}
 		);
-		yield delay(4000);
 		yield put(receiveUpdateCrawlStepType(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -82,10 +79,12 @@ function* deleteCrawlStepType(action) {
 
 // All the Sagas Catchers to Export
 function* fetchAllCrawlStepTypesSaga() {
-	yield take(
-		SETTINGS_CRAWLSTEPTYPE_ACTIONS.REQUEST_SETTINGS_CRAWLSTEPTYPE_FETCH_ALL
-	);
-	yield call(fetchAllCrawlStepTypes);
+	while (true) {
+		yield take(
+			SETTINGS_CRAWLSTEPTYPE_ACTIONS.REQUEST_SETTINGS_CRAWLSTEPTYPE_FETCH_ALL
+		);
+		yield call(fetchAllCrawlStepTypes);
+	}
 }
 function* createCrawlStepTypeSaga() {
 	console.log('SAGA Intercept crawlsteptype');

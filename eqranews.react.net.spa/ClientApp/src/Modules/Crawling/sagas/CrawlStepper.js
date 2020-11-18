@@ -104,10 +104,12 @@ function* deleteCrawlStepper(action) {
 
 // All the Sagas Catchers to Export
 function* fetchCrawlStepperBySourceSaga() {
-	const action = yield take(
-		CRAWL_STEPPER_ACTIONS.REQUEST_CRAWL_STEPPER_FETCH_BY_SOURCE
-	);
-	yield call(fetchCrawlStepperBySource, action);
+	while (true) {
+		const action = yield take(
+			CRAWL_STEPPER_ACTIONS.REQUEST_CRAWL_STEPPER_FETCH_BY_SOURCE
+		);
+		yield call(fetchCrawlStepperBySource, action);
+	}
 }
 
 function* createCrawlStepperSaga() {

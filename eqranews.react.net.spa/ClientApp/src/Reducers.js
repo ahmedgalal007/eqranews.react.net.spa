@@ -31,7 +31,7 @@ const NavigationState = (state = {}, { type: type, data: data }) => {
 			return { ...data };
 			break;
 		default:
-			return {};
+			return data || {};
 	}
 };
 

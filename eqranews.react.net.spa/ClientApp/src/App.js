@@ -22,7 +22,10 @@ import NotFound from './Modules/_shared/components/NotFound';
 
 export class App extends Component {
 	static displayName = App.name;
-
+	constructor(props) {
+		super(props);
+		this.state = {};
+	}
 	render() {
 		// console.log('App Props:', this.props);
 		return (

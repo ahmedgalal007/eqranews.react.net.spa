@@ -16,6 +16,7 @@ export class Category extends Component {
 			{ title: 'Id', name: 'id', width: '10%' },
 			{ title: 'Name', name: 'name' },
 			{ title: 'Color', name: 'color' },
+			{ title: 'Default', name: 'default' },
 			{ title: 'Parent', name: 'parentId', searchable: true },
 			{
 				width: '10%',
@@ -36,7 +37,7 @@ export class Category extends Component {
 		];
 
 		this.columnDefs = [
-			{ responsivePriority: 1, targets: [4, 5] },
+			{ responsivePriority: 1, targets: [3, 5, 6] },
 			{
 				targets: 2,
 				createdCell: (td, cellData, rowData, row, col) => {
@@ -44,7 +45,11 @@ export class Category extends Component {
 						<div class="col s6 m3 l2">
 							<a
 								class="btn z-depth-2"
-								style={{ background: rowData[2], cursor: 'default' }}
+								style={{
+									background: rowData[2],
+									cursor: 'default',
+									minWidth: '120px',
+								}}
 							>
 								{rowData[2]}
 							</a>
@@ -57,10 +62,29 @@ export class Category extends Component {
 				targets: 3,
 				searchable: true,
 				createdCell: (td, cellData, rowData, row, col) => {
+					console.log('rowData[3]', rowData[3]);
+					this.forceUpdate();
+					return ReactDOM.render(
+						<label>
+							<input
+								type="checkbox"
+								checked={rowData[3] ? 'checked' : ''}
+								disabled="disabled"
+							/>
+							<span></span>
+						</label>,
+						td
+					);
+				},
+			},
+			{
+				targets: 4,
+				searchable: true,
+				createdCell: (td, cellData, rowData, row, col) => {
 					return ReactDOM.render(
 						<div class="col s6 m3 l2">
-							{rowData[3]
-								? this.props.data.filter(x => x.id == rowData[3])[0].name
+							{rowData[4]
+								? this.props.data.filter(x => x.id == rowData[4])[0].name
 								: ''}
 						</div>,
 						td
@@ -68,7 +92,7 @@ export class Category extends Component {
 				},
 			},
 			{
-				targets: 4,
+				targets: 5,
 				createdCell: (td, cellData, rowData, row, col) => {
 					const linkStr = '/settings/category/' + rowData[0];
 					return ReactDOM.render(
@@ -85,7 +109,7 @@ export class Category extends Component {
 				},
 			},
 			{
-				targets: 5,
+				targets: 6,
 				createdCell: (td, cellData, rowData, row, col) => {
 					return ReactDOM.render(
 						<a

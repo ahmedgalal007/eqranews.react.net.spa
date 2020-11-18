@@ -11,6 +11,7 @@ namespace DAL.Store
         public Category()
         {
             Childrens = new HashSet<Category>();
+            Default = false;
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -18,6 +19,7 @@ namespace DAL.Store
 
         public string Name { get; set; }
         public string Color { get; set; }
+        public bool Default { get; set; }
         public int? ParentId { get; set; }
         public virtual Category Parent { get; set; }
 

@@ -23,6 +23,7 @@ export class CategoryForm extends Component {
 		const initialFieldValues = this.initialFieldValues(params.id);
 		this.state = { ...initialFieldValues, Errors: {} };
 		console.log('Values: ', this.state);
+		this.switch = React.createRef();
 	}
 
 	componentDidMount = () => {
@@ -97,6 +98,7 @@ export class CategoryForm extends Component {
 			id: id,
 			name: '',
 			color: '',
+			default: false,
 			parentId: '',
 		};
 
@@ -120,6 +122,19 @@ export class CategoryForm extends Component {
 		console.log(fieldValue);
 	};
 
+	handelCkeckboxChange = e => {
+		console.log('Checked Box Clicked!!  ', e.target.type);
+		let { value, checked } = e.target;
+		if (e.target.type == 'checkbox') {
+			value = checked ? true : false;
+			this.switch.setAttribute('value', value ? 'true' : 'false');
+			this.switch.value = value ? 'true' : 'false';
+			const fieldValue = { [this.switch.name]: value };
+			//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
+			this.setState(fieldValue);
+			this.validate(fieldValue);
+		}
+	};
 	validate = (fieldValues = this.state) => {
 		console.log('fieldValues:', fieldValues);
 		let temp = {};
@@ -158,6 +173,7 @@ export class CategoryForm extends Component {
 
 	render() {
 		const { id, name, color, parentId } = this.state;
+		const Default = this.state.default;
 		const errors = this.state.Errors;
 		console.log('Props', this.state);
 		return (
@@ -225,7 +241,27 @@ export class CategoryForm extends Component {
 													/>
 												</div>
 											</div>
-
+											<div className="input-field col s12">
+												<div className="switch">
+													<label htmlFor="Ckeck01">
+														<input
+															id="Ckeck01"
+															type="checkbox"
+															onChange={this.handelCkeckboxChange}
+															checked={Default}
+														/>
+														<span className="lever"></span>
+														Default
+													</label>
+													<input
+														id="default"
+														ref={el => (this.switch = el)}
+														name="default"
+														type="hidden"
+														value={Default ? 'true' : 'false'}
+													></input>
+												</div>
+											</div>
 											<small className="errorTxt5"></small>
 										</div>
 										<div className="input-field col s12">

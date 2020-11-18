@@ -17,7 +17,6 @@ function* fetchAllCategories() {
 		data: true,
 	});
 	const data = yield call(Api.fetchAll);
-	yield delay(2000);
 	console.log('Categories Data From Saga', data);
 	yield put(receiveFetchAllCategories(data));
 	yield put({
@@ -33,7 +32,6 @@ function* createCategory(action) {
 			data: true,
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
-		yield delay(2000);
 		yield put(receiveCreateCategory(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -56,7 +54,6 @@ function* updateCategory(action) {
 			(o, [k, v]) => ((o[k] = v), o),
 			{}
 		);
-		yield delay(4000);
 		yield put(receiveUpdateCategory(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -84,8 +81,10 @@ function* deleteCategory(action) {
 
 // All the Sagas Catchers to Export
 function* fetchAllCategoriesSaga() {
-	yield take(SETTINGS_CATEGORY_ACTIONS.REQUEST_SETTINGS_CATEGORY_FETCH_ALL);
-	yield call(fetchAllCategories);
+	while (true) {
+		yield take(SETTINGS_CATEGORY_ACTIONS.REQUEST_SETTINGS_CATEGORY_FETCH_ALL);
+		yield call(fetchAllCategories);
+	}
 }
 function* createCategorySaga() {
 	yield takeLatest(

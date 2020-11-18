@@ -56,6 +56,8 @@ namespace eqranews.react.net.spa.Controllers
 
             _context.Entry(category).State = EntityState.Modified;
 
+            if (category.Default) SetDefaultCategory(category, EntityState.Modified);
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -75,6 +77,8 @@ namespace eqranews.react.net.spa.Controllers
             return NoContent();
         }
 
+
+
         // POST: api/Categories
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
@@ -82,6 +86,8 @@ namespace eqranews.react.net.spa.Controllers
         public async Task<ActionResult<Category>> PostCategory([FromForm] Category category)
         {
             _context.Categories.Add(category);
+            if (category.Default) SetDefaultCategory(category, EntityState.Added);
+
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCategory", new { id = category.Id }, category);
@@ -119,6 +125,17 @@ namespace eqranews.react.net.spa.Controllers
         private bool CategoryExists(int id)
         {
             return _context.Categories.Any(e => e.Id == id);
+        }
+
+        private void SetDefaultCategory(Category category, EntityState state)
+        {
+            foreach (var cat in _context.Categories.ToList())
+            {
+                cat.Default = false;
+                _context.Entry(cat).State = EntityState.Modified;
+            }
+            category.Default = true;
+            _context.Entry(category).State = state;
         }
     }
 }

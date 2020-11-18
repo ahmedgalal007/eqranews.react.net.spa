@@ -28,7 +28,7 @@ function* fetchCrawlItemByStep(action) {
 		});
 
 		const data = yield call(Api.filterByStep, action.data);
-		yield delay(2000);
+		// yield delay(2000);
 		yield put(receiveFetchCrawlItemByStep(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -69,7 +69,6 @@ function* updateCrawlItem(action) {
 			(o, [k, v]) => ((o[k] = v), o),
 			{}
 		);
-		yield delay(4000);
 		yield put(receiveUpdateCrawlItem(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -95,10 +94,12 @@ function* deleteCrawlItem(action) {
 
 // All the Sagas Catchers to Export
 function* fetchCrawlItemByStepSaga() {
-	const action = yield take(
-		CRAWL_ITEM_ACTIONS.REQUEST_CRAWL_ITEM_FETCH_BY_STEP
-	);
-	yield call(fetchCrawlItemByStep, action);
+	while (true) {
+		const action = yield take(
+			CRAWL_ITEM_ACTIONS.REQUEST_CRAWL_ITEM_FETCH_BY_STEP
+		);
+		yield call(fetchCrawlItemByStep, action);
+	}
 }
 function* createCrawlItemSaga() {
 	yield console.log('Crawl Item Create Requested!!!');

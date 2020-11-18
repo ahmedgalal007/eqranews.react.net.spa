@@ -10,7 +10,7 @@ import authService from './AuthorizeService';
 export default class AuthorizeRoute extends Component {
 	constructor(props) {
 		super(props);
-
+		this._isMounted = false;
 		this.state = {
 			ready: false,
 			authenticated: false,
@@ -18,6 +18,7 @@ export default class AuthorizeRoute extends Component {
 	}
 
 	componentDidMount() {
+		this._isMounted = true;
 		this._subscription = authService.subscribe(() =>
 			this.authenticationChanged()
 		);
@@ -26,6 +27,7 @@ export default class AuthorizeRoute extends Component {
 
 	componentWillUnmount() {
 		authService.unsubscribe(this._subscription);
+		this._isMounted = false;
 	}
 
 	render() {
@@ -42,8 +44,10 @@ export default class AuthorizeRoute extends Component {
 					{...rest}
 					render={props => {
 						if (authenticated) {
-							authService.getUser().then(_user => console.log('UserInfo: ', _user) );
-							
+							authService
+								.getUser()
+								.then(_user => console.log('UserInfo: ', _user));
+
 							return <Component {...props} />;
 						} else {
 							return <Redirect to={redirectUrl} />;
@@ -56,11 +60,15 @@ export default class AuthorizeRoute extends Component {
 
 	async populateAuthenticationState() {
 		const authenticated = await authService.isAuthenticated();
-		this.setState({ ready: true, authenticated });
+		if (this._isMounted) {
+			this.setState({ ready: true, authenticated });
+		}
 	}
 
 	async authenticationChanged() {
-		this.setState({ ready: false, authenticated: false });
-		await this.populateAuthenticationState();
+		if (this._isMounted) {
+			this.setState({ ready: false, authenticated: false });
+			await this.populateAuthenticationState();
+		}
 	}
 }

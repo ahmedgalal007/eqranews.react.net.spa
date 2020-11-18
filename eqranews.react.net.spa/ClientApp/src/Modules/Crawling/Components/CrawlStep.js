@@ -9,6 +9,7 @@ import {
 } from '../Actions/CrawlStep';
 import {
 	requestFetchCrawlItemByStep,
+	requestFetchAllCrawlItems,
 	requestDeleteCrawlItem,
 } from '../Actions/CrawlItem';
 import { requestFetchAllCrawlStepTypes } from '../../Settings/Actions/CrawlStepType';
@@ -23,14 +24,15 @@ import BackButton from '../../_shared/components/BackButton';
 class CrawlStep extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { crawlStepperId: 0, crawlStepTypeId: 0 };
 		this.props.FetchAllCrawlStepTypes();
+		this.state = { crawlStepperId: 0, crawlStepTypeId: 0 };
 	}
 
 	//validate({fullname: 'jenny'})
 	initialFieldValues = (id = 0, parentId) => {
 		let result = {
 			id: id,
+			name: '',
 			url: '',
 			selector: '',
 			crawlStepTypeId: 0,
@@ -40,10 +42,10 @@ class CrawlStep extends Component {
 
 		if (id > 0) {
 			const record = this.props.data.filter(x => x.id == id)[0];
-			if (record) {
-				console.log('Initialized Record:', record);
-				result = record;
-			}
+			// if (record) {
+			console.log('Initialized Record:', record);
+			result = record;
+			// }
 		}
 		return result;
 	};
@@ -52,14 +54,22 @@ class CrawlStep extends Component {
 		const {
 			match: { params },
 		} = this.props;
-		console.log('Step Params:', params);
 
-		if (params.id && params.id > 0)
-			this.props.updateNavigationState({
-				...this.props.navigationState,
-				crawlStepId: params.id,
-			});
+		// if (params.id && params.id > 0)
+		this.props.location.state = {
+			crawlStepperId: this.props.location.state.crawlStepperId,
+			crawlSourceId: this.props.location.state.crawlSourceId,
+			crawlStepId: Number.parseInt(params.id, 10),
+		};
 
+		const initialFieldValues = this.initialFieldValues(
+			params?.id || 0,
+			this.props.location.state.crawlStepperId
+		);
+
+		this.setState({ ...initialFieldValues, Errors: {} });
+
+		console.log('this.props.location.state', this.props.location.state);
 		this.columns = [
 			{ title: 'ID', name: 'id' },
 			{ title: 'NAME', name: 'name' },
@@ -73,7 +83,7 @@ class CrawlStep extends Component {
 				createdCell: FormUtils.createEditButton(
 					'/crawl/item/',
 					this.props.history,
-					this.props.navigationState
+					this.props.location.state
 				),
 			},
 			{
@@ -82,26 +92,23 @@ class CrawlStep extends Component {
 			},
 		];
 
-		this.stepperId = 0;
-		if (this.props.location.state) {
-			if (
-				this.props.location.state.crawlStepperId &&
-				this.props.location.state.crawlStepperId > 0
-			) {
-				this.stepperId = this.props.location.state.crawlStepperId;
-			}
-		}
-		const initialFieldValues = this.initialFieldValues(
-			params?.id || 0,
-			this.stepperId
-		);
-		this.setState({ ...initialFieldValues, Errors: {} });
-		this.props.FetchCrawlItemByStep(initialFieldValues.id);
+		// this.stepperId = 0;
+		// if (this.props.location.state) {
+		// 	if (
+		// 		this.props.location.state.crawlStepperId &&
+		// 		this.props.location.state.crawlStepperId > 0
+		// 	) {
+		// 		this.stepperId = this.props.location.state.crawlStepperId;
+		// 	}
+		// }
+
 		console.log('CRAWl STEP ITEMS', this.props.crawlItems);
-		const scripts = AppUtilities.populateAllSctions();
-		scripts.PAGE_VENDOR_JS.scripts.push(
-			'app-assets/vendors/select2/select2.full.min.js'
-		);
+		this.props.FetchCrawlItemByStep(initialFieldValues.id);
+
+		// const scripts = AppUtilities.populateAllSctions();
+		// scripts.PAGE_VENDOR_JS.scripts.push(
+		// 	'app-assets/vendors/select2/select2.full.min.js'
+		// );
 
 		// AppUtilities.loadAllSectionsScripts(scripts).then(() => {
 		if (window.jQuery) {
@@ -140,6 +147,11 @@ class CrawlStep extends Component {
 			});
 		}
 		// });
+		// this.props.FetchCrawlItemByStep(this.state.id);
+	};
+
+	componentDidUpdate = () => {
+		// this.props.FetchCrawlItemByStep(this.state.id);
 	};
 
 	handelInputChange = e => {
@@ -185,6 +197,7 @@ class CrawlStep extends Component {
 	render() {
 		const {
 			id,
+			name,
 			url,
 			selector,
 			crawlStepTypeId,
@@ -192,13 +205,17 @@ class CrawlStep extends Component {
 			crawlItems,
 		} = this.state;
 		const errors = this.state.Errors;
-		console.log('STEP_Props:', this.props);
+
+		console.log('STEP_State:', this.state);
 		return (
 			<div className="row">
 				{console.log(this.props)}
 				<div className="col s12">
 					<div style={{ float: 'left' }}>
-						<BackButton link={'/crawl/stepper/' + this.stepperId}></BackButton>
+						<BackButton
+							link={'/crawl/stepper/' + crawlStepperId}
+							routeState={this.props.location.state}
+						></BackButton>
 					</div>
 					<div id="validations" className="card card-tabs">
 						<div className="card-content">
@@ -225,6 +242,25 @@ class CrawlStep extends Component {
 												type="hidden"
 												value={id}
 											></input>
+										</div>
+										<div className="input-field col s12">
+											<label htmlFor="name">Name *</label>
+											<input
+												dir="rtl"
+												className="validate"
+												id="name"
+												name="name"
+												type="text"
+												data-error=".errorTxt1"
+												onChange={this.handelInputChange}
+												value={name}
+												required
+												{...(errors.name && {
+													error: 'true',
+													'data-pattern-error': errors.name,
+												})}
+											></input>
+											<small className="errorTxt1"></small>
 										</div>
 										<div className="input-field col s12">
 											<label htmlFor="name">URL *</label>

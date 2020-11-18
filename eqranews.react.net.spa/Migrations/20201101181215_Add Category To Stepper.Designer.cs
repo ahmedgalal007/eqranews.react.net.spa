@@ -2,19 +2,21 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using eqranews.react.net.spa.Data;
 
 namespace eqranews.react.net.spa.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201101181215_Add Category To Stepper")]
+    partial class AddCategoryToStepper
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "3.1.7")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DAL.Crawling.CrawlItem", b =>
@@ -95,9 +97,6 @@ namespace eqranews.react.net.spa.Migrations
 
                     b.Property<int>("CrawlStepperId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Selector")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
@@ -276,9 +275,6 @@ namespace eqranews.react.net.spa.Migrations
 
                     b.Property<int>("CategoryId")
                         .HasColumnType("int");
-
-                    b.Property<bool>("Main")
-                        .HasColumnType("tinyint(1)");
 
                     b.Property<int>("NewsId")
                         .HasColumnType("int");

@@ -32,7 +32,7 @@ function* fetchCrawlStepByStepper(action) {
 		});
 
 		const data = yield call(Api.filterByStepper, action.data);
-		yield delay(2000);
+		// yield delay(2000);
 		yield put(receiveFetchCrawlStepByStepper(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -50,7 +50,7 @@ function* createCrawlStep(action) {
 			data: true,
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
-		yield delay(2000);
+		// yield delay(2000);
 		yield put(receiveCreateCrawlStep(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -73,7 +73,7 @@ function* updateCrawlStep(action) {
 			(o, [k, v]) => ((o[k] = v), o),
 			{}
 		);
-		yield delay(4000);
+		// yield delay(4000);
 		yield put(receiveUpdateCrawlStep(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -99,11 +99,13 @@ function* deleteCrawlStep(action) {
 
 // All the Sagas Catchers to Export
 function* fetchCrawlStepByStepperSaga() {
-	console.log('receiving fetching crawl steps by staepper in Saga');
-	const action = yield take(
-		CRAWL_STEP_ACTIONS.REQUEST_CRAWL_STEP_FETCH_BY_STEPPER
-	);
-	yield call(fetchCrawlStepByStepper, action);
+	while (true) {
+		console.log('receiving fetching crawl steps by staepper in Saga');
+		const action = yield take(
+			CRAWL_STEP_ACTIONS.REQUEST_CRAWL_STEP_FETCH_BY_STEPPER
+		);
+		yield call(fetchCrawlStepByStepper, action);
+	}
 }
 
 function* createCrawlStepSaga() {

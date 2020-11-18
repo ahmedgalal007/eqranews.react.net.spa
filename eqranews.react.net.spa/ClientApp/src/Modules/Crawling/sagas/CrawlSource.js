@@ -15,7 +15,7 @@ const Api = ApiProxy('crawlsources');
 
 console.log('API_WITH_FILTER:', Api);
 
-function* fetchAllCrawlSources() {
+function* fetchAllCrawlSources(action) {
 	try {
 		yield put({
 			type: 'PAGE_LOADING',
@@ -24,6 +24,10 @@ function* fetchAllCrawlSources() {
 		const data = yield call(Api.fetchAll);
 		console.log('CrawlSources Data From Saga', data);
 		yield put(receiveFetchAllCrawlSources(data));
+		if (action.data.callback) {
+			action.data.callback();
+			console.log('Action Callback Running!!!!');
+		}
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
@@ -42,7 +46,7 @@ function* createCrawlSource(action) {
 		const data = yield call(Api.create, action.data); // data= newRecord
 		console.log('CRAWL NEW_RECORD DATA', data);
 		yield put(receiveCreateCrawlSource(data));
-		yield call(fetchAllCrawlSources);
+		// yield call(fetchAllCrawlSources);
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
@@ -65,7 +69,7 @@ function* updateCrawlSource(action) {
 			{}
 		);
 		yield put(receiveUpdateCrawlSource(data));
-		yield call(fetchAllCrawlSources);
+		// yield call(fetchAllCrawlSources);
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
@@ -92,8 +96,12 @@ function* deleteCrawlSource(action) {
 
 // All the Sagas Catchers to Export
 function* fetchAllCrawlSourcesSaga() {
-	yield take(CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_FETCH_ALL);
-	yield call(fetchAllCrawlSources);
+	while (true) {
+		const action = yield take(
+			CRAWL_SOURCE_ACTIONS.REQUEST_CRAWL_SOURCE_FETCH_ALL
+		);
+		yield call(fetchAllCrawlSources, action);
+	}
 }
 function* createCrawlSourceSaga() {
 	yield takeLatest(

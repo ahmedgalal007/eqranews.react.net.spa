@@ -11,6 +11,7 @@ import AuthorizeRoute from './AuthorizeRoute';
 export default class AuthorizeRouteByRole extends Component {
 	constructor(props) {
 		super(props);
+		this._isMounted = false;
 
 		this.state = {
 			ready: false,
@@ -19,6 +20,8 @@ export default class AuthorizeRouteByRole extends Component {
 	}
 
 	componentDidMount() {
+		this._isMounted = true;
+
 		this._subscription = authService.subscribe(() =>
 			this.authenticationChanged()
 		);
@@ -27,6 +30,7 @@ export default class AuthorizeRouteByRole extends Component {
 
 	componentWillUnmount() {
 		authService.unsubscribe(this._subscription);
+		this._isMounted = false;
 	}
 
 	render() {
@@ -64,11 +68,15 @@ export default class AuthorizeRouteByRole extends Component {
 
 	async populateAuthenticationState() {
 		const authenticated = await authService.isAuthenticated();
-		this.setState({ ready: true, authenticated });
+		if (this._isMounted) {
+			this.setState({ ready: true, authenticated });
+		}
 	}
 
 	async authenticationChanged() {
-		this.setState({ ready: false, authenticated: false });
-		await this.populateAuthenticationState();
+		if (this._isMounted) {
+			this.setState({ ready: false, authenticated: false });
+			await this.populateAuthenticationState();
+		}
 	}
 }

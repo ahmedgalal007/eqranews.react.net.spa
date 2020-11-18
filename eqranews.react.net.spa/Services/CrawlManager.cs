@@ -142,8 +142,19 @@ namespace eqranews.react.net.spa.Services
                         db.News.Add(newsEntry);
                         db.SaveChanges();
 
+                       
+
+
                         if (newsEntry.Id > 0)
                         {
+                            // Add the Main Category to the News Item Category
+                            if ((int)stepper.CategoryId > 0)
+                            {
+                                db.NewsCategories.Add(new NewsCategory() { Id = 0, NewsId = newsEntry.Id, CategoryId = (int)stepper.CategoryId, Main = true });
+                                db.SaveChanges();
+                            }
+
+                            // Add all the News Items
                             foreach (var x in item.CrawlItems)
                             {
                                 NewsItem nItem = new NewsItem
@@ -152,7 +163,19 @@ namespace eqranews.react.net.spa.Services
                                     Name = x.Name,
                                     Value = x.Value
                                 };
-                                db.NewsItems.Add(nItem);
+                                if (nItem.Name == "Category")
+                                {
+                                    int cat = 0;
+                                    if (int.TryParse(nItem.Value, out cat))
+                                    {
+                                        db.NewsCategories.Add(new NewsCategory() { Id = 0, NewsId = newsEntry.Id, CategoryId = cat, Main = false });
+                                        db.SaveChanges();
+                                    }
+                                }
+                                else
+                                {
+                                    db.NewsItems.Add(nItem);
+                                }
                             }
 
                             db.SaveChanges();

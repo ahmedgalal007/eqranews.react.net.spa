@@ -6,7 +6,14 @@ import {
 	receiveUpdateCountry,
 	receiveDeleteCountry,
 } from '../Actions/Country';
-import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
+import {
+	take,
+	takeLatest,
+	put,
+	call,
+	delay,
+	takeEvery,
+} from 'redux-saga/effects';
 // import Api from '../Api/Country';
 import ApiProxy from '../../_shared/api/ApiProxy';
 const Api = ApiProxy('countries');
@@ -24,7 +31,6 @@ function* fetchAllCountries() {
 	// 		{ Id: 3, Name: 'Kuwait', IsoCode: 'KW' },
 	// 	];
 	// });
-	yield delay(4000);
 	yield put(receiveFetchAllCountries(data));
 	yield put({
 		type: 'PAGE_LOADING',
@@ -39,9 +45,8 @@ function* createCountry(action) {
 			data: true,
 		});
 		const data = yield call(Api.create, action.data); // data= newRecord
-		yield delay(4000);
 		yield put(receiveCreateCountry(data));
-		yield call(fetchAllCountries);
+		// yield call(fetchAllCountries);
 		yield put({
 			type: 'PAGE_LOADING',
 			data: false,
@@ -63,7 +68,6 @@ function* updateCountry(action) {
 			(o, [k, v]) => ((o[k] = v), o),
 			{}
 		);
-		yield delay(4000);
 		yield put(receiveUpdateCountry(data));
 		yield put({
 			type: 'PAGE_LOADING',
@@ -89,10 +93,12 @@ function* deleteCountry(action) {
 
 // All the Sagas Catchers to Export
 function* fetchAllCountriesSaga() {
-	const action = yield take(
-		SETTINGS_COUNTRY_ACTIONS.REQUEST_SETTINGS_COUNTRY_FETCH_ALL
-	);
-	yield call(fetchAllCountries, action);
+	while (true) {
+		const action = yield take(
+			SETTINGS_COUNTRY_ACTIONS.REQUEST_SETTINGS_COUNTRY_FETCH_ALL
+		);
+		yield call(fetchAllCountries, action);
+	}
 }
 function* createCountrySaga() {
 	yield takeLatest(

@@ -30,9 +30,10 @@ const store = createStore(
 	)
 );
 
-store.subscribe(() => {
+const handleStore = () => {
 	//throttle(1000, '*', function () {
 	//	console.log('Saving State.....');
+	//throttle(
 	saveState({
 		NavigationState: store.getState().NavigationState,
 		Countries: store.getState().Countries,
@@ -46,8 +47,10 @@ store.subscribe(() => {
 		Users: store.getState().Users,
 		NewsItems: store.getState().NewsItems,
 	});
-	//});
-});
+	//	,1000);
+};
+const unsubscribe = store.subscribe(handleStore);
+unsubscribe();
 
 // then run the saga
 sagaMiddleware.run(rootSaga);
@@ -56,6 +59,7 @@ sagaMiddleware.run(rootSaga);
 
 // const baseUrl = document.getElementsByTagName('base')[0].getAttribute('href');
 const rootElement = document.getElementById('root');
+rootElement.style.display = 'none';
 //%PUBLIC_URL%
 ReactDOM.render(
 	<Provider store={store}>
@@ -83,10 +87,15 @@ ReactDOM.render(
 			}
 			const loader = document.querySelector('#reactloader');
 			if (loader) {
+				rootElement.classList.add('animated', 'fadeIn');
+				setTimeout(() => {
+					rootElement.style.display = 'block';
+				}, 1000);
+
 				loader.classList.add('animated', 'fadeOut');
 				setTimeout(() => {
 					loader.style.display = 'none';
-				}, 4000);
+				}, 1000);
 			}
 		});
 

@@ -22,7 +22,7 @@ namespace eqranews.react.net.spa.Data
 
 
             var builder = new DbContextOptionsBuilder<T>();
-            var connectionString = configuration.GetConnectionString("ConfigurationDb");
+            var connectionString = configuration.GetConnectionString("DevConnectionMySQL");
             builder.UseMySql(connectionString);
 
             var dbContext = (T)Activator.CreateInstance(

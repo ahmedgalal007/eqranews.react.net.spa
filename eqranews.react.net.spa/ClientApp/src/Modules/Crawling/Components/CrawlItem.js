@@ -23,6 +23,12 @@ class CrawlItem extends Component {
 			this.props.location.state.crawlStepId
 		);
 		this.state = { ...this.initialFieldValues, Errors: {} };
+
+		this.props.location.state = {
+			crawlSourceId: this.props.location.state.crawlSourceId,
+			crawlStepperId: this.props.location.state.crawlStepperId,
+			crawlStepId: this.state.crawlStepId,
+		};
 	};
 	componentDidMount = () => {
 		const scripts = AppUtilities.populateAllSctions();
@@ -95,7 +101,8 @@ class CrawlItem extends Component {
 				<div className="col s12">
 					<div style={{ float: 'left' }}>
 						<BackButton
-							link={'/crawl/step/' + this.props.location.state.crawlStepId}
+							link={'/crawl/step/' + crawlStepId}
+							routeState={this.props.location.state}
 						></BackButton>
 					</div>
 					<div id="validations" className="card card-tabs">
@@ -233,6 +240,10 @@ const mapStateToProps = state => {
 const mapActionToProps = {
 	CreateCrawlItem: requestCreateCrawlItem,
 	UpdateCrawlItem: requestUpdateCrawlItem,
+	updateNavigationState: data => ({
+		type: 'UPDATE_NAVIGATION_STATE',
+		data: data,
+	}),
 };
 
 export default connect(
