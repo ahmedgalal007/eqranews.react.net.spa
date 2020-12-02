@@ -44,21 +44,46 @@ class CrawlSource extends React.Component {
 		});
 
 		// this.props.FetchAllCrawlSources();
-		this.props.FetchCrawlStepperBySource(params.id);
-
-		const initialFieldValues = this.initialFieldValues(params.id);
+		// if (!params.id == undefined)
+		this.props.FetchCrawlStepperBySource(params.id || 0);
+		const initialFieldValues = this.initialFieldValues(params.id || 0);
 		this.state = { ...initialFieldValues, Errors: {} };
 
 		this.columns = [
 			{ title: 'ID', name: 'id' },
 			{ title: 'NAME', name: 'name' },
+			{ title: 'ENABLED', name: 'enabled' },
 			{ title: 'EDIT', defaultContent: '' },
 			{ title: 'DELETE', defaultContent: '' },
 		];
 		this.columnDefs = [
-			{ targets: [2, 3], orderable: false },
+			{ targets: [3, 4], orderable: false },
 			{
 				targets: 2,
+				// createdCell: FormUtils.createEditButton(
+				// 	'/crawl/stepper/' + this.state.id + '/',
+				// 	this.props.history
+				// ),
+				// createdCell: FormUtils.createEditLink('/crawl/stepper/', {
+				// 	source: this.state.id,
+				// }),
+				createdCell: (td, cellData, rowData, row, col) => {
+					this.forceUpdate();
+					return ReactDOM.render(
+						<label>
+							<input
+								type="checkbox"
+								checked={rowData[2] ? 'checked' : ''}
+								disabled="disabled"
+							/>
+							<span></span>
+						</label>,
+						td
+					);
+				},
+			},
+			{
+				targets: 3,
 				// createdCell: FormUtils.createEditButton(
 				// 	'/crawl/stepper/' + this.state.id + '/',
 				// 	this.props.history
@@ -91,7 +116,7 @@ class CrawlSource extends React.Component {
 				},
 			},
 			{
-				targets: 3,
+				targets: 4,
 				createdCell: FormUtils.createDeleteButton(
 					this.props.DeleteCrawlStepper
 				),

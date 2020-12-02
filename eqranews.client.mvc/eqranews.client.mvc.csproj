@@ -16,6 +16,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.4" />
   </ItemGroup>
   <ItemGroup>
       <DotNetCliToolReference Include="BundlerMinifier.Core" Version="3.2.449" />
@@ -25,7 +27,15 @@
     <None Include="compilerconfig.json" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\api\Data\" />
+    <Folder Include="Areas\api\Models\" />
+    <Folder Include="Areas\api\Views\" />
     <Folder Include="wwwroot\uploads\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\eqranews.geo\eqranews.geo.csproj" />
+    <ProjectReference Include="..\eqranews.react.net.spa\eqranews.react.net.spa.csproj" />
   </ItemGroup>
 
 </Project>

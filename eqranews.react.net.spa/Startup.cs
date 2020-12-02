@@ -25,6 +25,8 @@ namespace eqranews.react.net.spa
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; set; }
         string conn;
 
         public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
@@ -33,8 +35,7 @@ namespace eqranews.react.net.spa
             Env = webHostEnvironment;
         }
 
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Env { get; set; }
+
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -203,8 +204,8 @@ namespace eqranews.react.net.spa
 
 
             // Apply Migration to Database
-            InitializeDatabase(app);
-            CreateRoles(app.ApplicationServices);
+            DataSeed.InitializeDatabase(app);
+            // CreateRoles(app.ApplicationServices);
             // Add HangFire
             // backgroundJobClient.Enqueue(() => Console.WriteLine("Hello Hangfire job!!!!"));
             // recurringJobManager.AddOrUpdate("Run Every Minute", () => Console.WriteLine("Test Recuring Job !!!"), "* * * * *");
@@ -213,65 +214,20 @@ namespace eqranews.react.net.spa
             crawlManager.CreateEnabledSourcesJobs();
         }
 
-        private void InitializeDatabase(IApplicationBuilder app)
-        {
-            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
-            {
-                scope.ServiceProvider.GetRequiredService<ApplicationDbContext>().Database.Migrate();
-                // scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>().Database.Migrate();
-
-            }
-        }
+        //private void InitializeDatabase(IApplicationBuilder app)
+        //{
+           
+        //}
 
 
-        private void CreateRoles(IServiceProvider serviceProvider)
-        {
-            using (var scope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
-            {
+        //private void CreateRoles(IServiceProvider serviceProvider)
+        //{
+        //    using (var scope = serviceProvider.GetService<IServiceScopeFactory>().CreateScope())
+        //    {
 
-                var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
-                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-                Task<IdentityResult> roleResult;
-                string email = "ahmedgalal007@gmail.com";
-
-                //Check that there is an Administrator role and create if not
-                List<string> _roleNames = new List<string>() { "Administrator", "Subscriber", "Editor", "Moderator" };
-                foreach (string role in _roleNames)
-                {
-                    Task<bool> hasAdminRole = roleManager.RoleExistsAsync(role);
-                    hasAdminRole.Wait();
-
-                    if (!hasAdminRole.Result)
-                    {
-                        roleResult = roleManager.CreateAsync(new IdentityRole(role));
-                        roleResult.Wait();
-                    }
-                }
-                
-
-                //Check if the admin user exists and create it if not
-                //Add to the Administrator role
-
-                Task<ApplicationUser> testUser = userManager.FindByEmailAsync(email);
-                testUser.Wait();
-
-                if (testUser.Result == null)
-                {
-                    ApplicationUser administrator = new ApplicationUser();
-                    administrator.Email = email;
-                    administrator.UserName = email;
-
-                    Task<IdentityResult> newUser = userManager.CreateAsync(administrator, "Sico007_");
-                    newUser.Wait();
-
-                    if (newUser.Result.Succeeded)
-                    {
-                        Task<IdentityResult> newUserRole = userManager.AddToRoleAsync(administrator, "Administrator");
-                        newUserRole.Wait();
-                    }
-                }
-            }
-        }
+               
+        //    }
+        //}
 
     }
 }

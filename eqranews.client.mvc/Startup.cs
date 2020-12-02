@@ -1,10 +1,12 @@
 using eqranews.client.mvc.OAuth;
+using eqranews.react.net.spa.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -18,16 +20,37 @@ namespace eqranews.client.mvc
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        string conn;
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Env { get; set; }
+
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
             Configuration = configuration;
+            Env = webHostEnvironment;
         }
 
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            if (Env.IsEnvironment("Docker"))
+            {
+                conn = $"server={Environment.GetEnvironmentVariable("MYSQL_HOST")};" +
+                $"port={Environment.GetEnvironmentVariable("MYSQL_TCP_PORT")};" +
+                $"user={Environment.GetEnvironmentVariable("MYSQL_USER")};" +
+                $"password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
+                $"database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")}";
+            }
+            else if (Env.IsDevelopment())
+            {
+                conn = $"server=localhost;" +
+                $"port=3306;" +
+                $"user=ahmedgalal007;" +
+                $"password=Sico007_;" +
+                $"database=eqranews";
+            }
+
             services.AddAuthentication(options => {
                 // options.DefaultAuthenticateScheme = "ClientCookies";
                 // options.DefaultSignInScheme = "ClientCookies";
@@ -59,6 +82,20 @@ namespace eqranews.client.mvc
                 });
 
             services.AddScoped<ApplicationUser>();
+
+            services.AddScoped<ApplicationDbContext>();
+            services.AddDbContext<ApplicationDbContext>(options => options.UseMySql(
+                    // Configuration.GetConnectionString("DevConnectionMySQL")
+                    conn, mySqlOptionsAction: sqlOptions =>
+                    {
+                        sqlOptions.EnableRetryOnFailure(maxRetryCount: 10, maxRetryDelay: TimeSpan.FromSeconds(40), errorNumbersToAdd: null);
+                    }
+                )
+                .UseLazyLoadingProxies(false));
+
+
+
+
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
 
