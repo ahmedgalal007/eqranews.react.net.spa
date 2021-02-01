@@ -5,6 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.Store;
 using eqranews.react.net.spa.Data;
+using AngleSharp.Common;
+using eqranews.react.net.spa.Models;
+using System.Reflection;
+using Newtonsoft.Json;
 
 namespace eqranews.react.net.spa.Controllers
 {
@@ -24,6 +28,16 @@ namespace eqranews.react.net.spa.Controllers
         public async Task<ActionResult<IEnumerable<News>>> GetNews()
         {
             return await _context.News.ToListAsync();
+        }
+
+        [HttpGet("DataTableHandler")]
+        public async Task<DataTableResultViewModelcs<News>> DataTableHandler([FromQuery]int iDisplayStart, [FromQuery] int iDisplayLength, [FromQuery] int iColumns, [FromQuery] int iSortCol_0, [FromQuery] string sSortDir_0   , [FromQuery] string sSearch, [FromQuery] bool bRegex)
+        {
+            //var iDisplayStart = Request.QueryString.ToDictionary()["iDisplayStart"];
+            int totalRecords = _context.News.Select(e => e.Id).Count();
+            var result = await _context.News.Skip(iDisplayStart).Take(iDisplayLength).ToListAsync();
+            // return  new JsonResult( new DataTableResultViewModelcs<News>() { iTotalDisplayRecords = result.Count, iTotalRecords= totalRecords,  aaData = result }, new JsonSerializerSettings { });
+            return new DataTableResultViewModelcs<News>() { iTotalDisplayRecords = totalRecords, iTotalRecords = totalRecords, aaData = result };
         }
 
         // GET: api/News/5

@@ -5,11 +5,10 @@ const baseUrl = '/api/';
 export default {
 	CrawlSources(url = baseUrl + 'CrawlSources/') {
 		return {
-			fetchAll: async () => {
-				const res = await axios.get(url);
-				const data = await res.json();
-				return data;
-			},
+			fetchAll: () =>  axios.request({ method: "get", url: url }),
+			//	const { data } = await res; //.json();
+			//	return data;
+			//},
 			fetchById: async id => await axios.get(url + id),
 			create: async newRecord => await axios.post(url, newRecord),
 			update: async (id, updateRecord) =>

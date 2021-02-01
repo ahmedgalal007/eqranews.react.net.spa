@@ -6,14 +6,21 @@ import {
 	receiveUpdateCrawlSource,
 	receiveDeleteCrawlSource,
 } from '../Actions/CrawlSource';
+import { receiveFetchAllCountries } from '../../Settings/Actions/Country';
+import { receiveFetchAllCategories} from '../../Settings/Actions/Category';
+import { receiveFetchAllCrawlStepTypes} from '../../Settings/Actions/CrawlStepType';
+
 import { take, takeLatest, put, call, delay } from 'redux-saga/effects';
 //import Api from '../Api/CrawlSource';
 import ApiProxy, { AddApiFilter } from '../../_shared/api/ApiProxy';
 
 const Api = ApiProxy('crawlsources');
+const ApiCountry = ApiProxy('countries');
+const ApiCategory = ApiProxy('categories');
+const ApiCST = ApiProxy('CrawlSetpTypes');
+
 // const ApiStepper = AddApiFilter(ApiProxy('crawlsteppers'), 'Source');
 
-console.log('API_WITH_FILTER:', Api);
 
 function* fetchAllCrawlSources(action) {
 	try {
@@ -21,8 +28,18 @@ function* fetchAllCrawlSources(action) {
 			type: 'PAGE_LOADING',
 			data: true,
 		});
-		const data = yield call(Api.fetchAll);
-		console.log('CrawlSources Data From Saga', data);
+
+		let response = yield call(ApiCountry.fetchAll);
+		const countries = response.data;
+		yield put(receiveFetchAllCountries(countries));
+		response = yield call(ApiCategory.fetchAll);
+		const categories = response.data;
+		yield put(receiveFetchAllCategories(categories));
+		response = yield call(ApiCST.fetchAll);
+		const CST = response.data;
+		yield put(receiveFetchAllCrawlStepTypes(CST));
+		response = yield call(Api.fetchAll);
+		const { data } = response;
 		yield put(receiveFetchAllCrawlSources(data));
 		if (action.data.callback) {
 			action.data.callback();

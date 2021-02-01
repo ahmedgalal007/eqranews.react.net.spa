@@ -147,7 +147,6 @@ $(document).ready(function($) {
 					}
 
 					carousel.owlCarousel({
-						rtl:true,
 						autoPlay: 10000,
 						navigation : true,
 						items : dataNum,

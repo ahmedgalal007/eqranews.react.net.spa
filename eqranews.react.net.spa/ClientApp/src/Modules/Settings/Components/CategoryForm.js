@@ -61,7 +61,7 @@ export class CategoryForm extends Component {
 					if ($().select2) {
 						$('#parentId').select2({
 							dropdownAutoWidth: true,
-							placeholder: 'Select an option',
+							placeholder: 'Select Parent Category',
 							allowClear: true,
 							width: '100%',
 							dir: 'rtl',
@@ -99,6 +99,10 @@ export class CategoryForm extends Component {
 			name: '',
 			color: '',
 			default: false,
+			isHome: false,
+			isTiker: false,
+			isMenu: false,
+			isSlider: false,
 			parentId: '',
 		};
 
@@ -122,19 +126,20 @@ export class CategoryForm extends Component {
 		console.log(fieldValue);
 	};
 
-	handelCkeckboxChange = e => {
+	handelCkeckboxChange = (e, elem) => {
 		console.log('Checked Box Clicked!!  ', e.target.type);
 		let { value, checked } = e.target;
 		if (e.target.type == 'checkbox') {
 			value = checked ? true : false;
-			this.switch.setAttribute('value', value ? 'true' : 'false');
-			this.switch.value = value ? 'true' : 'false';
-			const fieldValue = { [this.switch.name]: value };
+			elem.setAttribute('value', value ? 'true' : 'false');
+			elem.value = value ? 'true' : 'false';
+			const fieldValue = { [elem.name]: value };
 			//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
 			this.setState(fieldValue);
 			this.validate(fieldValue);
 		}
 	};
+
 	validate = (fieldValues = this.state) => {
 		console.log('fieldValues:', fieldValues);
 		let temp = {};
@@ -172,7 +177,7 @@ export class CategoryForm extends Component {
 	};
 
 	render() {
-		const { id, name, color, parentId } = this.state;
+		const { id, name, color, parentId, isMenu, isHome, isSlider, isTiker } = this.state;
 		const Default = this.state.default;
 		const errors = this.state.Errors;
 		console.log('Props', this.state);
@@ -242,24 +247,105 @@ export class CategoryForm extends Component {
 												</div>
 											</div>
 											<div className="input-field col s12">
-												<div className="switch">
-													<label htmlFor="Ckeck01">
+												<div className="row">
+													<div className="switch col s4">
+														<label htmlFor="DefaultSwitch">
+															<input
+																id="DefaultSwitch"
+																type="checkbox"
+																onChange={(e) => this.handelCkeckboxChange(e, this.DefaultSwitch)}
+																checked={Default}
+															/>
+															<span className="lever"></span>
+															Default
+														</label>
 														<input
-															id="Ckeck01"
-															type="checkbox"
-															onChange={this.handelCkeckboxChange}
-															checked={Default}
-														/>
-														<span className="lever"></span>
-														Default
-													</label>
-													<input
-														id="default"
-														ref={el => (this.switch = el)}
-														name="default"
-														type="hidden"
-														value={Default ? 'true' : 'false'}
-													></input>
+															id="default"
+															ref={el => (this.DefaultSwitch = el)}
+															name="default"
+															type="hidden"
+															value={Default ? 'true' : 'false'}
+														></input>
+													</div>
+													<div className="switch col s4">
+														<label htmlFor="IsMenuSwitch">
+															<input
+																id="IsMenuSwitch"
+																type="checkbox"
+																onChange={(e) => this.handelCkeckboxChange(e, this.IsMenuSwitch)}
+																checked={isMenu}
+															/>
+															<span className="lever"></span>
+															Is Menu
+														</label>
+														<input
+															id="isMenu"
+															ref={el => (this.IsMenuSwitch = el)}
+															name="isMenu"
+															type="hidden"
+															value={isMenu ? 'true' : 'false'}
+														></input>
+													</div>
+													<div className="switch col s4"></div>
+												</div>
+												<div className="row">
+													<div className="switch col s4">
+														<label htmlFor="IsHomeSwitch">
+															<input
+																id="IsHomeSwitch"
+																type="checkbox"
+																onChange={(e) => this.handelCkeckboxChange(e, this.IsHomeSwitch)}
+																checked={isHome}
+															/>
+															<span className="lever"></span>
+															Is Home
+														</label>
+														<input
+															id="isHome"
+															ref={el => (this.IsHomeSwitch = el)}
+															name="isHome"
+															type="hidden"
+															value={isHome ? 'true' : 'false'}
+														></input>
+													</div>
+													<div className="switch col s4">
+														<label htmlFor="IsSliderSwitch">
+															<input
+																id="IsSliderSwitch"
+																type="checkbox"
+																onChange={(e) => this.handelCkeckboxChange(e, this.IsSliderSwitch)}
+																checked={isSlider}
+															/>
+															<span className="lever"></span>
+															Is Slider
+														</label>
+														<input
+															id="isSlider"
+															ref={el => (this.IsSliderSwitch = el)}
+															name="isSlider"
+															type="hidden"
+															value={isSlider ? 'true' : 'false'}
+														></input>
+													</div>
+													<div className="switch col s4">
+														<label htmlFor="IsTikerSwitch">
+															<input
+																id="IsTikerSwitch"
+																type="checkbox"
+																onChange={(e)=>this.handelCkeckboxChange(e,this.IsTikerSwitch)}
+																checked={isTiker}
+															/>
+															<span className="lever"></span>
+															Is Tiker
+														</label>
+														<input
+															id="isTiker"
+															ref={el => (this.IsTikerSwitch = el)}
+															name="isTiker"
+															type="hidden"
+															value={isTiker ? 'true' : 'false'}
+														></input>
+													</div>
 												</div>
 											</div>
 											<small className="errorTxt5"></small>

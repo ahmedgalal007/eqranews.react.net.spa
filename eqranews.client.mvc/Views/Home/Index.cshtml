@@ -2,12 +2,21 @@
 
 
 @{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "إقرأ نيوز";
 }
 
+<partial name="Sliders/HeadingNewsSection" />
+
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @{
+        var country = "";
+        var countries = (List<MaxMind.GeoIP2.Responses.CountryResponse>)Context.Items["CountryResponse"];
+        if (countries !=null && countries.Count > 0)
+        {
+            country = countries.First()?.Country.Name;
+        }
+     }
+    <h4>@country</h4>
 
     <h2>Claims</h2>
 

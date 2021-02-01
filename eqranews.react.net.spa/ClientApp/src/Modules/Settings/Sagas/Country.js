@@ -23,7 +23,7 @@ function* fetchAllCountries() {
 		type: 'PAGE_LOADING',
 		data: true,
 	});
-	const data = yield call(Api.fetchAll);
+	const response = yield call(Api.fetchAll);
 	// const data = yield call(() => {
 	// 	return [
 	// 		{ Id: 1, Name: 'Egypt', IsoCode: 'EG' },
@@ -31,6 +31,7 @@ function* fetchAllCountries() {
 	// 		{ Id: 3, Name: 'Kuwait', IsoCode: 'KW' },
 	// 	];
 	// });
+	const { data } = response;
 	yield put(receiveFetchAllCountries(data));
 	yield put({
 		type: 'PAGE_LOADING',

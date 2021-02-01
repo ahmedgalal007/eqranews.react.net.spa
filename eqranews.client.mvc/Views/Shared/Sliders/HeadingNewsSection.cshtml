@@ -1,0 +1,97 @@
+﻿@inject eqranews.client.mvc.Data.IDAL _dal;
+<!-- heading-news-section2
+            ================================================== -->
+<section class="heading-news2">
+
+    <div class="container">
+
+        <div class="iso-call heading-news-box">
+            @{ var items = await _dal.GetNews().GetNews();}
+
+            <div class="news-post image-post default-size">
+                @Html.Raw(SliderSmallItem(items[3]))
+            </div>
+
+                <div class="image-slider snd-size">
+                    @*<span class="top-stories">TOP STORIES</span>*@
+                    <ul class="bxslider">
+                        <li>
+                            <div class="news-post image-post">
+                                @Html.Raw(SliderBigItem(items[0]))
+                            </div>
+                        </li>
+                        <li>
+                            <div class="news-post image-post">
+                                @Html.Raw(SliderBigItem(items[1]))
+                            </div>
+                        </li>
+                        <li>
+                            <div class="news-post image-post">
+                                @Html.Raw(SliderBigItem(items[2]))
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="news-post image-post">
+                    @Html.Raw(SliderSmallItem(items[4]))
+                </div>
+
+                <div class="news-post image-post">
+                    @Html.Raw(SliderSmallItem(items[5]))
+                </div>
+
+                <div class="news-post image-post">
+                    @Html.Raw(SliderSmallItem(items[6]))
+                </div>
+
+
+        </div>
+    </div>
+
+</section>
+<!-- End heading-news-section -->
+
+@functions{
+    public string SliderSmallItem(DAL.Store.News item)
+    {
+        string result = $"<span class=\"top-stories\">{((System.Collections.Generic.List<DAL.Crawling.CrawlSource>)Context.Items["Sources"]).Find(e => e.Id == item.SourceId).Name}</span>" +
+                $"                    <img src=\"{ item.Thumb}\" width=\"250\" height=\"210\" alt=\"\"> \n\r" +
+                $"                    <div class=\"hover-box\"> \n\r" +
+                $"                      <div class=\"inner-hover\"> \n\r" +
+                $"                          <a class=\"category-post\" href=\"{item.NewsCategories.Where(e => e.Main).First().CategoryId}\">{item.NewsCategories.Where(e => e.Main).First().Category.Name}</a> \n\r" +
+                $"                          <h2><a href=\"{item.SourceLink}\">{item.Title}</a></h2>\n\r" +
+                $"                          <ul class=\"post-tags\"> \n\r" +
+                $"                              <li><i class=\"fa fa-clock-o\"></i><span>27 may 2013</span></li> \n\r" +
+                $"                              <li><a href=\"#\"><i class=\"fa fa-comments-o\"></i><span>23</span></a></li> \n\r" +
+                $"                          </ul> \n\r" +
+                $"                          <p>{item.Title}</p>\n\r" +
+                $"                      </div>\n\r" +
+                $"                    </div>\n\r";
+
+        return result;
+    }
+
+    public string SliderBigItem(DAL.Store.News item)
+    {
+        string imgVal = item.NewsItems.Where(e => e.Name == "Image").First().Value;
+        var img = string.IsNullOrEmpty(imgVal) ? "upload/news-posts/h7.jpg": imgVal;
+        string result = $"<span class=\"top-stories\">{((System.Collections.Generic.List<DAL.Crawling.CrawlSource>)Context.Items["Sources"]).Find(e => e.Id == item.SourceId).Name}</span> \n\r" +
+                $"                    <img data-item-id=\"{item.Id}\" src=\"{img}\" width=\"680\" height=\"433\" alt=\"\"> \n\r" +
+                $"                    <div class=\"hover-box\"> \n\r" +
+                $"                      <div class=\"inner-hover\"> \n\r" +
+                $"                          <a class=\"category-post\" href=\"{item.NewsCategories.Where(e => e.Main).First().CategoryId}\">{item.NewsCategories.Where(e => e.Main).First().Category.Name}</a> \n\r" +
+                $"                          <h2><a href=\"{item.SourceLink}\">{item.Title}</a></h2>\n\r" +
+                $"                          <ul class=\"post-tags\"> \n\r" +
+                $"                              <li><i class=\"fa fa-clock-o\"></i><span>27 may 2013</span></li> \n\r" +
+                //$"                              <li><i class=\"fa fa-clock-o\"></i><span>27 may 2013</span></li> \n\r" +
+                $"                              <li><a href=\"#\"><i class=\"fa fa-comments-o\"></i><span>23</span></a></li> \n\r" +
+                $"                              <li><i class=\"fa fa-eye\"></i>872</li> \n\r" +
+                $"                          </ul> \n\r" +
+                $"                          <p>{item.Title}</p>\n\r" +
+                $"                      </div>\n\r" +
+                $"                    </div>\n\r";
+
+        return result;
+    }
+}

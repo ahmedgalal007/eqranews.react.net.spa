@@ -28,16 +28,16 @@
     <PackageReference Include="Hangfire.AspNetCore" Version="1.7.17" />
     <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
     <PackageReference Include="Hangfire.MySql.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.11" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" version="3.1.10" />
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="3.1.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" version="3.1.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" version="3.1.10" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="3.7.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Proxies" version="3.1.9" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" version="3.1.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" version="3.1.9">
@@ -46,7 +46,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Kubernetes.Tools.Targets" Version="1.1.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.3" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
   </ItemGroup>
@@ -95,6 +95,8 @@
     <Content Remove="wwwroot\js\vendors.min.js" />
   </ItemGroup>
   <ItemGroup>
+    <None Remove="Dockerfile" />
+    <None Remove="Dockerfile.prod" />
     <None Remove="_MySQL_Init_Script\MySQL.sh" />
   </ItemGroup>
   <ItemGroup>
@@ -172,5 +174,9 @@
       </ResolvedFileToPublish>
     </ItemGroup>
   </Target>
+
+  <ItemGroup>
+    <None Remove="..\.dockerignore" />
+  </ItemGroup>
 
 </Project>

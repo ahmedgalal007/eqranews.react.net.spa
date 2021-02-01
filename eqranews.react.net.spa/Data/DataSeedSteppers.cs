@@ -16,6 +16,14 @@ namespace eqranews.react.net.spa.Data
         {
             _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var _steppers = new List<CrawlStepper> {
+                new CrawlStepper {Name="الأهرام_أحدث الأخبار", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="الأهرام_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+
+                new CrawlStepper {Name="اليوم السابع_أحدث الأخبار", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="اليوم السابع_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+
+                ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                new CrawlStepper {Name="عكاظ_أحدث الأخبار", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="عكاظ_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="عكاظ_رياضة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="عكاظ_إقتصاد", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
@@ -24,6 +32,7 @@ namespace eqranews.react.net.spa.Data
                 new CrawlStepper {Name="عكاظ_تكنولوجيا", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="عكاظ_تحقيقات", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                new CrawlStepper {Name="المدينة_أحدث الأخبار", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="المدينة_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="المدينة_رياضة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="المدينة_إقتصاد", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
@@ -34,6 +43,7 @@ namespace eqranews.react.net.spa.Data
                 new CrawlStepper {Name="المدينة_فكر وثقافة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="المدينة_صحة وجمال", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                new CrawlStepper {Name="الإمارات اليوم_أحدث الأخبار", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="الإمارات اليوم_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="الإمارات اليوم_رياضة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="الإمارات اليوم_إقتصاد", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
@@ -45,16 +55,17 @@ namespace eqranews.react.net.spa.Data
                 new CrawlStepper {Name="الإمارات اليوم_فكر وثقافة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                 new CrawlStepper {Name="الإمارات اليوم_حوادث", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
                  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-                new CrawlStepper {Name="البيان_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_رياضة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_إقتصاد", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_فنون", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_منوعات", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_تكنولوجيا", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_تحقيقات", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_صحة وجمال", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_فكر وثقافة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
-                new CrawlStepper {Name="البيان_حوادث", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=false },
+                new CrawlStepper {Name="البيان_أحدث الأخبار", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_سياسة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_رياضة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_إقتصاد", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_فنون", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_منوعات", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_تكنولوجيا", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_تحقيقات", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_صحة وجمال", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_فكر وثقافة", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
+                new CrawlStepper {Name="البيان_حوادث", CrawlSourceId=0, CategoryId=0, RecuringTime=TimeSpan.FromMinutes(3), Enabled=true },
 
             };
 

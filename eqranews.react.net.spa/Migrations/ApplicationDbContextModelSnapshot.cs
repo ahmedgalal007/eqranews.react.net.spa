@@ -14,7 +14,7 @@ namespace eqranews.react.net.spa.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .HasAnnotation("ProductVersion", "3.1.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("DAL.Crawling.CrawlItem", b =>
@@ -155,6 +155,21 @@ namespace eqranews.react.net.spa.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("InHome")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("InMenu")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("InMoreMenu")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("InSlider")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("InTicker")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
@@ -199,10 +214,25 @@ namespace eqranews.react.net.spa.Migrations
                     b.Property<bool>("Default")
                         .HasColumnType("tinyint(1)");
 
+                    b.Property<bool>("IsHome")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsMenu")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsSlider")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<bool>("IsTiker")
+                        .HasColumnType("tinyint(1)");
+
                     b.Property<string>("Name")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<int?>("ParentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Periority")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -254,6 +284,9 @@ namespace eqranews.react.net.spa.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("SourceLink")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
+
+                    b.Property<string>("Thumb")
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("Title")

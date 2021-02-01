@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace eqranews.crawling.Models
 {
@@ -14,13 +15,13 @@ namespace eqranews.crawling.Models
         }
         public List<CrawlStep> StepSequence { get; set; }
         public List<CrawlResult> _crawlResults = new List<CrawlResult>();
-        public List<CrawlResult> Crawl()
+        public async Task<List<CrawlResult>> Crawl()
         {
 
             foreach (CrawlStep step in StepSequence)
             {
                 // if(step.CrawlStepType == CrawlSetpType.Loop){}
-                _crawlResults = step.Process(_crawlResults);
+                _crawlResults = await step.Process(_crawlResults);
             }
 
             return _crawlResults;

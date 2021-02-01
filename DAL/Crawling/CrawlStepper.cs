@@ -9,7 +9,14 @@ namespace DAL.Crawling
     {
         public int Id { get; set; }
         public string Name { get; set; }
+
         public bool Enabled { get; set; }
+        public bool InHome { get; set; }
+        public bool InMenu { get; set; }
+        public bool InMoreMenu { get; set; }
+        public bool InTicker { get; set; }
+        public bool InSlider { get; set; }
+
         public TimeSpan RecuringTime { get; set; }
         public string Description { get; set; }
 

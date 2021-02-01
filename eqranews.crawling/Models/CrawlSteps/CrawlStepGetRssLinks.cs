@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 using System.Xml;
 
 namespace eqranews.crawling.Models.CrawlSteps
@@ -14,7 +15,7 @@ namespace eqranews.crawling.Models.CrawlSteps
 
         public CrawlStepGetRssLinks(int Id, CrawlSetpType crawlSetpType, Url url, string Selector) : base(Id, crawlSetpType, url, Selector) { }
 
-        public override List<CrawlResult> Process(List<CrawlResult> results)
+        public override async Task<List<CrawlResult>> Process(List<CrawlResult> results)
         {
             XmlDocument doc = new XmlDocument();
             doc.Load(this.Url.Href);
@@ -23,10 +24,11 @@ namespace eqranews.crawling.Models.CrawlSteps
             {
                 results.Add(new CrawlResult
                 {
-                    Url = new AngleSharp.Url(this.Url, lnk.Value)
+                    Url = new AngleSharp.Url(this.Url, lnk.Value),
+                    Document = PageCrawler.GetPage(new AngleSharp.Url(this.Url, lnk.Value)).Result
                 });
             }
-            return base.Process(results);
+            return await base.Process(results);
         }
     }
 }

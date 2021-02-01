@@ -1,4 +1,7 @@
+using eqranews.client.mvc.Data;
+using eqranews.client.mvc.Middlewares;
 using eqranews.client.mvc.OAuth;
+using eqranews.geo;
 using eqranews.react.net.spa.Data;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
@@ -93,8 +96,7 @@ namespace eqranews.client.mvc
                 )
                 .UseLazyLoadingProxies(false));
 
-
-
+            services.AddScoped<IDAL,Data.DAL>();
 
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
         }
@@ -125,7 +127,7 @@ namespace eqranews.client.mvc
 
             app.UseAuthentication();
             app.UseAuthorization();
-
+            app.UseGeo();
             // This is needed if running behind a reverse proxy
             // like ngrok which is great for testing while developing
             app.UseForwardedHeaders(new ForwardedHeadersOptions

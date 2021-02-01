@@ -13,9 +13,9 @@ import {
 	requestDeleteCrawlSource,
 } from '../Actions/CrawlSource';
 
-import { requestFetchAllCountries } from '../../Settings/Actions/Country';
-import { requestFetchAllCategories } from '../../Settings/Actions/Category';
-import { requestFetchAllCrawlStepTypes } from '../../Settings/Actions/CrawlStepType';
+//import { requestFetchAllCountries } from '../../Settings/Actions/Country';
+//import { requestFetchAllCategories } from '../../Settings/Actions/Category';
+//import { requestFetchAllCrawlStepTypes } from '../../Settings/Actions/CrawlStepType';
 import { bindActionCreators } from 'redux';
 
 export class Crawl extends Component {
@@ -24,9 +24,9 @@ export class Crawl extends Component {
 	constructor(props) {
 		super(props);
 		//if (!(this.props.countries && this.props.countries.length > 0))
-		this.props.FetchAllCountries();
-		this.props.FetchAllCategories();
-		this.props.FetchAllCrawlStepTypes();
+		//this.props.FetchAllCountries();
+		//this.props.FetchAllCategories();
+		//this.props.FetchAllCrawlStepTypes();
 
 		// const data = {
 		// 	callback: function () {
@@ -177,9 +177,9 @@ const mapStateToProps = state => {
 };
 
 const mapActionToProps = {
-	FetchAllCountries: requestFetchAllCountries,
-	FetchAllCategories: requestFetchAllCategories,
-	FetchAllCrawlStepTypes: requestFetchAllCrawlStepTypes,
+	//FetchAllCountries: requestFetchAllCountries,
+	//FetchAllCategories: requestFetchAllCategories,
+	//FetchAllCrawlStepTypes: requestFetchAllCrawlStepTypes,
 	FetchAllCrawlSources: requestFetchAllCrawlSources,
 	DeleteCrawlSource: requestDeleteCrawlSource,
 };

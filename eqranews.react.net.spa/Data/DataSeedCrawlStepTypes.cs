@@ -15,6 +15,7 @@ namespace eqranews.react.net.spa.Data
         {
             var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
             var _types = new List<CrawlSetpType> {
+                new CrawlSetpType {Name="CrawlStepGetLinkImgList" },
                 new CrawlSetpType {Name="CrawlStepGetLinkList" },
                 new CrawlSetpType {Name="CrawlStepParseLinkList"},
                 new CrawlSetpType {Name="CrawlStepGetRssLinks" },

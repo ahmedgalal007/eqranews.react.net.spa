@@ -5,7 +5,7 @@ export const CrawlSteppers = (state = [], { type: type, data: data }) => {
 		// case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_FETCH_ALL:
 		// 	return data;
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_FETCH_BY_SOURCE:
-			return data;
+			return [...data];
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_CREATE:
 			return [...state, data];
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_UPDATE:
@@ -13,6 +13,6 @@ export const CrawlSteppers = (state = [], { type: type, data: data }) => {
 		case CRAWL_STEPPER_ACTIONS.RECEIVE_CRAWL_STEPPER_DELETE:
 			return state.filter(x => x.id != data);
 		default:
-			return state;
+			return [...state];
 	}
 };

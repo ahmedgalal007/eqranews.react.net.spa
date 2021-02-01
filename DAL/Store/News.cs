@@ -15,6 +15,7 @@ namespace DAL.Store
         public int Id { get; set; }
         public string SourceLink { get; set; }
         public string Title { get; set; }
+        public string Thumb { get; set; }
         public DateTime Created { get; set; }
 
         public int CountryId { get; set; }

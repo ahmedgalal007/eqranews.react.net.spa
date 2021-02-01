@@ -16,7 +16,9 @@ function* fetchAllCategories() {
 		type: 'PAGE_LOADING',
 		data: true,
 	});
-	const data = yield call(Api.fetchAll);
+	const response = yield call(Api.fetchAll);
+	const { data } = response;
+
 	console.log('Categories Data From Saga', data);
 	yield put(receiveFetchAllCategories(data));
 	yield put({

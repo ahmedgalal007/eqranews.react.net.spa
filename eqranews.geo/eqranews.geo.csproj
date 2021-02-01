@@ -8,4 +8,12 @@
     <PackageReference Include="MaxMind.GeoIP2" Version="3.2.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="GeoDb\GeoLite2-City.mmdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="GeoDb\GeoLite2-Country.mmdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

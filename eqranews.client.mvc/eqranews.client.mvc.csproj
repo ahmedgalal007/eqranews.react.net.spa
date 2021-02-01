@@ -5,6 +5,11 @@
     <UserSecretsId>6a8ab387-2b7f-484f-97a3-783c918ab45e</UserSecretsId>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>
+      Copy  /Y "$(SolutionDir)eqranews.geo\GeoDb\*" "$(TargetDir)"
+    </PostBuildEvent>
+  </PropertyGroup>
 
   <ItemGroup>
     <Content Remove="bundleconfig.json" />
@@ -13,6 +18,7 @@
 
   <ItemGroup>
     <PackageReference Include="BundlerMinifier.Core" Version="3.2.449" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.7" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.9" />
@@ -25,11 +31,63 @@
   <ItemGroup>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
+    <None Include="wwwroot\images\svg-weather\1.svg" />
+    <None Include="wwwroot\images\svg-weather\10.svg" />
+    <None Include="wwwroot\images\svg-weather\11.svg" />
+    <None Include="wwwroot\images\svg-weather\12.svg" />
+    <None Include="wwwroot\images\svg-weather\13.svg" />
+    <None Include="wwwroot\images\svg-weather\14.svg" />
+    <None Include="wwwroot\images\svg-weather\15.svg" />
+    <None Include="wwwroot\images\svg-weather\16.svg" />
+    <None Include="wwwroot\images\svg-weather\17.svg" />
+    <None Include="wwwroot\images\svg-weather\18.svg" />
+    <None Include="wwwroot\images\svg-weather\19.svg" />
+    <None Include="wwwroot\images\svg-weather\2.svg" />
+    <None Include="wwwroot\images\svg-weather\20.svg" />
+    <None Include="wwwroot\images\svg-weather\21.svg" />
+    <None Include="wwwroot\images\svg-weather\22.svg" />
+    <None Include="wwwroot\images\svg-weather\23.svg" />
+    <None Include="wwwroot\images\svg-weather\24.svg" />
+    <None Include="wwwroot\images\svg-weather\25.svg" />
+    <None Include="wwwroot\images\svg-weather\26.svg" />
+    <None Include="wwwroot\images\svg-weather\27.svg" />
+    <None Include="wwwroot\images\svg-weather\28.svg" />
+    <None Include="wwwroot\images\svg-weather\29.svg" />
+    <None Include="wwwroot\images\svg-weather\3.svg" />
+    <None Include="wwwroot\images\svg-weather\30.svg" />
+    <None Include="wwwroot\images\svg-weather\31.svg" />
+    <None Include="wwwroot\images\svg-weather\32.svg" />
+    <None Include="wwwroot\images\svg-weather\33.svg" />
+    <None Include="wwwroot\images\svg-weather\34.svg" />
+    <None Include="wwwroot\images\svg-weather\35.svg" />
+    <None Include="wwwroot\images\svg-weather\36.svg" />
+    <None Include="wwwroot\images\svg-weather\37.svg" />
+    <None Include="wwwroot\images\svg-weather\38.svg" />
+    <None Include="wwwroot\images\svg-weather\39.svg" />
+    <None Include="wwwroot\images\svg-weather\4.svg" />
+    <None Include="wwwroot\images\svg-weather\40.svg" />
+    <None Include="wwwroot\images\svg-weather\41.svg" />
+    <None Include="wwwroot\images\svg-weather\42.svg" />
+    <None Include="wwwroot\images\svg-weather\43.svg" />
+    <None Include="wwwroot\images\svg-weather\44.svg" />
+    <None Include="wwwroot\images\svg-weather\45.svg" />
+    <None Include="wwwroot\images\svg-weather\46.svg" />
+    <None Include="wwwroot\images\svg-weather\47.svg" />
+    <None Include="wwwroot\images\svg-weather\5.svg" />
+    <None Include="wwwroot\images\svg-weather\6.svg" />
+    <None Include="wwwroot\images\svg-weather\7.svg" />
+    <None Include="wwwroot\images\svg-weather\8.svg" />
+    <None Include="wwwroot\images\svg-weather\9.svg" />
+    <None Include="wwwroot\upload\.DS_Store" />
+    <None Include="wwwroot\upload\addsense\addsense.rar" />
+    <None Include="wwwroot\upload\banners\.DS_Store" />
+    <None Include="wwwroot\upload\news-posts\.DS_Store" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Areas\api\Data\" />
     <Folder Include="Areas\api\Models\" />
     <Folder Include="Areas\api\Views\" />
+    <Folder Include="Services\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
   <ItemGroup>

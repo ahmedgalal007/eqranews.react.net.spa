@@ -69,6 +69,7 @@ namespace eqranews.react.net.spa
                 .UseDefaultTypeSerializer()
                 //.UseMemoryStorage(new MemoryStorageOptions { CountersAggregateInterval = TimeSpan.FromSeconds(30)})
                 .UseStorage(new MySqlStorage(conn + "; Allow User Variables=True"))
+                .WithJobExpirationTimeout(TimeSpan.FromMinutes(61))  // time to clean cache
                 .UseSerializerSettings(new JsonSerializerSettings()
                 {
                     ReferenceLoopHandling = ReferenceLoopHandling.Ignore,

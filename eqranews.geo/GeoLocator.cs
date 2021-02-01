@@ -3,6 +3,7 @@ using MaxMind.GeoIP2.Model;
 using MaxMind.GeoIP2.Responses;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text;
 
@@ -47,6 +48,13 @@ namespace eqranews.geo
                 //Console.WriteLine(location.AccuracyRadius); // 50
             }
         }
+        public static GeoData GetEnterprise(IPAddress ClientIP)
+        {
+            using (var reader = new DatabaseReader(_EnterpriseDbPath))
+            {
+                return new GeoData(reader.Enterprise(ClientIP));
+            }
+        }
 
         public static CityResponse GetCity(string ClientIP)
         {
@@ -73,6 +81,14 @@ namespace eqranews.geo
                 //Console.WriteLine(city.Location.Longitude); // -93.2323
             }
         }
+        public static CityResponse GetCity(IPAddress ClientIP)
+        {
+            using (var reader = new DatabaseReader(_CityDbPath))
+            {
+                return reader.City(ClientIP);
+            }
+        }
+
 
         public static CountryResponse GetCountry(string ClientIP)
         {
@@ -99,6 +115,16 @@ namespace eqranews.geo
                 //Console.WriteLine(city.Location.Longitude); // -93.2323
             }
         }
+        public static CountryResponse GetCountry(IPAddress ClientIP)
+        {
+            // This creates the DatabaseReader object, which should be reused across
+            // lookups.
+            using (var reader = new DatabaseReader(_CountryDbPath))
+            {
+                return reader.Country(ClientIP);
+            }
+        }
+
 
         public static void SetEnterpriseDbPath(string path)
         {

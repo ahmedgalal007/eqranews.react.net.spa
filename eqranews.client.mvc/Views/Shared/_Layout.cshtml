@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using eqranews.react.net.spa.Data;
+@inject ApplicationDbContext db;
+<!DOCTYPE html>
 <html lang="en" class="no-js">
 <head>
     <meta charset="utf-8" />
@@ -20,7 +22,7 @@
     <div id="container">
 
         <!-- Header
-        ================================================== -->
+    ================================================== -->
         <header class="clearfix">
             <!-- Bootstrap navbar -->
             <nav class="navbar navbar-default navbar-static-top" role="navigation">
@@ -61,6 +63,38 @@
 												c7.75,0,15.062,1.458,22.125,3.541c2.812,0.792,5.667,1.417,8.312,2.521c4.375-8.562,9.875-16.396,15.979-23.75
 												C181.792,242.188,216.562,224,256,224c10.125,0,19.834,1.458,29.25,3.709c10.562,2.499,20.542,6.291,29.834,11.291
 												c23.291,12.375,42.416,31.542,54.457,55.063C378.938,290.188,389.209,288,400,288c44.188,0,80,35.812,80,80S444.188,448,400,448z" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -187,191 +221,10 @@
                             <ul class="nav navbar-nav navbar-right">
 
                                 <li><a class="active" href="index.html">Home</a></li>
-                                <li class="drop-arrow">
-                                    <a href="politics-category.html">Politics</a>
-                                    <div class="megadropdown">
-                                        <div class="container">
-                                            <div class="inner-megadropdown world-dropdown">
-                                                <div class="filter-block">
-                                                    <ul class="filter-posts">
-                                                        <li><a href="#">All</a></li>
-                                                        <li><a href="#">Perspectives</a></li>
-                                                        <li><a href="#">Congress</a></li>
-                                                        <li><a class="active" href="#">Agenda</a></li>
-                                                        <li><a href="#">White House</a></li>
-                                                        <li><a href="#">Others</a></li>
-                                                    </ul>
-                                                </div>
-                                                <div class="posts-filtered-block">
-                                                    <div class="owl-wrapper">
-                                                        <h1>Agenda</h1>
-                                                        <div class="owl-carousel" data-num="4">
-
-                                                            <div class="item news-post standard-post">
-                                                                <div class="post-gallery">
-                                                                    <img src="upload/news-posts/art1.jpg" alt="">
-                                                                </div>
-                                                                <div class="post-content">
-                                                                    <h2><a href="single-post.html">Donec odio. Quisque volutpat mattis eros. </a></h2>
-                                                                    <ul class="post-tags">
-                                                                        <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                        <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="item news-post standard-post">
-                                                                <div class="post-gallery">
-                                                                    <img src="upload/news-posts/art2.jpg" alt="">
-                                                                </div>
-                                                                <div class="post-content">
-                                                                    <h2><a href="single-post.html">Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. </a></h2>
-                                                                    <ul class="post-tags">
-                                                                        <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                        <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="item news-post standard-post">
-                                                                <div class="post-gallery">
-                                                                    <img src="upload/news-posts/art3.jpg" alt="">
-                                                                </div>
-                                                                <div class="post-content">
-                                                                    <h2><a href="single-post.html">Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</a></h2>
-                                                                    <ul class="post-tags">
-                                                                        <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                        <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="item news-post standard-post">
-                                                                <div class="post-gallery">
-                                                                    <img src="upload/news-posts/art5.jpg" alt="">
-                                                                </div>
-                                                                <div class="post-content">
-                                                                    <h2><a href="single-post.html">Donec nec justo eget felis facilisis fermentum. </a></h2>
-                                                                    <ul class="post-tags">
-                                                                        <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                        <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="item news-post standard-post">
-                                                                <div class="post-gallery">
-                                                                    <img src="upload/news-posts/art6.jpg" alt="">
-                                                                </div>
-                                                                <div class="post-content">
-                                                                    <h2><a href="single-post.html">Donec nec justo eget felis facilisis fermentum. </a></h2>
-                                                                    <ul class="post-tags">
-                                                                        <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                        <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li><a href="politics-category.html">Elections</a></li>
-                                <li class="drop-arrow">
-                                    <a href="politics-category.html">World</a>
-                                    <div class="megadropdown">
-                                        <div class="container">
-                                            <div class="inner-megadropdown tech-dropdown">
-
-                                                <div class="owl-wrapper">
-                                                    <ul class="horizontal-filter-posts">
-                                                        <li><a class="active" href="#">All</a></li>
-                                                        <li><a href="#">Business</a></li>
-                                                        <li><a href="#">Europe</a></li>
-                                                        <li><a href="#">USA</a></li>
-                                                        <li><a href="#">Money</a></li>
-                                                    </ul>
-                                                    <div class="owl-carousel" data-num="4">
-
-                                                        <div class="item news-post standard-post">
-                                                            <div class="post-gallery">
-                                                                <img src="upload/news-posts/art4.jpg" alt="">
-                                                            </div>
-                                                            <div class="post-content">
-                                                                <h2><a href="single-post.html">Donec odio. Quisque volutpat mattis eros. </a></h2>
-                                                                <ul class="post-tags">
-                                                                    <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                    <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="item news-post standard-post">
-                                                            <div class="post-gallery">
-                                                                <img src="upload/news-posts/art2.jpg" alt="">
-                                                            </div>
-                                                            <div class="post-content">
-                                                                <h2><a href="single-post.html">Quisque volutpat mattis eros. Nullam malesuada erat ut turpis. </a></h2>
-                                                                <ul class="post-tags">
-                                                                    <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                    <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="item news-post standard-post">
-                                                            <div class="post-gallery">
-                                                                <img src="upload/news-posts/art3.jpg" alt="">
-                                                            </div>
-                                                            <div class="post-content">
-                                                                <h2><a href="single-post.html">Suspendisse urna nibh, viverra non, semper suscipit, posuere a, pede.</a></h2>
-                                                                <ul class="post-tags">
-                                                                    <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                    <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="item news-post standard-post">
-                                                            <div class="post-gallery">
-                                                                <img src="upload/news-posts/art6.jpg" alt="">
-                                                            </div>
-                                                            <div class="post-content">
-                                                                <h2><a href="single-post.html">Donec nec justo eget felis facilisis fermentum. </a></h2>
-                                                                <ul class="post-tags">
-                                                                    <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                    <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="item news-post standard-post">
-                                                            <div class="post-gallery">
-                                                                <img src="upload/news-posts/art1.jpg" alt="">
-                                                            </div>
-                                                            <div class="post-content">
-                                                                <h2><a href="single-post.html">Donec nec justo eget felis facilisis fermentum. </a></h2>
-                                                                <ul class="post-tags">
-                                                                    <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                                                    <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li><a href="politics-category.html">Nation</a></li>
-                                <li><a href="politics-category.html">Opinion</a></li>
-                                <li><a href="politics-category.html">Video</a></li>
+                                @foreach (var item in db.Categories.Where(C => C.ParentId == null && C.IsMenu).ToList())
+                                {
+                                    <li><a href="/Category/@item.Id">@item.Name</a></li>
+                                }
 
                             </ul>
                             <form class="navbar-form navbar-left" role="search">
@@ -390,14 +243,15 @@
         </header>
         <!-- End Header -->
 
+        @RenderBody()
         <div class="container">
             <main role="main" class="pb-3">
-                @RenderBody()
+
             </main>
         </div>
 
         <!-- footer
-         ================================================== -->
+     ================================================== -->
         <footer>
             <div class="container">
                 <div class="footer-widgets-part">

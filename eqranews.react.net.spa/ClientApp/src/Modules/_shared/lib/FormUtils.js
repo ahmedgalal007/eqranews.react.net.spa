@@ -13,6 +13,7 @@ export const tableData = (columns, dataArray) => {
 	});
 };
 
+
 export const createEditButton = (path, history, routeState = {}) => {
 	return (td, cellData, rowData, row, col) => {
 		const linkStr = path + rowData[0];

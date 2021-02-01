@@ -111,6 +111,11 @@ class CrawlStepper extends Component {
 			id: id,
 			name: '',
 			enabled: true,
+			inHome: false,
+			inTicker: false,
+			inMenu: false,
+			inMoreMenu: false,
+			inSlider: false,
 			recuringTime: '00:03',
 			crawlSourceId: crawlSourceId,
 			categoryId: 1,
@@ -127,14 +132,14 @@ class CrawlStepper extends Component {
 		return result;
 	};
 
-	handeCkeckboxChange = e => {
+	handeCkeckboxChange = (e, elem) => {
 		console.log('Checked Box Clicked!!  ', e.target.type);
 		let { value, checked } = e.target;
 		if (e.target.type == 'checkbox') {
 			value = checked ? true : false;
-			this.switch.setAttribute('value', value ? 'true' : 'false');
-			this.switch.value = value ? 'true' : 'false';
-			const fieldValue = { [this.switch.name]: value };
+			elem.setAttribute('value', value ? 'true' : 'false');
+			elem.value = value ? 'true' : 'false';
+			const fieldValue = { [elem.name]: value };
 			//this.setState({ Values: { ...this.props.Values, ...fieldValue } });
 			this.setState(fieldValue);
 			this.validate(fieldValue);
@@ -167,7 +172,7 @@ class CrawlStepper extends Component {
 			return Object.values(temp).every(x => x == '');
 	};
 
-	handelSubmit = e => {
+	handelSubmit = async e => {
 		e.preventDefault();
 		console.log(e.target);
 		if (this.validate()) {
@@ -181,13 +186,19 @@ class CrawlStepper extends Component {
 				this.props.createCrawlStepper(formData);
 			} else {
 				alert('update Form');
-				this.props.updateCrawlStepper(formData.get('id'), formData);
+				await this.props.updateCrawlStepper(formData.get('id'), formData);
 			}
 		}
 	};
 
 	Mount = () => {
-		this.switch = React.createRef();
+		this.EnabledSwitch = React.createRef();
+		this.InHomeSwitch = React.createRef();
+		this.InTickerSwitch = React.createRef();
+		this.InSliderSwitch = React.createRef();
+		this.InMenuSwitch = React.createRef();
+		this.InMoreMenuSwitch = React.createRef();
+
 		// // this.props.FetchCrawlStepperBySource(this.state.crawlSourceId);
 		// console.log('CRAWl STEPPER PROPS', this.props);
 
@@ -244,7 +255,8 @@ class CrawlStepper extends Component {
 		const {
 			id,
 			name,
-			enabled,
+			enabled, inHome, inSlider, inTicker, inMenu, inMoreMenu,
+			
 			recuringTime,
 			crawlSourceId,
 			categoryId,
@@ -308,11 +320,11 @@ class CrawlStepper extends Component {
 										</div>
 										<div className="input-field col s12">
 											<div className="switch">
-												<label htmlFor="Ckeck01">
+												<label htmlFor="CkeckEnabled">
 													<input
-														id="Ckeck01"
+														id="CkeckEnabled"
 														type="checkbox"
-														onChange={this.handeCkeckboxChange}
+														onChange={(e) => this.handeCkeckboxChange(e, this.EnabledSwitch)}
 														checked={enabled}
 													/>
 													<span className="lever"></span>
@@ -320,7 +332,7 @@ class CrawlStepper extends Component {
 												</label>
 												<input
 													id="enabled"
-													ref={el => (this.switch = el)}
+													ref={el => (this.EnabledSwitch = el)}
 													name="enabled"
 													type="hidden"
 													value={enabled ? 'true' : 'false'}
@@ -331,10 +343,115 @@ class CrawlStepper extends Component {
 												id="recuringTime"
 												name="recuringTime"
 												type="text"
-												enabled={this.switch.value == 'true' ? 'true' : 'false'}
+												enabled={this.EnabledSwitch.value == 'true' ? 'true' : 'false'}
 												onChange={this.handelInputChange}
 												value={recuringTime}
 											/>
+										</div>
+										<div className="input-field col l4 m6 s12">
+											<div className="switch">
+												<label htmlFor="CkeckInHome">
+													<input
+														id="CkeckInHome"
+														type="checkbox"
+														onChange={(e) => this.handeCkeckboxChange(e, this.InHomeSwitch)}
+														checked={inHome}
+													/>
+													<span className="lever"></span>
+													In Home
+												</label>
+												<input
+													id="inHome"
+													ref={el => (this.InHomeSwitch = el)}
+													name="inHome"
+													type="hidden"
+													value={inHome ? 'true' : 'false'}
+												></input>
+											</div>
+										</div>
+										<div className="input-field col l4 m6 s12">
+											<div className="switch">
+												<label htmlFor="CkeckInTicker">
+													<input
+														id="CkeckInTicker"
+														type="checkbox"
+														onChange={(e) => this.handeCkeckboxChange(e, this.InTickerSwitch)}
+														checked={inTicker}
+													/>
+													<span className="lever"></span>
+													In Ticker
+												</label>
+												<input
+													id="inTicker"
+													ref={el => (this.InTickerSwitch = el)}
+													name="inTicker"
+													type="hidden"
+													value={inTicker ? 'true' : 'false'}
+												></input>
+											</div>
+										</div>
+										<div className="input-field col l4 m6 s12">
+											<div className="switch">
+												<label htmlFor="CkeckInSlider">
+													<input
+														id="CkeckInSlider"
+														type="checkbox"
+														onChange={(e) => this.handeCkeckboxChange(e, this.InSliderSwitch)}
+														checked={inSlider}
+													/>
+													<span className="lever"></span>
+													In Slider
+												</label>
+												<input
+													id="inSlider"
+													ref={el => (this.InSliderSwitch = el)}
+													name="inSlider"
+													type="hidden"
+													value={inSlider ? 'true' : 'false'}
+												></input>
+											</div>
+										</div>
+										<div className="input-field col l4 m6 s12">
+											<div className="switch">
+												<label htmlFor="CkeckInMenu">
+													<input
+														id="CkeckInMenu"
+														type="checkbox"
+														onChange={(e) => this.handeCkeckboxChange(e, this.InMenuSwitch)}
+														checked={inMenu}
+													/>
+													<span className="lever"></span>
+													In Menu
+												</label>
+												<input
+													id="inMenu"
+													ref={el => (this.InMenuSwitch = el)}
+													name="inMenu"
+													type="hidden"
+													value={inMenu ? 'true' : 'false'}
+												></input>
+											</div>
+										</div>
+										<div className="input-field col l4 m6 s12">
+											<div className="switch">
+												<label htmlFor="CkeckInMoreMenu">
+													<input
+														id="CkeckInMoreMenu"
+														type="checkbox"
+														onChange={(e) => this.handeCkeckboxChange(e, this.InMoreMenuSwitch)}
+														checked={inMoreMenu}
+													/>
+													<span className="lever"></span>
+													In More Menu
+												</label>
+												<input
+													id="inMoreMenu"
+													ref={el => (this.InMoreMenuSwitch = el)}
+													name="inMoreMenu"
+													type="hidden"
+													value={inMoreMenu ? 'true' : 'false'}
+												></input>
+											</div>
 										</div>
 										<div className="input-field col s12">
 											<label

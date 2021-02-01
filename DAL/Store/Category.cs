@@ -12,6 +12,12 @@ namespace DAL.Store
         {
             Childrens = new HashSet<Category>();
             Default = false;
+            Color = "#ffffff";
+            IsMenu = false;
+            IsSlider = false;
+            IsTiker = false;
+            IsHome = false;
+
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -19,7 +25,15 @@ namespace DAL.Store
 
         public string Name { get; set; }
         public string Color { get; set; }
+        public int Periority { get; set; }
+
         public bool Default { get; set; }
+        public bool IsMenu { get; set; }
+        public bool IsHome { get; set; }
+        public bool IsSlider { get; set; }
+        public bool IsTiker { get; set; }
+
+
         public int? ParentId { get; set; }
         public virtual Category Parent { get; set; }
 

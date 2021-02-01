@@ -6,12 +6,16 @@ const Countries = (control, baseUrl = '/api/') => {
 	if (url.slice(-1) != '/') url += '/';
 	return {
 		url: url,
-		fetchAll: async () => {
-			const res = await axios.get(url);
-			console.log('Api Response', res);
-			return res.data;
-		},
-		fetchById: async id => await axios.get(url + id),
+		fetchAll: () =>
+			axios.request({
+				method: "get",
+				url: url
+			})
+		,
+		fetchById: id => axios.request({
+			method: "get",
+			url: url + id
+		}),
 		create: async newRecord => {
 			const res = await axios.post(url, newRecord, {
 				headers: {
@@ -34,7 +38,6 @@ const Countries = (control, baseUrl = '/api/') => {
 			}),
 		delete: async id => await axios.delete(url + id),
 		applyFilter: async (name, id) => {
-			console.log('APPLING FILTER_' + name + ' Value= ', id);
 			const res = await axios.get(url + name + '/' + id);
 			return res.data;
 		},

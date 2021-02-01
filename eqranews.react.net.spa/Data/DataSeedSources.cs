@@ -14,7 +14,9 @@ namespace eqranews.react.net.spa.Data
         public static void Seed(IServiceScope scope)
         {
             var _db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var _sources = new List<CrawlSource> {
+            var _sources = new List<CrawlSource> {                
+                new CrawlSource {Name="الأهرام", CountryId= 0, DomainURL="http://gate.ahram.org.eg/", Logo="/images/sources/Al_Ahram.jpg" },
+                new CrawlSource {Name="اليوم السابع", CountryId= 0, DomainURL="https://www.youm7.com/" },
                 new CrawlSource {Name="عكاظ", CountryId= 0, DomainURL="https://www.okaz.com.sa/", Logo="https://www.okaz.com.sa/themes/okazksa/images/new-okazlogo.svg" },
                 new CrawlSource {Name="المدينة", CountryId= 0, DomainURL="https://www.al-madina.com/" },
                 new CrawlSource {Name="الشرق الأوسط", CountryId= 0, DomainURL="https://aawsat.com/" },
@@ -25,6 +27,7 @@ namespace eqranews.react.net.spa.Data
                 new CrawlSource {Name="اليوم", CountryId= 0, DomainURL="https://www.alyaum.com/" },
                 new CrawlSource {Name="البلاد", CountryId= 0, DomainURL="https://albiladdaily.com/" },
                 new CrawlSource {Name="الاقتصادية", CountryId= 0, DomainURL="https://www.aleqt.com/" },
+                new CrawlSource {Name="العربية", CountryId= 0, DomainURL="https://www.alarabiya.net/" },
                 new CrawlSource {Name="جريدة الاتحاد", CountryId= 0, DomainURL="https://www.alittihad.ae/" },
                 new CrawlSource {Name="البيان", CountryId= 0, DomainURL="https://www.albayan.ae/" },
                 new CrawlSource {Name="بوابة العين الإخبارية", CountryId= 0, DomainURL="https://al-ain.com/" },
@@ -43,12 +46,19 @@ namespace eqranews.react.net.spa.Data
                 new CrawlSource {Name="التغييير نت", CountryId= 0, DomainURL="https://www.yemenakhbar.com/author/altagheer" },
                 new CrawlSource {Name="العاصمة اونلاين", CountryId= 0, DomainURL="https://alasimahonline.com/" },
             };
-            List<string> SaudiArabia = new List<string> { "عكاظ", "المدينة", "الشرق الأوسط", "الحياة", "الجزيرة", "مكة", "سبق", "اليوم", "البلاد", "الاقتصادية" };
+
+            List<string> Egypt = new List<string> { "الأهرام", "اليوم السابع" };
+
+            List<string> SaudiArabia = new List<string> { "عكاظ", "المدينة", "الشرق الأوسط", "الحياة", "الجزيرة", "مكة", "سبق", "اليوم", "البلاد", "الاقتصادية", "العربية" };
 
             List<string> Emirates = new List<string> { "جريدة الاتحاد", "البيان", "بوابة العين الإخبارية", "جريدة الخليج", "الإمارات اليوم", "صحيفة الرؤية الإمارتية", "صحيفة الوطن الإماراتية", "ارم" };
 
             List<string> Yemen = new List<string> { "نشوان نيوز", "الساحل الغربي", "الشارع", "الثورة", "يمن فويس", "المصدر اونلاين", "يمن ميديا", "التغييير نت", "العاصمة اونلاين" };
 
+            if (_db.Countries.Any(C => C.IsoCode == "EG"))
+            {
+                SetSourcesCountryByList(Sources: _sources, CountryId: _db.Countries.First(C => C.IsoCode == "EG").Id, CountryNames: Egypt);
+            }
             if (_db.Countries.Any(C => C.IsoCode == "SA"))
             {
                 SetSourcesCountryByList(Sources: _sources, CountryId: _db.Countries.First(C => C.IsoCode == "SA").Id, CountryNames: SaudiArabia);

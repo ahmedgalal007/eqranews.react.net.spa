@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { withRouter, Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { NewsItems } from '../Reducers/news';
-import { DTable } from '../../_shared/components/DTable';
+import { DTable } from '../../_shared/components/DTableServer';
 import * as FormUtils from '../../_shared/lib/FormUtils';
 
 import {
@@ -21,6 +21,7 @@ export class News extends Component {
 		this.props.FetchAllNews();
 	};
 	componentWillMount = () => {
+
 		this.props.FetchAllNews();
 
 		this._IsMounted = true;
@@ -141,6 +142,7 @@ export class News extends Component {
 								columns={this.columns}
 								formate={this.formate}
 								columnDefs={this.columnDefs}
+								sAjaxSource="/api/News/DataTableHandler"
 							></DTable>
 						</div>
 					</div>

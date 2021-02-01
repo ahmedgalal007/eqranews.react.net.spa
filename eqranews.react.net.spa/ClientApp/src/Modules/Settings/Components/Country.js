@@ -91,6 +91,7 @@ export class Country extends Component {
 	};
 
 	tableData = dataArray => {
+		console.log("dataArray: ",dataArray);
 		return dataArray.map((x, i) => {
 			const res = [];
 			console.log('X', x);

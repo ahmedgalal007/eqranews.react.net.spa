@@ -22,7 +22,6 @@ import {
 
 import ApiFactory from '../Api/news';
 const Api = ApiFactory();
-console.log('API_WITH_FILTER_NEWS:', Api);
 
 function* fetchAllNews() {
 	try {
@@ -31,7 +30,6 @@ function* fetchAllNews() {
 			data: true,
 		});
 		const data = yield call(Api.fetchAll);
-		yield delay(2000);
 		yield put(receiveFetchAllNews(data));
 		yield put({
 			type: 'PAGE_LOADING',

@@ -73,7 +73,7 @@ namespace eqranews.react.net.spa
                                 // results = (List<CrawlResult>)method.Invoke(instance, new object[] { results });
 
                         });
-                        results = stepperEng.Crawl();
+                        results = stepperEng.Crawl().Result;
                     }
                 })
             );

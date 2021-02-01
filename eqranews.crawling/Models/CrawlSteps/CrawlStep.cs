@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace eqranews.crawling.Models.CrawlSteps
 {
@@ -36,7 +37,7 @@ namespace eqranews.crawling.Models.CrawlSteps
         public List<CrawlItem> CrawlItems { get; set; }
         public object Inputs { get; set; }
 
-        public virtual List<CrawlResult> Process(List<CrawlResult> results) {
+        public virtual async Task<List<CrawlResult>> Process(List<CrawlResult> results) {
             return results;
         }
     }
