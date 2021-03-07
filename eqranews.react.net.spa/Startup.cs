@@ -20,6 +20,9 @@ using Hangfire.MySql.Core;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using eqranews.react.net.spa.IdentityServer;
+using Microsoft.AspNetCore.HttpOverrides;
+using System.Net;
+using Microsoft.AspNetCore.Http;
 
 namespace eqranews.react.net.spa
 {
@@ -55,14 +58,15 @@ namespace eqranews.react.net.spa
                 $"password={Environment.GetEnvironmentVariable("MYSQL_PASSWORD")};" +
                 $"database={Environment.GetEnvironmentVariable("MYSQL_DATABASE")}";
             }
-            else if (Env.IsDevelopment())
+            else // if (Env.IsDevelopment())
             {
-                conn = $"server=localhost;" +
-                $"port=3306;" +
-                $"user=ahmedgalal007;" +
-                $"password=Sico007_;" +
-                $"database=eqranews";
+                //conn = $"server=localhost;" +
+                //$"database=eqranews;"+
+                //$"user=ahmedgalal007;" +
+                //$"password=Sico007_";
+                conn = Configuration.GetConnectionString("DefaultConnection");
             }
+
             services.AddHangfire(config =>
                 config.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
                 .UseSimpleAssemblyNameTypeSerializer()
@@ -102,6 +106,7 @@ namespace eqranews.react.net.spa
                 // opt.Events.RaiseSuccessEvents
                 // opt.Authentication.CookieLifetime
             })
+            //.LoadSigningCredentialFrom(Configuration["certificates:signing"])
             // .AddInMemoryApiResources(Id4Configuration.GetApis())
             // .AddInMemoryClients(Id4Configuration.GetClients())
             // .AddDeveloperSigningCredential()
@@ -134,6 +139,11 @@ namespace eqranews.react.net.spa
             //new CrawlUtils(services);
             services.AddSingleton<CrawlManager>(sp => new CrawlManager(sp));
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                options.KnownProxies.Add(IPAddress.Parse("35.209.91.187"));
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -154,6 +164,16 @@ namespace eqranews.react.net.spa
             // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
+
+            app.UseCookiePolicy(new CookiePolicyOptions
+            {
+                MinimumSameSitePolicy = SameSiteMode.Lax
+            });
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             // //Hangfire Service 
             //app.UseHangfireDashboard("/hangfire", new DashboardOptions
