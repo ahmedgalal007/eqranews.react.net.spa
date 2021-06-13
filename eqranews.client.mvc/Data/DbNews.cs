@@ -17,7 +17,22 @@ namespace eqranews.client.mvc.Data
         }
 
         public async Task<News> GetByID(int Id) {
-            return await _db.News.Include(e => e.NewsItems).Where(e => e.Id == Id).FirstAsync();
+            var news = await _db.News.FindAsync(Id);
+            _db.Entry(news).Collection(e => e.NewsItems);
+            return news;
+        }
+
+        public async Task<News> Update(News item)
+        {
+            _db.Entry(item).State = EntityState.Modified;
+            _db.Entry(item).Property(x => x.Created).IsModified = false;
+            _db.SaveChanges();
+            return item;
+        }
+
+        public async Task<News> GetByIDWithCategoriesAndSource(int Id)
+        {
+            return await _db.News.Include(e => e.NewsItems).Include(e => e.NewsCategories).ThenInclude(C => C.Category).Include(e => e.Source).Where(e => e.Id == Id).SingleOrDefaultAsync();
         }
 
         public async Task<List<News>> GetNews(int Page = 1, int Count = 10)
@@ -39,11 +54,25 @@ namespace eqranews.client.mvc.Data
         }
         public async Task<List<News>> GetByCategory(int CategoryId, int Page = 1, int Count = 10)
         {
-            return await _db.NewsCategories.Include(e => e.News).Where(e => e.CategoryId == CategoryId).Skip((Page - 1) * Count).Take(Count).Select(e => e.News).OrderByDescending(e => e.Created).ToListAsync();
+            return await _db.NewsCategories.Include(e => e.News).Where(e => e.CategoryId == CategoryId).OrderByDescending(e => e.News.Created).Skip((Page - 1) * Count).Take(Count).Select(e => e.News).ToListAsync();
         }
         public async Task<List<News>> GetBySourceCategory(int SourceId,int CategoryId, int Page = 1, int Count = 10)
         {
             return await _db.NewsCategories.Include(e => e.News).Where(e => e.CategoryId == CategoryId && e.News.SourceId == SourceId).Select(e => e.News).OrderByDescending(e => e.Created).Skip((Page - 1) * Count).Take(Count).ToListAsync();
+        }
+
+        public async Task<List<News>> GetMostViewedSourceCategory(int SourceId, int CategoryId, int Page = 1, int Count = 10)
+        {
+            return await _db.News.Where(e =>  e.CountryId == _db.CrawlSources.Find(SourceId).CountryId && e.Created > DateTime.Now.AddDays(-2)).OrderByDescending(e => e.ViewsCount).Skip((Page - 1) * Count).Take(Count).ToListAsync();
+        }
+
+        public async Task<List<News>> GetMostViewedCategory(int CategoryId, int Page = 1, int Count = 10)
+        {
+            return await _db.News.Where(e => e.NewsCategories.SingleOrDefault(e => e.Main).CategoryId == CategoryId && e.Created > DateTime.Now.AddDays(-2)).OrderByDescending(e => e.ViewsCount).Skip((Page - 1) * Count).Take(Count).ToListAsync();
+        }
+        public async Task<List<News>> GetMostViewedSource(int SourceId, int Page = 1, int Count = 10)
+        {
+            return await _db.News.Where(e => e.CountryId == _db.CrawlSources.Find(SourceId).CountryId && e.Created > DateTime.Now.AddDays(-2)).OrderByDescending(e => e.ViewsCount).Skip((Page - 1) * Count).Take(Count).ToListAsync();
         }
     }
 }

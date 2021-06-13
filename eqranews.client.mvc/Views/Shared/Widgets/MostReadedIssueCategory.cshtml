@@ -1,0 +1,79 @@
+﻿@inject eqranews.client.mvc.Data.IDAL _dal;
+@inject eqranews.client.mvc.Services.IUtilService _utils;
+
+@model List<KeyValuePair<string, int>>;
+
+@{
+
+    int SourceId = Model.Where(e => e.Key == "Source").FirstOrDefault().Value;
+    int CategoryId = Model.Where(e => e.Key == "Category").FirstOrDefault().Value;
+    var news = new List<DAL.Store.News>();
+    var mostPopular = new List<DAL.Store.News>();
+    if (CategoryId > 0)
+    {
+        mostPopular = await _dal.GetNews().GetMostViewedCategory(CategoryId, 1, 5);
+        news = _dal.GetNews().GetByCategory(CategoryId, 1, 5).Result;
+    }
+    if (SourceId > 0 )
+    {
+        mostPopular = await _dal.GetNews().GetMostViewedSource(SourceId, 1, 5);
+        news = _dal.GetNews().GetBySource(SourceId, 1, 5).Result;
+    }
+
+}
+
+<!-- Popular Posts-->
+<div class="mt-4 widget tab-posts-widget">
+
+    <ul class="nav nav-tabs tab-rtl " id="myTab">
+        <li class="active">
+            <a href="#option1" data-toggle="tab">الأكثر قرآءة</a>
+        </li>
+        <li>
+            <a href="#option2" data-toggle="tab">أحدث الأخبار</a>
+        </li>
+    </ul>
+
+    <div class="tab-content mb-2">
+        <div class="tab-pane active" id="option1">
+            <ul class="list-posts">
+                @{ foreach (var item in mostPopular)
+                    {
+                        @Html.Raw(getNewsItem(item));
+                    }
+                }
+            </ul>
+        </div>
+        <div class="tab-pane" id="option2">
+            <ul class="list-posts">
+
+                @{ foreach (var item in news)
+                    {
+                        @Html.Raw(getNewsItem(item));
+                    }
+                }
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- End Popular Posts-->
+
+@functions{
+    public string getNewsItem(DAL.Store.News item)
+    {
+        string result = $"<li>\n\r" +
+                 //$"  <img src = \"{item.Thumb}\" alt = \"\" >\n\r" +
+
+                 @Html.Raw(_utils.renderImage(item.Thumb, item.Title, 59)) +
+                 $"  <div class=\"post-content\"> \n\r" +
+                 $"    <h2><a href=\"{ "/News/" + item.Id + "/" }\">{item.Title}</a></h2>\n\r" +
+                 $"    <ul class=\"post-tags\"> \n\r" +
+                 $"      <li><i class=\"fa fa-clock-o\"></i>{item.Created.ToString("dd MMM yyyy")}</li>\n\r" +
+                 $"    </ul> \n\r" +
+                 $"  </div> \n\r" +
+                 $"</li>\n\r";
+
+        return result;
+    }
+}

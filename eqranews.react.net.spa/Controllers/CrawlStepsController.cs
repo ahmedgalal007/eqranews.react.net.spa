@@ -96,7 +96,14 @@ namespace eqranews.react.net.spa.Controllers
         {
             _context.CrawlSteps.Add(crawlStep);
             await _context.SaveChangesAsync();
-
+            // _context.CrawlSetpTypes.Where(e => e.Name.Any(n => new List<string> { "CrawlStepGetLinkImgList", "" }.Contains("")).Select(e => e.Id).Contains(crawlStep.CrawlStepTypeId)
+            List<string> ListTypes = new List<string> { "CrawlStepGetLinkImgList", "CrawlStepGetLinkList", "CrawlStepGetRssLinks" };
+            if (crawlStep.Id > 0 && (ListTypes.Any(L => L.Contains(_context.CrawlSetpTypes.Where( e => e.Id == crawlStep.CrawlStepTypeId).SingleOrDefault().Name))))
+            {
+                crawlStep.CrawlItems.Add(new CrawlItem { Name = "Title", Selector = "title" });
+                crawlStep.CrawlItems.Add(new CrawlItem { Name = "Image" });
+                crawlStep.CrawlItems.Add(new CrawlItem { Name = "Content" });
+            }
             return CreatedAtAction("GetCrawlStep", new { id = crawlStep.Id }, crawlStep);
         }
 

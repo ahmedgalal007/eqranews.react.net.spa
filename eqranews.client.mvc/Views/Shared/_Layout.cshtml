@@ -14,7 +14,7 @@
 
     <link rel="stylesheet" href="~/css/all.min.css" />
     <link rel="stylesheet" href="~/css/site.min.css" />
-
+    @RenderSection("Metas", false);
 </head>
 <body  dir="rtl">
 
@@ -150,68 +150,14 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                             </button>
-                            <a class="navbar-brand" href="index.html"><img src="images/logo.png" alt=""></a>
+                            <a class="navbar-brand" href="/"><img src="/images/logo.png" alt=""></a>
                         </div>
 
                     </div>
                 </div>
                 <!-- End Logo & advertisement -->
                 <!-- list line posts -->
-                <div class="list-line-posts" dir="ltr">
-                    <div class="container">
 
-                        <div class="owl-wrapper">
-                            <div class="owl-carousel" data-num="3">
-
-                                <div class="item list-post">
-                                    <img src="upload/news-posts/listw5.jpg" alt="">
-                                    <div class="post-content">
-                                        <a href="politics-category.html">Politics</a>
-                                        <h2><a href="single-post.html">Donec odio. Quisque volutpat mattis eros. Nullam malesuada </a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="item list-post">
-                                    <img src="upload/news-posts/listw4.jpg" alt="">
-                                    <div class="post-content">
-                                        <a href="politics-category.html">World</a>
-                                        <h2><a href="single-post.html">Nullam malesuada erat ut turpis. Suspendisse urna nibh</a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="item list-post">
-                                    <img src="upload/news-posts/listw3.jpg" alt="">
-                                    <div class="post-content">
-                                        <a href="politics-category.html">Business</a>
-                                        <h2><a href="single-post.html">Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. </a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                                <div class="item list-post">
-                                    <img src="upload/news-posts/listw2.jpg" alt="">
-                                    <div class="post-content">
-                                        <a href="politics-category.html">Election</a>
-                                        <h2><a href="single-post.html">Pellentesque odio nisi, euismod in, pharetra a, ultricies in, diam. </a></h2>
-                                        <ul class="post-tags">
-                                            <li><i class="fa fa-clock-o"></i>27 may 2013</li>
-                                        </ul>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
                 <!-- End list line posts -->
                 <!-- navbar list container -->
                 <div class="nav-list-container">
@@ -220,7 +166,7 @@
                         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                             <ul class="nav navbar-nav navbar-right">
 
-                                <li><a class="active" href="index.html">Home</a></li>
+                                <li><a class="active" href="/">Home</a></li>
                                 @foreach (var item in db.Categories.Where(C => C.ParentId == null && C.IsMenu).ToList())
                                 {
                                     <li><a href="/Category/@item.Id">@item.Name</a></li>
@@ -284,7 +230,7 @@
 
                         </div>
                         <div class="col-md-3">
-                            <div class="widget posts-widget">
+                            @*<div class="widget posts-widget">
                                 <h1>Random Post</h1>
                                 <ul class="list-posts">
                                     <li>
@@ -320,10 +266,10 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </div>
+                            </div>*@
                         </div>
                         <div class="col-md-3">
-                            <div class="widget flickr-widget">
+                            @*<div class="widget flickr-widget">
                                 <h1>Flickr Photos</h1>
                                 <ul class="flickr-list">
                                     <li><a href="#"><img src="upload/flickr/1.jpg" alt=""></a></li>
@@ -334,7 +280,7 @@
                                     <li><a href="#"><img src="upload/flickr/6.jpg" alt=""></a></li>
                                 </ul>
                                 <a href="#">View more photos...</a>
-                            </div>
+                            </div>*@
                         </div>
                     </div>
                 </div>

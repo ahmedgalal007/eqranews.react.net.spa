@@ -59,15 +59,20 @@ namespace eqranews.react.net.spa.IdentityServer
             clients.AddRange(
                  new Client
                  {
+                     ClientUri = "https://eqranews.com",
                      ClientId = "client_id",
+                     ClientName = "MVC Client",
                      ClientSecrets = { new Secret("client_secret".ToSha256()) },
                      AllowedGrantTypes = GrantTypes.CodeAndClientCredentials,
                      AlwaysIncludeUserClaimsInIdToken = true,
                      // where to redirect to after login
-                     RedirectUris = { "https://localhost:44369/signin-oidc" },
+                     RedirectUris = { "https://eqranews.com/signin-oidc" },
                      RequireConsent = false,
+                     // PostLogoutRedirectUris = { "https://eqranews.com/" },
                      // where to redirect to after logout
-                     PostLogoutRedirectUris = { "https://localhost:44369/signout-callback-oidc" },
+                     // FrontChannelLogoutUri = "https://eqranews.com/signout-callback-oidc" ,
+                     PostLogoutRedirectUris = { "https://eqranews.com/signout-callback-oidc" },
+
                      AllowedScopes = new List<string>
                      {
                          "openid",

@@ -1,41 +1,130 @@
-﻿@using Microsoft.AspNetCore.Authentication
+﻿@inject eqranews.client.mvc.Data.IDAL _dal;
+@using Microsoft.AspNetCore.Authentication
 
+@model  List<eqranews.client.mvc.Models.SourceNews>;
 
 @{
     ViewData["Title"] = "إقرأ نيوز";
 }
 
+<!-- Block Ads-->
+<partial name="AdBlocks/GoogleAdsenseAfterHeader" />
+<!-- End Block Ads-->
+
 <partial name="Sliders/HeadingNewsSection" />
 
+<partial name="Sliders/TickerNewsSection" />
+
+<!-- block-wrapper-section -->
+<section class="block-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-0 sidebar-sticky">
+                <!-- sidebar -->
+                <partial name="Sidebars/SmallSidebar" />
+                <!-- End sidebar -->
+            </div>
+            <div class="col-md-7 col-sm-8 content-blocker">
+                <!-- Block Ads-->
+                <!-- End Block Ads-->
+                <!-- block content -->
+                <div class="block-content">
+
+                    <!-- grid box -->
+                    <partial name="Widgets/GridBox" model="_dal.GetNews().GetByCategory(1).Result" />
+                    <!-- End grid box -->
+                    <!-- google addsense -->
+                    <partial name="Widgets/GoogleAdsense" />
+                    <!-- End google addsense -->
+                    <!-- carousel box -->
+                    <partial name="Widgets/CarouselBox" />
+                    <!-- End carousel box -->
+                </div>
+                <!-- End block content -->
+            </div>
+            <div class="col-md-3 col-sm-4 sidebar-sticky">
+
+                <!-- sidebar -->
+                <partial name="Sidebars/LargeSidebar" />
+                <!-- End sidebar -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End block-wrapper-section -->
+<!-- list line posts section -->
+<partial name="Widgets/ListLinePostsSection" />
+<!-- End list line posts section -->
+<!-- feature-video-section
+    ================================================== -->
+<partial name="Widgets/FeatureVideoSection" />
+
+<!-- End feature-video-section -->
+<!-- block-wrapper-section
+    ================================================== -->
+<section class="block-wrapper">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-push-3 col-md-2 col-sm-0 sidebar-sticky">
+
+                <!-- sidebar -->
+                <partial name="Sidebars/SmallSidebar" />
+                <!-- End sidebar -->
+            </div>
+            <div class="col-md-push-3 col-md-7 col-sm-8 content-blocker">
+
+                <!-- block content -->
+                <div class="block-content">
+                    <partial name="Widgets/CategoryArticleBox" model=" _dal.GetCategories().GetByIDWithNews(3)" />
+                </div>
+                <!-- End block content -->
+            </div>
+            <div class="col-md-pull-9 col-md-3 col-sm-4 sidebar-sticky">
+                <!-- sidebar -->
+                <partial name="Sidebars/LargeSidebar" />
+                <!-- End sidebar -->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End block-wrapper-section -->
 <div class="text-center">
     @{
         var country = "";
         var countries = (List<MaxMind.GeoIP2.Responses.CountryResponse>)Context.Items["CountryResponse"];
-        if (countries !=null && countries.Count > 0)
+        if (countries != null && countries.Count > 0)
         {
             country = countries.First()?.Country.Name;
         }
-     }
+    }
     <h4>@country</h4>
-
+    <h4>
+        Client IP:  @Context.Request.HttpContext.Connection.RemoteIpAddress;
+    </h4>
+    <h4>
+        Root : @Context.Items["root"]
+    </h4>
     <h2>Claims</h2>
 
-    <dl>
-        @foreach (var claim in User.Claims)
-        {
-            <dt>@claim.Type</dt>
-            <dd>@claim.Value</dd>
-        }
-    </dl>
+    @if (User.Claims.Count() > 0)
+    {
+        <dl>
+            @foreach (var claim in User.Claims)
+            {
+                <dt>@claim.Type</dt>
+                <dd>@claim.Value</dd>
+            }
+        </dl>
 
-    <h2>Properties</h2>
+        <h2>Properties</h2>
 
-    <dl>
-        @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
-        {
-            <dt>@prop.Key</dt>
-            <dd>@prop.Value</dd>
-        }
-    </dl>
-
+        <dl>
+            @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
+            {
+                <dt>@prop.Key</dt>
+                <dd>@prop.Value</dd>
+            }
+        </dl>
+    }
 </div>

@@ -1,4 +1,6 @@
-﻿using eqranews.client.mvc.Models;
+﻿//using AspNetCore;
+using eqranews.client.mvc.Data;
+using eqranews.client.mvc.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -13,15 +15,19 @@ namespace eqranews.client.mvc.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IDAL _dal;
+        public HomeController(ILogger<HomeController> logger, IDAL dAL)
         {
             _logger = logger;
+            _dal = dAL;
         }
-
+        
+ 
         public IActionResult Index()
         {
-            return View();
+            var query = _dal.GetSource().GetCountrySourcesWithNews(2,5);
+            List<SourceNews> SourceNews = query.ToList();
+            return View(SourceNews);
         }
 
         [Authorize]

@@ -121,7 +121,7 @@ namespace eqranews.geo
             // lookups.
             using (var reader = new DatabaseReader(_CountryDbPath))
             {
-                return reader.Country(ClientIP);
+                return ClientIP.ToString().Trim() == "::1"? null: reader.Country(ClientIP);
             }
         }
 

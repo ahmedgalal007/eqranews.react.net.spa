@@ -1,13 +1,12 @@
-﻿using eqranews.react.net.spa.Data;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using DAL.Crawling;
+using eqranews.react.net.spa.Data;
 
 namespace eqranews.client.mvc.Areas.api.Controllers
 {

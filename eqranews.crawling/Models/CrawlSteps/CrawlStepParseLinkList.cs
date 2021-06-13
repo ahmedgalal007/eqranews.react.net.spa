@@ -20,9 +20,22 @@ namespace eqranews.crawling.Models.CrawlSteps
             // CrawlResult result = new CrawlResult();
             foreach (var result in results)
             {
+                foreach (var element in result.Document.QuerySelectorAll("script"))
+                {
+                    element.Remove();
+                }
+                foreach (var element in result.Document.QuerySelectorAll("ins"))
+                {
+                    element.Remove();
+                }
+                foreach (var element in result.Document.QuerySelectorAll("a"))
+                {
+                    element.Remove();
+                }
+
                 if (result.Url != null)
                 {
-
+                    
                     // result.Document = PageCrawler.GetPage(result.Url).Result;
                     // var elements = document.Result.QuerySelectorAll(this.Selector);
                     foreach (var item in this.CrawlItems)

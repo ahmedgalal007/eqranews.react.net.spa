@@ -26,5 +26,7 @@ namespace DAL.Store
         public ICollection<NewsItem> NewsItems { get; set; }
         public ICollection<NewsCategory> NewsCategories { get; set; }
 
+        public int ViewsCount { get; set; }
+
     }
 }

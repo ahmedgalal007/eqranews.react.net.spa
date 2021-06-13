@@ -24,7 +24,7 @@ namespace eqranews.crawling.Models.Tests
                 "#ContentPlaceHolder1_divUrgent .blok_file > a"
             ));
             // Act
-            var res = stepper.Crawl();
+            var res = stepper.Crawl().Result;
             // Assert
             Assert.True(res.Count > 0, "This test needs an implementation");
         }
@@ -45,7 +45,7 @@ namespace eqranews.crawling.Models.Tests
                 }
             });
             // Act
-            var res = stepper.Crawl();
+            var res = stepper.Crawl().Result;
             // Assert
             Assert.True(res.Count > 0, "This test needs an implementation");
         }
@@ -73,7 +73,7 @@ namespace eqranews.crawling.Models.Tests
                 }
             });
             // Act
-            var res = stepper.Crawl();
+            var res = stepper.Crawl().Result;
             // Assert
             //Assert.True(String.IsNullOrEmpty(res[0]?.CrawlItems[0]?.Value) , "Title Crawling fail for El masry Elyom ");
             //Assert.True(String.IsNullOrEmpty(res[0]?.CrawlItems[1]?.Value), "Image Crawling fail for El masry Elyom ");

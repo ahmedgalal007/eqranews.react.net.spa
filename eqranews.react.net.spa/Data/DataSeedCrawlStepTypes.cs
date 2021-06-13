@@ -20,6 +20,8 @@ namespace eqranews.react.net.spa.Data
                 new CrawlSetpType {Name="CrawlStepParseLinkList"},
                 new CrawlSetpType {Name="CrawlStepGetRssLinks" },
                 new CrawlSetpType {Name="CrawlStepAssignCategories" },
+                new CrawlSetpType {Name="CrawlStepRemove" },
+                new CrawlSetpType {Name="CrawlStepConvertHtmlToText" },
             };
             foreach (var type in _types)
             {

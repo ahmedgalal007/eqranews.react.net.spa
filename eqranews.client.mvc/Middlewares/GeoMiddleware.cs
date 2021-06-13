@@ -2,7 +2,6 @@
 using DAL.Geo;
 using DAL.Store;
 using eqranews.geo;
-using eqranews.react.net.spa.Data;
 using MaxMind.GeoIP2.Responses;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,7 +41,9 @@ namespace eqranews.client.mvc.Middlewares
             Regex appPathMatcher = new Regex(@"(?<!fil)[A-Za-z]:\\+[\S\s]*?(?=\\+bin)");
             var appRoot = appPathMatcher.Match(rootDir).Value;
             var root = rootDir.TrimStart(appRoot.ToCharArray()).Replace("\\", "/");
-            GeoLocator.SetCountryPath($"./{root}/GeoDb/GeoLite2-Country.mmdb");
+            root = $"{root}/GeoDb/GeoLite2-Country.mmdb";
+            root = @"./GeoDb/GeoLite2-Country.mmdb";
+            GeoLocator.SetCountryPath(root);
             if (ClientIP.IsIPv6LinkLocal || ClientIP.IsIPv6SiteLocal)
             {
                 countries.Add(GeoLocator.GetCountry(ClientIP));
@@ -57,6 +58,7 @@ namespace eqranews.client.mvc.Middlewares
                 // var httpConnectionFeature = context.Request.HttpContext.Features.Get<IHttpConnectionFeature>();
                 // var localIpAddress = httpConnectionFeature?.LocalIpAddress;
                 var ips = await System.Net.Dns.GetHostAddressesAsync(System.Net.Dns.GetHostName());
+                countries.Add(GeoLocator.GetCountry(ClientIP));
                 //countries.Add(GeoLocator.GetCountry(ips.Where(e => e.AddressFamily != System.Net.Sockets.AddressFamily.InterNetworkV6).Last()));
             }
             // context.Session.Set("CountryResponse", Encoding.UTF32.GetBytes(JsonConvert.SerializeObject(countries)));
@@ -64,6 +66,7 @@ namespace eqranews.client.mvc.Middlewares
             context.Items["Countries"] = _DalCountries;
             context.Items["Sources"] = _CrawlSources;
             context.Items["Categories"] = _Categories;
+            context.Items["root"] = root;
             await _next(context);
         }
     }

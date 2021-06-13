@@ -1,0 +1,27 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model eqranews.client.mvc.Models.CategoryNews;
+
+<div class="container">
+    <div class="row" style="transform: none;">
+
+        <div class="col-md-push-2 col-md-7 col-sm-8 content-blocker" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+            <!-- block content -->
+            <partial name="Widgets/CategoryArticleBox" model="@Model" />
+            <!-- End block content -->
+        </div>
+        <div class="col-md-push-2 col-md-3 col-sm-4 sidebar-sticky" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            @{ List<KeyValuePair<string, int>> args = new List<KeyValuePair<string, int>> { new KeyValuePair<string, int>("Category", Model.Category.Id), new KeyValuePair<string, int>("Source", 0) }; }
+            <partial name="Widgets/MostReadedIssueCategory" model="@args" />
+        </div>
+        <div class="col-md-pull-10 col-md-2 col-sm-0 sidebar-sticky" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        </div>
+
+    </div>
+</div>

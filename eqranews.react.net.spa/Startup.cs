@@ -64,7 +64,8 @@ namespace eqranews.react.net.spa
                 //$"database=eqranews;"+
                 //$"user=ahmedgalal007;" +
                 //$"password=Sico007_";
-                conn = Configuration.GetConnectionString("DefaultConnection");
+                // conn = Configuration.GetConnectionString("DefaultConnection");
+                conn = "server=localhost;port=3306;user=ahmedgalal007;password=Sico007_;database=eqranews";
             }
 
             services.AddHangfire(config =>
@@ -106,7 +107,7 @@ namespace eqranews.react.net.spa
                 // opt.Events.RaiseSuccessEvents
                 // opt.Authentication.CookieLifetime
             })
-            //.LoadSigningCredentialFrom(Configuration["certificates:signing"])
+            // .LoadSigningCredentialFrom(Configuration["certificates:signing"])
             // .AddInMemoryApiResources(Id4Configuration.GetApis())
             // .AddInMemoryClients(Id4Configuration.GetClients())
             // .AddDeveloperSigningCredential()
@@ -144,6 +145,21 @@ namespace eqranews.react.net.spa
                 options.KnownProxies.Add(IPAddress.Parse("35.209.91.187"));
             });
 
+            services.AddHsts(options =>
+            {
+                options.Preload = true;
+                options.IncludeSubDomains = true;
+                options.MaxAge = TimeSpan.FromDays(60);
+                // options.ExcludedHosts.Add("example.com");
+                // options.ExcludedHosts.Add("www.example.com");
+            });
+
+            services.AddHttpsRedirection(options =>
+            {
+                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
+                options.HttpsPort = 443;
+            });
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -158,10 +174,11 @@ namespace eqranews.react.net.spa
             {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                // app.UseHsts();
+                app.UseHsts();
             }
-            app.UseCors();
+
             // app.UseHttpsRedirection();
+            app.UseCors();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -170,10 +187,17 @@ namespace eqranews.react.net.spa
                 MinimumSameSitePolicy = SameSiteMode.Lax
             });
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            var forwardOptions = new ForwardedHeadersOptions
             {
-                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
-            });
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                RequireHeaderSymmetry = false
+            };
+
+            forwardOptions.KnownNetworks.Clear();
+            forwardOptions.KnownProxies.Clear();
+
+            // ref: https://github.com/aspnet/Docs/issues/2384
+            app.UseForwardedHeaders(forwardOptions);
 
             // //Hangfire Service 
             //app.UseHangfireDashboard("/hangfire", new DashboardOptions

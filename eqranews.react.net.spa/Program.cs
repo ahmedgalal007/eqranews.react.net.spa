@@ -38,9 +38,10 @@ namespace eqranews.react.net.spa
                             //        );
                             //    });
                             //})
-                            .UseKestrel()
+                            // .UseKestrel()
                             .UseContentRoot(Directory.GetCurrentDirectory())
-                            .UseUrls("http://*:44377")
+                            //.UseUrls("http://*:44377")
+                            //.UseIISIntegration()
                             .UseStartup<Startup>();
                 });
     }

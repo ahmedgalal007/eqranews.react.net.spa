@@ -4,6 +4,7 @@
     "inputFiles": [
       "wwwroot/css/bootstrap.min.css",
       "wwwroot/css/jquery.bxslider.css",
+      "wwwroot/css/font-awesome.css",
       "wwwroot/css/magnific-popup.css",
       "wwwroot/css/owl.carousel.css",
       "wwwroot/css/owl.theme.css",

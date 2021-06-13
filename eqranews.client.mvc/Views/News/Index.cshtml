@@ -1,0 +1,167 @@
+﻿@inject eqranews.client.mvc.Data.IDAL _dal;
+@using Microsoft.AspNetCore.Authentication
+@model DAL.Store.News
+
+@{
+    var ImgSrc = Model.NewsItems.Where(e => e.Name == "Image").FirstOrDefault()?.Value;
+    string Description = Model.NewsItems.Where(e => e.Name == "Description").FirstOrDefault()?.Value;
+    DAL.Store.Category MainCategory = Model.NewsCategories.Where(e => e.Main).First()?.Category;
+}
+
+<div class="container">
+    <div class="row" style="transform: none;">
+
+
+        <!-- block content -->
+        <div class="col-md-push-2 col-md-7 col-sm-8 content-blocker" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+            <div class="theiaStickySidebar" style="padding-top: 0px; padding-bottom: 1px; position: static;">
+                <div class="block-content">
+
+                    <!-- single-post box -->
+                    <div class="single-post-box">
+
+                        <div class="title-post">
+                            <h1>@Model.Title</h1>
+                            <ul class="post-tags">
+                                <li><i class="fa fa-clock-o"></i>@Model.Created.ToString(" yyyy MMM dd")</li>
+                                @*<li><i class="fa fa-user"></i>by <a href="#">John Doe</a></li>*@
+                                <li><a href="#"><i class="fa fa-comments-o"></i><span>0</span></a></li>
+                                <li><i class="fa fa-eye"></i>@Model.ViewsCount</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-4 text-center" style="width:100%; margin-bottom:10px;">
+                            @if (MainCategory != null)
+                            {
+                                <a class="btn btn-danger" href="/Category/@MainCategory?.Id">@MainCategory?.Name</a>
+                            }
+                            <a class="btn btn-danger" href="/Source/@Model.SourceId">@Model.Source.Name</a>
+                            <a class="btn btn-primary" href="@Model.SourceLink">تابع الخبر في المصدر</a>
+                        </div>
+                        <div class="share-post-box">
+                            <ul class="share-box">
+                                <li><i class="fa fa-share-alt"></i><span>مشاركة</span></li>
+                                <li><a class="facebook" href="http://www.facebook.com/share.php?u=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-facebook"></i><span>Facebook</span></a></li>
+                                <li><a class="twitter" href="https://twitter.com/share?url=@Url.ActionLink("Index","News",new {Id = Model.Id })&amp;text=YOUR_TITLE&amp;hashtags=YOUR_HASHTAGS" target="_blank"><i class="fa fa-twitter"></i><span></span></a></li>
+                                <li><a class="google" href="https://plus.google.com/share?url=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-google-plus"></i><span></span></a></li>
+                                <li><a class="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-linkedin"></i><span></span></a></li>
+                                <li><a href="https://web.whatsapp.com/send?text=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><svg viewBox="0 0 32 32" class="whatsapp-ico"><path d=" M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z" fill-rule="evenodd"></path></svg></a></li>
+
+                            </ul>
+                        </div>
+
+                        <div class="post-gallery">
+                            @if (!string.IsNullOrWhiteSpace(ImgSrc))
+                            {
+                                <img src="@ImgSrc" alt="@Model.Title">
+                                <span class="image-caption">@Model.Title</span>
+                            }
+                        </div>
+
+                        <div class="post-content">
+
+                            <div>@Html.Raw(Model.NewsItems.Where(e => e.Name == "Content").FirstOrDefault()?.Value)</div>
+
+
+                        </div>
+
+                        @*<div class="article-inpost">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="image-content">
+                                        <div class="image-place">
+                                            <img src="upload/news-posts/single-art2.jpg" alt="">
+                                            <div class="hover-image">
+                                                <a class="zoom" href="upload/news-posts/single-art2.jpg"><i class="fa fa-arrows-alt"></i></a>
+                                            </div>
+                                        </div>
+                                        <span class="image-caption">Cras eget sem nec dui volutpat ultrices.</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="image-content">
+                                        <div class="image-place">
+                                            <img src="upload/news-posts/single-art3.jpg" alt="">
+                                            <div class="hover-image">
+                                                <a class="zoom" href="upload/news-posts/single-art3.jpg"><i class="fa fa-arrows-alt"></i></a>
+                                            </div>
+                                        </div>
+                                        <span class="image-caption">Cras eget sem nec dui volutpat ultrices.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>*@
+
+                        <div class="post-content">
+
+                        </div>
+
+
+                        <div class="post-tags-box">
+                            <ul class="tags-box">
+                                <li><i class="fa fa-tags"></i><span>Tags:</span></li>
+                                <li><a href="#">News</a></li>
+                                <li><a href="#">Fashion</a></li>
+                                <li><a href="#">Politics</a></li>
+                                <li><a href="#">Sport</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="share-post-box">
+                            <ul class="share-box">
+                                <li><i class="fa fa-share-alt"></i><span>Share Post</span></li>
+                                <li><a class="facebook" href="http://www.facebook.com/share.php?u=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-facebook"></i><span>Share on Facebook</span></a></li>
+                                <li><a class="twitter" href="https://twitter.com/share?url=@Url.ActionLink("Index","News",new {Id = Model.Id })&amp;text=YOUR_TITLE&amp;hashtags=YOUR_HASHTAGS" target="_blank"><i class="fa fa-twitter"></i><span>Share on Twitter</span></a></li>
+                                <li><a class="google" href="https://plus.google.com/share?url=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-google-plus"></i><span></span></a></li>
+                                <li><a class="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-linkedin"></i><span></span></a></li>
+                                <li><a class="google" href="https://web.whatsapp.com/send?text=@Url.ActionLink("Index","News",new {Id = Model.Id })" target="_blank"><i class="fa fa-whatsapp"></i><span></span></a></li>
+                            </ul>
+                        </div>
+
+                    </div>
+                    <!-- End single-post box -->
+
+                </div>
+            </div>
+        </div>
+        <!-- End block content -->
+        <cache expires-after="@TimeSpan.FromSeconds(120)" vary-by="@Model.NewsCategories.Where(e => e.Main).FirstOrDefault().CategoryId">
+            <div class="col-md-push-2 col-md-3 col-sm-4 sidebar-sticky" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+                @{ List<KeyValuePair<string, int>> args = new List<KeyValuePair<string, int>> { new KeyValuePair<string, int>("Category", Model.NewsCategories.Where(e => e.Main).FirstOrDefault().CategoryId), new KeyValuePair<string, int>("Source", Model.SourceId) }; }
+                <partial name="Widgets/MostReadedIssueCategory" model="@args" />
+            </div>
+        </cache>
+        <div class="col-md-pull-10 col-md-2 col-sm-0 sidebar-sticky" style="position: relative; overflow: visible; box-sizing: border-box; min-height: 1px;">
+
+        </div>
+
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        $(document).ready(function () {
+            $.ajax({
+              type: "POST",
+              url: "/News/IncrementViews",
+              data: {"NewsId": "@Model.Id"},
+              success: function (data) {
+              },
+              dataType: "text",
+            });
+        });
+    </script>
+}
+
+
+@section Metas{
+    <meta property="og:description" content="@Description"/>
+
+    <!-- You can use Open Graph tags to customize link previews.
+    Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
+    <meta property="og:url" content="@Url.ActionLink("Index","News",new {Id = Model.Id })" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="@Model.Title" />
+    <meta property="og:description" content="@Description" />
+    <meta property="og:image" content="@ImgSrc" />
+}

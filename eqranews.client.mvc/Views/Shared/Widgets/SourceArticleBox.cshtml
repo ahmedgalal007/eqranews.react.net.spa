@@ -1,0 +1,111 @@
+﻿@inject eqranews.client.mvc.Data.IDAL _dal;
+@inject eqranews.client.mvc.Services.IUtilService _utils;
+
+@model eqranews.client.mvc.Models.SourceNews;
+@{
+    //var items = _dal.GetNews().GetByCategory(Model.Id);
+}
+    <!-- article box -->
+<div class="article-box" dir="ltr">
+    <div class="title-section mt-2">
+        <h1><span>@Model.Source.Name</span></h1>
+    </div>
+
+    @foreach (var item in Model.News)
+    {
+        <div class="news-post article-post">
+            <div class="row">
+                <div class="col-sm-7">
+                    <div class="post-content">
+                        <a class="source" href="/Source/@item.SourceId">@_dal.GetSource().GetByID(item.SourceId).Result.Name</a>
+                        <h2><a href="/news/@item.Id">@item.Title</a></h2>
+                        <ul class="post-tags">
+                            <li><i class="fa fa-clock-o"></i>@item.Created.ToString("dd MMM yyyy")</li>
+                            @*<li><i class="fa fa-user"></i>by <a href="#">John Doe</a></li>
+                    <li><a href="#"><i class="fa fa-comments-o"></i><span>23</span></a></li>*@
+                            <li><i class="fa fa-eye"></i>@item.ViewsCount</li>
+                        </ul>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="post-gallery">
+                        @Html.Raw(_utils.renderImage(item.Thumb, item.Title, 159))
+                        @*<img alt="" src="@news.Thumb">*@
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+</div>
+    <!-- End article box -->
+    <!-- Pagination box -->
+    <div class="pagination-box"  dir="ltr" style="float:right">
+        <ul class="pagination-list clearfix">
+            @*<li><a class="active" href="#">1</a></li>
+            <li><a href="#">2</a></li>
+            <li><a href="#">3</a></li>
+            <li><span>...</span></li>
+            <li><a href="#">9</a></li>
+            <li><a href="#">Next</a></li>*@
+
+            @if (Model.Page < Model.TotalPages)
+            {
+                <li><a class="next" href="~/Source/@Model.Source.Id/?Page=@(Model.TotalPages)"><span class="fa fa-angle-double-left"></span></a></li>
+}
+            @if (Model.Page < Model.TotalPages)
+            {
+                <li><a class="next" href="~/Source/@Model.Source.Id/?Page=@(Model.Page + 1)"><span class="fa fa-angle-left"></span></a></li>
+}
+            @if (Model.Page + 5 <= Model.TotalPages)
+            {
+                <li><span>...</span><a href="~/Source/@Model.Source.Id/?Page=@(Model.Page + 5)">+5</a><span>...</span></li>
+}
+            @if (Model.Page + 2 <= Model.TotalPages)
+            {
+                <li><a href="~/Source/@Model.Source.Id/?Page=@(Model.Page + 2)">@(Model.Page + 2)</a></li>
+}
+            @if (Model.Page + 1 <= Model.TotalPages)
+            {
+                <li><a href="~/Source/@Model.Source.Id/?Page=@(Model.Page + 1)">@(Model.Page + 1)</a></li>
+}
+
+            <li><a href="~/Source/@Model.Source.Id/?Page=@Model.Page" class="active">@(Model.Page)</a></li>
+
+            @if (Model.Page - 1 > 0)
+            {
+                <li><a href="~/Source/@Model.Source.Id/?Page=@(Model.Page - 1)">@(Model.Page - 1)</a></li>
+}
+            @if (Model.Page - 2 > 0)
+            {
+                <li><a href="~/Source/@Model.Source.Id/?Page=@(Model.Page - 2)">@(Model.Page - 2)</a></li>
+}
+            @if (Model.Page > 5)
+            {
+                <li><span>...</span><a href="~/Category/?Page=@Model.Source.Id/@(Model.Page - 5)">-5</a><span>...</span></li>
+}
+            @if (Model.Page > 1)
+            {
+                <li><a class="prev" href="~/Category/?Page=@Model.Source.Id/@(Model.Page - 1)"><span class="fa fa-angle-right"></span></a></li>
+}
+            @if (Model.Page > 3)
+            {
+                <li><a class="prev" href="~/Category/?Page=@Model.Source.Id/1"><span class="fa fa-angle-double-right"></span></a></li>
+}
+
+        </ul>
+        @*<p>Page 1 of 9</p>*@
+    </div>
+    <!-- End Pagination box -->
+
+@functions{
+    public string getArticle(DAL.Store.News item)
+    {
+        string result = $"";
+
+        return result;
+    }
+}

@@ -29,7 +29,8 @@ namespace eqranews.crawling.Models.CrawlSteps
         public Url Url { get; set; }
         public CrawlSetpType CrawlStepType { get; set; }
         public string Selector { get; set; }
-        
+        public int StepOrder { get; set; }
+
         public string LoopSelector { get; set; }
         public string LoopsPagerSelector { get; set; }
         public int LoopsMax { get; set; }
